@@ -22,7 +22,11 @@ const ClientHeader = () => {
         </div>
 
         {/* User Avatar */}
-        <div className="flex items-center">
+        <div className="flex items-center space-x-2">
+
+          <button className="text-sm font-semibold text-blue-600 px-4 py-2 rounded hover:bg-blue-50 transition-colors">
+            Connect Wallet
+          </button>
           <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
             <FaUser className="w-5 h-5 text-white" />
           </div>
