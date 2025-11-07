@@ -1,4 +1,3 @@
-import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import { useState } from 'react';
@@ -39,8 +38,8 @@ const ClientSupport = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Support</h1>
-      <Card>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Support Ticket</h1>
+      <div className="bg-white rounded-lg shadow-sm p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <Alert type="error" message={error} />}
           {success && <Alert type="success" message={success} />}
@@ -50,6 +49,7 @@ const ClientSupport = () => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             required
+            placeholder="Enter ticket subject"
           />
           
           <div>
@@ -62,14 +62,15 @@ const ClientSupport = () => {
               rows={6}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
+              placeholder="Enter your message"
             />
           </div>
           
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading} className="w-full md:w-auto">
             {loading ? 'Submitting...' : 'Submit Ticket'}
           </Button>
         </form>
-      </Card>
+      </div>
     </div>
   );
 };

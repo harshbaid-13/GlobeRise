@@ -1,4 +1,3 @@
-import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import { useState } from 'react';
@@ -37,8 +36,8 @@ const Deposit = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Make Deposit</h1>
-      <Card>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Make Deposit</h1>
+      <div className="bg-white rounded-lg shadow-sm p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <Alert type="error" message={error} />}
           {success && <Alert type="success" message={success} />}
@@ -49,6 +48,9 @@ const Deposit = () => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
+            placeholder="Enter deposit amount"
+            min="0.01"
+            step="0.01"
           />
           
           <div>
@@ -67,11 +69,11 @@ const Deposit = () => {
             </select>
           </div>
           
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading} className="w-full md:w-auto">
             {loading ? 'Submitting...' : 'Submit Deposit'}
           </Button>
         </form>
-      </Card>
+      </div>
     </div>
   );
 };

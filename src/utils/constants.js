@@ -65,11 +65,19 @@ export const ROUTES = {
   // Client routes
   CLIENT_DASHBOARD: '/client/dashboard',
   CLIENT_PLANS: '/client/plans',
-  CLIENT_PROFILE: '/client/profile',
+  CLIENT_BV_LOG: '/client/bv-log',
+  CLIENT_MY_REFERRALS: '/client/my-referrals',
+  CLIENT_MY_TREE: '/client/my-tree',
   CLIENT_DEPOSIT: '/client/deposit',
   CLIENT_WITHDRAW: '/client/withdraw',
+  CLIENT_BALANCE_TRANSFER: '/client/balance-transfer',
+  CLIENT_EPIN_RECHARGE: '/client/epin-recharge',
   CLIENT_TRANSACTIONS: '/client/transactions',
+  CLIENT_RANKING: '/client/ranking',
   CLIENT_SUPPORT: '/client/support',
+  CLIENT_2FA: '/client/2fa',
+  CLIENT_PROFILE: '/client/profile',
+  CLIENT_CHANGE_PASSWORD: '/client/change-password',
 };
 
 // LocalStorage keys

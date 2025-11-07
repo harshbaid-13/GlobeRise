@@ -1,10 +1,10 @@
-import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { withdrawalService } from '../../services/withdrawalService';
 import Alert from '../../components/common/Alert';
+import { formatCurrency } from '../../utils/formatters';
 
 const Withdraw = () => {
   const { user } = useAuth();
@@ -40,8 +40,15 @@ const Withdraw = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Make Withdrawal</h1>
-      <Card>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Make Withdrawal</h1>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="mb-6">
+          <div className="text-sm text-gray-600 mb-1">Available Balance</div>
+          <div className="text-2xl font-bold text-gray-800">
+            {formatCurrency(user?.balance || 0)}
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <Alert type="error" message={error} />}
           {success && <Alert type="success" message={success} />}
@@ -52,6 +59,9 @@ const Withdraw = () => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             required
+            placeholder="Enter withdrawal amount"
+            min="0.01"
+            step="0.01"
           />
           
           <div>
@@ -74,13 +84,14 @@ const Withdraw = () => {
             value={accountDetails}
             onChange={(e) => setAccountDetails(e.target.value)}
             required
+            placeholder="Enter account details"
           />
           
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading} className="w-full md:w-auto">
             {loading ? 'Submitting...' : 'Submit Withdrawal'}
           </Button>
         </form>
-      </Card>
+      </div>
     </div>
   );
 };

@@ -65,11 +65,19 @@ import UserRanking from './pages/admin/ranking/UserRanking';
 // Client pages
 import ClientDashboard from './pages/client/Dashboard';
 import ClientPlans from './pages/client/Plans';
-import Profile from './pages/client/Profile';
+import BvLog from './pages/client/BvLog';
+import MyReferrals from './pages/client/MyReferrals';
+import MyTree from './pages/client/MyTree';
 import Deposit from './pages/client/Deposit';
 import Withdraw from './pages/client/Withdraw';
+import BalanceTransfer from './pages/client/BalanceTransfer';
+import EPinRecharge from './pages/client/EPinRecharge';
 import Transactions from './pages/client/Transactions';
+import Ranking from './pages/client/Ranking';
 import ClientSupport from './pages/client/Support';
+import TwoFactorAuthClient from './pages/client/TwoFactorAuth';
+import Profile from './pages/client/Profile';
+import ChangePassword from './pages/client/ChangePassword';
 
 function App() {
   return (
@@ -156,11 +164,19 @@ function App() {
                     <Routes>
                       <Route path="dashboard" element={<ClientDashboard />} />
                       <Route path="plans" element={<ClientPlans />} />
-                      <Route path="profile" element={<Profile />} />
+                      <Route path="bv-log" element={<BvLog />} />
+                      <Route path="my-referrals" element={<MyReferrals />} />
+                      <Route path="my-tree" element={<MyTree />} />
                       <Route path="deposit" element={<Deposit />} />
                       <Route path="withdraw" element={<Withdraw />} />
+                      <Route path="balance-transfer" element={<BalanceTransfer />} />
+                      <Route path="epin-recharge" element={<EPinRecharge />} />
                       <Route path="transactions" element={<Transactions />} />
+                      <Route path="ranking" element={<Ranking />} />
                       <Route path="support" element={<ClientSupport />} />
+                      <Route path="2fa" element={<TwoFactorAuthClient />} />
+                      <Route path="profile" element={<Profile />} />
+                      <Route path="change-password" element={<ChangePassword />} />
                       <Route path="*" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
                     </Routes>
                   </ClientLayout>

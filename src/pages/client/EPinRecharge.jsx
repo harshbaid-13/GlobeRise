@@ -1,12 +1,10 @@
+import { useState } from 'react';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
-import { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
 import Alert from '../../components/common/Alert';
 
-const Profile = () => {
-  const { user } = useAuth();
-  const [name, setName] = useState(user?.name || '');
+const EPinRecharge = () => {
+  const [pin, setPin] = useState('');
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,9 +18,15 @@ const Profile = () => {
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      setSuccess('Profile updated successfully!');
+
+      if (!pin || pin.length < 8) {
+        throw new Error('Please enter a valid E-pin');
+      }
+
+      setSuccess('E-pin recharged successfully!');
+      setPin('');
     } catch (err) {
-      setError(err.message || 'Failed to update profile');
+      setError(err.message || 'Failed to recharge E-pin');
     } finally {
       setLoading(false);
     }
@@ -30,30 +34,30 @@ const Profile = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Profile</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">E-pin Recharge</h1>
+
       <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="mb-6">
+          <p className="text-sm text-gray-600">
+            Enter your E-pin code to recharge your account balance.
+          </p>
+        </div>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && <Alert type="error" message={error} />}
           {success && <Alert type="success" message={success} />}
 
           <Input
-            label="Username"
-            value={user?.username || ''}
-            disabled
+            label="E-pin Code"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            required
+            placeholder="Enter E-pin code"
+            maxLength={20}
           />
-          <Input
-            label="Email"
-            value={user?.email || ''}
-            disabled
-          />
-          <Input
-            label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-          />
+
           <Button type="submit" disabled={loading} className="w-full md:w-auto">
-            {loading ? 'Updating...' : 'Update Profile'}
+            {loading ? 'Processing...' : 'Recharge'}
           </Button>
         </form>
       </div>
@@ -61,5 +65,5 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default EPinRecharge;
 

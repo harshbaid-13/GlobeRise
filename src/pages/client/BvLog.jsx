@@ -1,20 +1,38 @@
-import { formatCurrency, formatDate } from '../../utils/formatters';
 import { useState, useEffect } from 'react';
-import { mockTransactions } from '../../data/mockTransactions';
+import { formatCurrency, formatDate } from '../../utils/formatters';
 import { delay } from '../../utils/helpers';
 import Loading from '../../components/common/Loading';
 
-const Transactions = () => {
-  const [transactions, setTransactions] = useState([]);
+const BvLog = () => {
+  const [bvLogs, setBvLogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadTransactions();
+    loadBvLogs();
   }, []);
 
-  const loadTransactions = async () => {
+  const loadBvLogs = async () => {
     await delay(500);
-    setTransactions(mockTransactions.slice(0, 50));
+    // Mock BV log data
+    const mockData = [
+      {
+        id: 1,
+        date: new Date().toISOString(),
+        type: 'Earned',
+        amount: 100,
+        description: 'Referral commission',
+        status: 'completed',
+      },
+      {
+        id: 2,
+        date: new Date().toISOString(),
+        type: 'Used',
+        amount: 50,
+        description: 'Binary commission',
+        status: 'completed',
+      },
+    ];
+    setBvLogs(mockData);
     setLoading(false);
   };
 
@@ -22,12 +40,15 @@ const Transactions = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Transactions</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">BV Log</h1>
       <div className="bg-white rounded-lg shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date
+                </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Type
                 </th>
@@ -35,44 +56,43 @@ const Transactions = () => {
                   Amount
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
+                  Description
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
+                  Status
                 </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {transactions.length === 0 ? (
+              {bvLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-6 py-4 text-center text-gray-500">
-                    No transactions found
+                  <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                    No BV logs found
                   </td>
                 </tr>
               ) : (
-                transactions.map((transaction) => (
-                  <tr key={transaction.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
-                      {transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}
+                bvLogs.map((log) => (
+                  <tr key={log.id}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                      {formatDate(log.date)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                      {formatCurrency(transaction.amount)}
+                      {log.type}
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                      {log.amount}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-800">{log.description}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 py-1 text-xs rounded-full ${
-                          transaction.status === 'completed'
+                          log.status === 'completed'
                             ? 'bg-green-100 text-green-800'
-                            : transaction.status === 'pending'
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
                         }`}
                       >
-                        {transaction.status}
+                        {log.status}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                      {formatDate(transaction.createdAt)}
                     </td>
                   </tr>
                 ))
@@ -85,5 +105,5 @@ const Transactions = () => {
   );
 };
 
-export default Transactions;
+export default BvLog;
 
