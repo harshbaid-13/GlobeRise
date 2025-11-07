@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  /* Dark Theme Colors - Crypto Style */
+  --color-dark-bg: #0d1421;
+  --color-dark-bg-secondary: #1a1f2e;
+  --color-dark-bg-tertiary: #252a3a;
+  --color-dark-border: #374151;
+  --color-dark-border-light: #4b5563;
+  
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e5e7eb;
+  --color-text-tertiary: #9ca3af;
+  
+  /* Accent Colors */
+  --color-primary: #00d4ff;
+  --color-primary-dark: #3b82f6;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+  
+  /* Sidebar */
+  --color-sidebar: #1a1f2e;
+}
+
+body {
+  background-color: var(--color-dark-bg);
+  color: var(--color-text-primary);
+}

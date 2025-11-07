@@ -1,0 +1,21 @@
+export const mockStats = {
+  totalUsers: 1281,
+  activeUsers: 1257,
+  emailUnverifiedUsers: 23,
+  mobileUnverifiedUsers: 1,
+  kycUnverifiedUsers: 878,
+  kycPendingUsers: 117,
+  totalDeposited: 227651.95,
+  pendingDeposits: 301,
+  rejectedDeposits: 0,
+  depositedCharge: 1800.53,
+  totalWithdrawn: 60279.95,
+  pendingWithdrawals: 26,
+  rejectedWithdrawals: 1,
+  withdrawalCharge: 3.00,
+  totalInvest: 134700.00,
+  last7DaysInvest: 0.00,
+  totalReferralCommission: 11995.00,
+  totalBinaryCommission: 2002.62,
+};
+
