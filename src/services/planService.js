@@ -34,7 +34,7 @@ export const planService = {
     const newPlan = {
       id: String(plans.length + 1),
       ...planData,
-      status: 'active',
+      status: planData.status || 'enabled',
     };
     
     plans.push(newPlan);

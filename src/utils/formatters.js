@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 
 /**
  * Format currency amount
@@ -43,5 +43,31 @@ export const truncate = (text, length = 50) => {
   if (!text) return '';
   if (text.length <= length) return text;
   return text.substring(0, length) + '...';
+};
+
+/**
+ * Format relative time (e.g., "2 hours ago", "3 days ago")
+ */
+export const formatRelativeTime = (date) => {
+  if (!date) return '-';
+  try {
+    return formatDistanceToNow(new Date(date), { addSuffix: true });
+  } catch (error) {
+    return '-';
+  }
+};
+
+/**
+ * Format date with time and relative time
+ */
+export const formatDateWithRelative = (date) => {
+  if (!date) return { dateTime: '-', relative: '-' };
+  try {
+    const dateTime = format(new Date(date), 'yyyy-MM-dd hh:mm A');
+    const relative = formatRelativeTime(date);
+    return { dateTime, relative };
+  } catch (error) {
+    return { dateTime: '-', relative: '-' };
+  }
 };
 

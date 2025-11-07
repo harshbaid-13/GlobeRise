@@ -1,3 +1,7 @@
 import AllPins from './AllPins';
-export default AllPins;
 
+const UnusedPins = () => {
+  return <AllPins filterType="all" filterStatus="unused" />;
+};
+
+export default UnusedPins;

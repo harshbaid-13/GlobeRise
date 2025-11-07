@@ -71,6 +71,35 @@ export const pinService = {
     return newPin;
   },
 
+  async createMultiplePins(amount, totalPins, createdBy) {
+    await delay(1000);
+    const pins = getPins();
+    const newPins = [];
+    const generatePinNumber = () => {
+      const generateSegment = () => String(Math.floor(Math.random() * 100000000)).padStart(8, '0');
+      return `${generateSegment()}-${generateSegment()}-${generateSegment()}-${generateSegment()}`;
+    };
+
+    for (let i = 0; i < totalPins; i++) {
+      const newPin = {
+        id: `pin_${Date.now()}_${i}`,
+        pin: generatePinNumber(),
+        type: 'admin', // Default to admin for created pins
+        status: 'unused',
+        amount: amount,
+        createdBy: createdBy,
+        usedBy: null,
+        usedAt: null,
+        createdAt: new Date().toISOString(),
+      };
+      newPins.push(newPin);
+      pins.push(newPin);
+    }
+    
+    savePins(pins);
+    return newPins;
+  },
+
   async deletePin(id) {
     await delay(800);
     const pins = getPins();
