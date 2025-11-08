@@ -1,3 +1,7 @@
-import AllWithdrawals from './AllWithdrawals';
-export default AllWithdrawals;
+import WithdrawalsList from './WithdrawalsList';
 
+const PendingWithdrawals = () => {
+  return <WithdrawalsList status="pending" title="Pending Withdrawals" />;
+};
+
+export default PendingWithdrawals;

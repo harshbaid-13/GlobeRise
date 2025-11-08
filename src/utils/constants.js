@@ -38,6 +38,7 @@ export const ROUTES = {
   ADMIN_DEPOSITS_REJECTED: '/admin/deposits/rejected',
   ADMIN_DEPOSITS_INITIATED: '/admin/deposits/initiated',
   ADMIN_DEPOSITS_ALL: '/admin/deposits/all',
+  ADMIN_DEPOSIT_DETAILS: '/admin/deposit/details/:id',
   ADMIN_WITHDRAWALS_PENDING: '/admin/withdrawals/pending',
   ADMIN_WITHDRAWALS_APPROVED: '/admin/withdrawals/approved',
   ADMIN_WITHDRAWALS_REJECTED: '/admin/withdrawals/rejected',

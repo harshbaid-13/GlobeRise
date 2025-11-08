@@ -40,10 +40,12 @@ import SuccessfulDeposits from './pages/admin/deposits/SuccessfulDeposits';
 import RejectedDeposits from './pages/admin/deposits/RejectedDeposits';
 import InitiatedDeposits from './pages/admin/deposits/InitiatedDeposits';
 import AllDeposits from './pages/admin/deposits/AllDeposits';
+import DepositDetails from './pages/admin/deposits/DepositDetails';
 import PendingWithdrawals from './pages/admin/withdrawals/PendingWithdrawals';
 import ApprovedWithdrawals from './pages/admin/withdrawals/ApprovedWithdrawals';
 import RejectedWithdrawals from './pages/admin/withdrawals/RejectedWithdrawals';
 import AllWithdrawals from './pages/admin/withdrawals/AllWithdrawals';
+import WithdrawalDetails from './pages/admin/withdrawals/WithdrawalDetails';
 import PendingTicket from './pages/admin/support/PendingTicket';
 import ClosedTicket from './pages/admin/support/ClosedTicket';
 import AnsweredTicket from './pages/admin/support/AnsweredTicket';
@@ -127,10 +129,12 @@ function App() {
                       <Route path="deposits/rejected" element={<RejectedDeposits />} />
                       <Route path="deposits/initiated" element={<InitiatedDeposits />} />
                       <Route path="deposits/all" element={<AllDeposits />} />
+                      <Route path="deposit/details/:id" element={<DepositDetails />} />
                       <Route path="withdrawals/pending" element={<PendingWithdrawals />} />
                       <Route path="withdrawals/approved" element={<ApprovedWithdrawals />} />
                       <Route path="withdrawals/rejected" element={<RejectedWithdrawals />} />
                       <Route path="withdrawals/all" element={<AllWithdrawals />} />
+                      <Route path="withdrawal/details/:id" element={<WithdrawalDetails />} />
                       <Route path="support/pending" element={<PendingTicket />} />
                       <Route path="support/closed" element={<ClosedTicket />} />
                       <Route path="support/answered" element={<AnsweredTicket />} />
