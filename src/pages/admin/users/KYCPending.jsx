@@ -1,3 +1,9 @@
 import AllUsers from './AllUsers';
-export default AllUsers;
+import { userService } from '../../../services/userService';
+
+const KYCPending = () => {
+  return <AllUsers loadUsersFn={userService.getKYCPendingUsers} title="KYC Pending Users" />;
+};
+
+export default KYCPending;
 

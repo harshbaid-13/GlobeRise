@@ -31,6 +31,7 @@ import KYCUnverified from './pages/admin/users/KYCUnverified';
 import KYCPending from './pages/admin/users/KYCPending';
 import PaidUsers from './pages/admin/users/PaidUsers';
 import AllUsers from './pages/admin/users/AllUsers';
+import UserDetails from './pages/admin/users/UserDetails';
 import SendNotification from './pages/admin/users/SendNotification';
 import PendingDeposits from './pages/admin/deposits/PendingDeposits';
 import ApprovedDeposits from './pages/admin/deposits/ApprovedDeposits';
@@ -116,6 +117,7 @@ function App() {
                       <Route path="users/kyc-pending" element={<KYCPending />} />
                       <Route path="users/paid" element={<PaidUsers />} />
                       <Route path="users/all" element={<AllUsers />} />
+                      <Route path="users/details/:id" element={<UserDetails />} />
                       <Route path="users/send-notification" element={<SendNotification />} />
                       <Route path="deposits/pending" element={<PendingDeposits />} />
                       <Route path="deposits/approved" element={<ApprovedDeposits />} />

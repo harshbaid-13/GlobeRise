@@ -1,27 +1,8 @@
-import { useState, useEffect } from 'react';
-import { userService } from '../../../services/userService';
 import AllUsers from './AllUsers';
+import { userService } from '../../../services/userService';
 
 const ActiveUsers = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
-  const loadUsers = async () => {
-    try {
-      const data = await userService.getActiveUsers();
-      setUsers(data);
-    } catch (error) {
-      console.error('Error loading users:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return <AllUsers />;
+  return <AllUsers loadUsersFn={userService.getActiveUsers} title="Active Users" />;
 };
 
 export default ActiveUsers;
