@@ -101,6 +101,9 @@ import NetworkTree from './pages/client/NetworkTree';
 import RankProgress from './pages/client/RankProgress';
 import EarningsBreakdown from './pages/client/EarningsBreakdown';
 import ClientTransactionHistory from './pages/client/TransactionHistory';
+import Investments from './pages/client/Investments';
+import Staking from './pages/client/Staking';
+import FiatWallet from './pages/client/wallets/FiatWallet';
 
 function App() {
   return (
@@ -205,7 +208,10 @@ function App() {
                         <Route path="2fa" element={<TwoFactorAuthClient />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="change-password" element={<ChangePassword />} />
+                        <Route path="investments" element={<Investments />} />
+                        <Route path="staking" element={<Staking />} />
                         <Route path="wallets" element={<Wallets />} />
+                        <Route path="wallets/fiat" element={<FiatWallet />} />
                         <Route path="wallets/deposit" element={<DepositWallet />} />
                         <Route path="wallets/roi" element={<ROIWallet />} />
                         <Route path="wallets/staking" element={<StakingWallet />} />
