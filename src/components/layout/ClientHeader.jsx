@@ -1,36 +1,117 @@
-import { useState } from 'react';
-import { FaUser, FaWallet } from 'react-icons/fa';
-import { useAuth } from '../../hooks/useAuth';
-import { useWallet } from '../../contexts/WalletContext';
-import { formatWalletAddress } from '../../utils/formatters';
-import WalletConnectModal from '../wallet/WalletConnectModal';
+import { useState } from "react";
+import {
+  FaUser,
+  FaWallet,
+  FaHome,
+  FaUsers,
+  FaSitemap,
+  FaPiggyBank,
+  FaExchangeAlt,
+  FaCreditCard,
+  FaList,
+  FaTrophy,
+  FaTicketAlt,
+  FaShieldAlt,
+  FaKey,
+  FaCrown,
+  FaGift,
+  FaHistory,
+  FaChartLine,
+  FaFileAlt,
+} from "react-icons/fa";
+import { useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useWallet } from "../../contexts/WalletContext";
+import { formatWalletAddress } from "../../utils/formatters";
+import WalletConnectModal from "../wallet/WalletConnectModal";
 
 const ClientHeader = () => {
-  const { user } = useAuth();
+  const { user: _user } = useAuth();
   const { address, isConnected, isCorrectNetwork, networkName } = useWallet();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const location = useLocation();
 
   const handleWalletClick = () => {
     setIsModalOpen(true);
+  };
+
+  const getPageMeta = () => {
+    const fullPath = location.pathname || "";
+    // Strip the /client prefix to get the sub-path
+    const path = fullPath.startsWith("/client")
+      ? fullPath.slice("/client".length) || "/dashboard"
+      : fullPath || "/dashboard";
+
+    // Normalize by removing trailing slashes
+    const normalized = path.replace(/\/+$/, "") || "/dashboard";
+
+    // Special handling for grouped paths
+    if (normalized.startsWith("/wallets")) {
+      return { title: "Wallets", Icon: FaWallet };
+    }
+    if (normalized.startsWith("/history")) {
+      return { title: "History", Icon: FaHistory };
+    }
+
+    const map = {
+      "/dashboard": { title: "Dashboard", Icon: FaHome },
+      "/plans": { title: "Plans", Icon: FaFileAlt },
+      "/bv-log": { title: "BV Log", Icon: FaList },
+      "/my-referrals": { title: "My Referrals", Icon: FaUsers },
+      "/my-tree": { title: "Referral Tree", Icon: FaSitemap },
+      "/deposit": { title: "Deposit", Icon: FaPiggyBank },
+      "/withdraw": { title: "Withdraw", Icon: FaPiggyBank },
+      "/balance-transfer": { title: "Balance Transfer", Icon: FaExchangeAlt },
+      "/epin-recharge": { title: "E-Pin Recharge", Icon: FaCreditCard },
+      "/transactions": { title: "Transactions", Icon: FaList },
+      "/ranking": { title: "Ranking", Icon: FaTrophy },
+      "/support": { title: "Support", Icon: FaTicketAlt },
+      "/2fa": { title: "Two-Factor Authentication", Icon: FaShieldAlt },
+      "/profile": { title: "Profile", Icon: FaUser },
+      "/change-password": { title: "Change Password", Icon: FaKey },
+      "/wallets": { title: "Wallets", Icon: FaWallet },
+      "/wallets/fiat": { title: "Fiat Wallet", Icon: FaWallet },
+      "/wallets/deposit": { title: "Deposit Wallet", Icon: FaWallet },
+      "/wallets/roi": { title: "ROI Wallet", Icon: FaWallet },
+      "/wallets/staking": { title: "Staking Wallet", Icon: FaWallet },
+      "/wallets/rewards": { title: "Rewards Wallet", Icon: FaWallet },
+      "/investments": { title: "Investments", Icon: FaChartLine },
+      "/staking": { title: "Staking", Icon: FaChartLine },
+      "/team-business": { title: "Team Business", Icon: FaChartLine },
+      "/individual-business": {
+        title: "Individual Business",
+        Icon: FaChartLine,
+      },
+      "/royalties": { title: "Royalties", Icon: FaCrown },
+      "/bonuses": { title: "Bonuses", Icon: FaGift },
+      "/my-team": { title: "My Team", Icon: FaUsers },
+      "/reports": { title: "Reports", Icon: FaFileAlt },
+      "/history/rewards": { title: "Rewards History", Icon: FaHistory },
+      "/history/staking": { title: "Staking History", Icon: FaHistory },
+      "/transaction-history": { title: "Transaction History", Icon: FaList },
+      "/rank-progress": { title: "Rank Progress", Icon: FaTrophy },
+      "/earnings-breakdown": { title: "Earnings Breakdown", Icon: FaFileAlt },
+    };
+
+    return map[normalized] || { title: "GlobeRise", Icon: null };
   };
 
   return (
     <>
       <div className="bg-[#393E46] shadow-sm border-b border-[#4b5563] px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-[#00ADB5] rounded-lg flex items-center justify-center">
-              <svg
-                className="w-6 h-6 text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-              </svg>
-            </div>
-            <h1 className="text-xl font-bold text-white">GlobeRise</h1>
-          </div>
+          {/* Page Title */}
+          {(() => {
+            const { title, Icon } = getPageMeta();
+            return (
+              <div className="flex items-center space-x-2">
+                {Icon && <Icon className="w-5 h-5 text-[#00ADB5]" />}
+                <h1 className="text-xl font-bold text-white tracking-wide">
+                  {title}
+                </h1>
+              </div>
+            );
+          })()}
 
           {/* User Avatar and Wallet */}
           <div className="flex items-center space-x-3">
@@ -38,18 +119,21 @@ const ClientHeader = () => {
               <div className="flex items-center space-x-2">
                 {/* Network Indicator */}
                 <div
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg border ${isCorrectNetwork
-                      ? 'bg-green-500/20 border-green-500'
-                      : 'bg-red-500/20 border-red-500'
-                    }`}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg border ${
+                    isCorrectNetwork
+                      ? "bg-green-500/20 border-green-500"
+                      : "bg-red-500/20 border-red-500"
+                  }`}
                 >
                   <div
-                    className={`w-2 h-2 rounded-full ${isCorrectNetwork ? 'bg-green-500' : 'bg-red-500'
-                      }`}
+                    className={`w-2 h-2 rounded-full ${
+                      isCorrectNetwork ? "bg-green-500" : "bg-red-500"
+                    }`}
                   ></div>
                   <span
-                    className={`text-xs font-medium ${isCorrectNetwork ? 'text-green-400' : 'text-red-400'
-                      }`}
+                    className={`text-xs font-medium ${
+                      isCorrectNetwork ? "text-green-400" : "text-red-400"
+                    }`}
                   >
                     {networkName}
                   </span>
@@ -77,10 +161,12 @@ const ClientHeader = () => {
           </div>
         </div>
       </div>
-      <WalletConnectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <WalletConnectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   );
 };
 
 export default ClientHeader;
-

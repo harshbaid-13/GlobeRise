@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
 import {
   FaHome,
   FaPaperPlane,
@@ -12,10 +12,11 @@ import {
   FaThumbsUp,
   FaCog,
   FaChevronDown,
-  FaChevronUp
-} from 'react-icons/fa';
-import { useState } from 'react';
-import { ROUTES } from '../../utils/constants';
+  FaChevronUp,
+} from "react-icons/fa";
+import { useState } from "react";
+import { ROUTES } from "../../utils/constants";
+import Logo from "../common/Logo";
 
 const Sidebar = () => {
   const [openMenus, setOpenMenus] = useState({
@@ -28,131 +29,177 @@ const Sidebar = () => {
   });
 
   const toggleMenu = (menu) => {
-    setOpenMenus(prev => ({ ...prev, [menu]: !prev[menu] }));
+    setOpenMenus((prev) => ({ ...prev, [menu]: !prev[menu] }));
   };
 
   const menuItems = [
-    { icon: FaHome, label: 'Dashboard', path: ROUTES.ADMIN_DASHBOARD },
-    { icon: FaPaperPlane, label: 'Plans', path: ROUTES.ADMIN_PLANS },
+    { icon: FaHome, label: "Dashboard", path: ROUTES.ADMIN_DASHBOARD },
+    { icon: FaPaperPlane, label: "Plans", path: ROUTES.ADMIN_PLANS },
     {
       icon: FaKey,
-      label: 'Manage Pins',
+      label: "Manage Pins",
       path: ROUTES.ADMIN_PINS_ALL,
       submenu: [
-        { label: 'All Pins', path: ROUTES.ADMIN_PINS_ALL },
-        { label: 'User Pins', path: ROUTES.ADMIN_PINS_USER },
-        { label: 'Admin Pins', path: ROUTES.ADMIN_PINS_ADMIN },
-        { label: 'Used Pins', path: ROUTES.ADMIN_PINS_USED },
-        { label: 'Unused Pins', path: ROUTES.ADMIN_PINS_UNUSED },
+        { label: "All Pins", path: ROUTES.ADMIN_PINS_ALL },
+        { label: "User Pins", path: ROUTES.ADMIN_PINS_USER },
+        { label: "Admin Pins", path: ROUTES.ADMIN_PINS_ADMIN },
+        { label: "Used Pins", path: ROUTES.ADMIN_PINS_USED },
+        { label: "Unused Pins", path: ROUTES.ADMIN_PINS_UNUSED },
       ],
-      menuKey: 'managePins',
+      menuKey: "managePins",
     },
-    { icon: FaTrophy, label: 'User Ranking', path: ROUTES.ADMIN_RANKING },
+    { icon: FaTrophy, label: "User Ranking", path: ROUTES.ADMIN_RANKING },
     {
       icon: FaUsers,
-      label: 'Manage Users',
+      label: "Manage Users",
       path: ROUTES.ADMIN_USERS_ALL,
       badge: 878,
       submenu: [
-        { label: 'Active Users', path: ROUTES.ADMIN_USERS_ACTIVE },
-        { label: 'Banned Users', path: ROUTES.ADMIN_USERS_BANNED },
-        { label: 'Email Unverified', path: ROUTES.ADMIN_USERS_EMAIL_UNVERIFIED, badge: 23 },
-        { label: 'Mobile Unverified', path: ROUTES.ADMIN_USERS_MOBILE_UNVERIFIED, badge: 1 },
-        { label: 'KYC Unverified', path: ROUTES.ADMIN_USERS_KYC_UNVERIFIED, badge: 878 },
-        { label: 'KYC Pending', path: ROUTES.ADMIN_USERS_KYC_PENDING, badge: 117 },
-        { label: 'Paid Users', path: ROUTES.ADMIN_USERS_PAID },
-        { label: 'All Users', path: ROUTES.ADMIN_USERS_ALL },
-        { label: 'Send Notification', path: ROUTES.ADMIN_USERS_SEND_NOTIFICATION },
+        { label: "Active Users", path: ROUTES.ADMIN_USERS_ACTIVE },
+        { label: "Banned Users", path: ROUTES.ADMIN_USERS_BANNED },
+        {
+          label: "Email Unverified",
+          path: ROUTES.ADMIN_USERS_EMAIL_UNVERIFIED,
+          badge: 23,
+        },
+        {
+          label: "Mobile Unverified",
+          path: ROUTES.ADMIN_USERS_MOBILE_UNVERIFIED,
+          badge: 1,
+        },
+        {
+          label: "KYC Unverified",
+          path: ROUTES.ADMIN_USERS_KYC_UNVERIFIED,
+          badge: 878,
+        },
+        {
+          label: "KYC Pending",
+          path: ROUTES.ADMIN_USERS_KYC_PENDING,
+          badge: 117,
+        },
+        { label: "Paid Users", path: ROUTES.ADMIN_USERS_PAID },
+        { label: "All Users", path: ROUTES.ADMIN_USERS_ALL },
+        {
+          label: "Send Notification",
+          path: ROUTES.ADMIN_USERS_SEND_NOTIFICATION,
+        },
       ],
-      menuKey: 'manageUsers',
+      menuKey: "manageUsers",
     },
     {
       icon: FaFileInvoiceDollar,
-      label: 'Deposits',
+      label: "Deposits",
       path: ROUTES.ADMIN_DEPOSITS_ALL,
       badge: 301,
       submenu: [
-        { label: 'Pending Deposits', path: ROUTES.ADMIN_DEPOSITS_PENDING, badge: 301 },
-        { label: 'Approved Deposits', path: ROUTES.ADMIN_DEPOSITS_APPROVED },
-        { label: 'Successful Deposits', path: ROUTES.ADMIN_DEPOSITS_SUCCESSFUL },
-        { label: 'Rejected Deposits', path: ROUTES.ADMIN_DEPOSITS_REJECTED },
-        { label: 'Initiated Deposits', path: ROUTES.ADMIN_DEPOSITS_INITIATED },
-        { label: 'All Deposits', path: ROUTES.ADMIN_DEPOSITS_ALL },
+        {
+          label: "Pending Deposits",
+          path: ROUTES.ADMIN_DEPOSITS_PENDING,
+          badge: 301,
+        },
+        { label: "Approved Deposits", path: ROUTES.ADMIN_DEPOSITS_APPROVED },
+        {
+          label: "Successful Deposits",
+          path: ROUTES.ADMIN_DEPOSITS_SUCCESSFUL,
+        },
+        { label: "Rejected Deposits", path: ROUTES.ADMIN_DEPOSITS_REJECTED },
+        { label: "Initiated Deposits", path: ROUTES.ADMIN_DEPOSITS_INITIATED },
+        { label: "All Deposits", path: ROUTES.ADMIN_DEPOSITS_ALL },
       ],
-      menuKey: 'deposits',
+      menuKey: "deposits",
     },
     {
       icon: FaBuilding,
-      label: 'Withdrawals',
+      label: "Withdrawals",
       path: ROUTES.ADMIN_WITHDRAWALS_ALL,
       badge: 26,
       submenu: [
-        { label: 'Pending Withdrawals', path: ROUTES.ADMIN_WITHDRAWALS_PENDING, badge: 26 },
-        { label: 'Approved Withdrawals', path: ROUTES.ADMIN_WITHDRAWALS_APPROVED },
-        { label: 'Rejected Withdrawals', path: ROUTES.ADMIN_WITHDRAWALS_REJECTED },
-        { label: 'All Withdrawals', path: ROUTES.ADMIN_WITHDRAWALS_ALL },
+        {
+          label: "Pending Withdrawals",
+          path: ROUTES.ADMIN_WITHDRAWALS_PENDING,
+          badge: 26,
+        },
+        {
+          label: "Approved Withdrawals",
+          path: ROUTES.ADMIN_WITHDRAWALS_APPROVED,
+        },
+        {
+          label: "Rejected Withdrawals",
+          path: ROUTES.ADMIN_WITHDRAWALS_REJECTED,
+        },
+        { label: "All Withdrawals", path: ROUTES.ADMIN_WITHDRAWALS_ALL },
       ],
-      menuKey: 'withdrawals',
+      menuKey: "withdrawals",
     },
     {
       icon: FaEnvelope,
-      label: 'Support Ticket',
+      label: "Support Ticket",
       path: ROUTES.ADMIN_SUPPORT_ALL,
       badge: 65,
       submenu: [
-        { label: 'Pending Ticket', path: ROUTES.ADMIN_SUPPORT_PENDING, badge: 65 },
-        { label: 'Closed Ticket', path: ROUTES.ADMIN_SUPPORT_CLOSED },
-        { label: 'Answered Ticket', path: ROUTES.ADMIN_SUPPORT_ANSWERED },
-        { label: 'All Ticket', path: ROUTES.ADMIN_SUPPORT_ALL },
+        {
+          label: "Pending Ticket",
+          path: ROUTES.ADMIN_SUPPORT_PENDING,
+          badge: 65,
+        },
+        { label: "Closed Ticket", path: ROUTES.ADMIN_SUPPORT_CLOSED },
+        { label: "Answered Ticket", path: ROUTES.ADMIN_SUPPORT_ANSWERED },
+        { label: "All Ticket", path: ROUTES.ADMIN_SUPPORT_ALL },
       ],
-      menuKey: 'support',
+      menuKey: "support",
     },
     {
       icon: FaList,
-      label: 'Report',
+      label: "Report",
       path: ROUTES.ADMIN_REPORTS_TRANSACTION,
       submenu: [
-        { label: 'Transaction History', path: ROUTES.ADMIN_REPORTS_TRANSACTION },
-        { label: 'Invest Log', path: ROUTES.ADMIN_REPORTS_INVEST },
-        { label: 'BV Log', path: ROUTES.ADMIN_REPORTS_BV },
-        { label: 'Referral Commission', path: ROUTES.ADMIN_REPORTS_REFERRAL },
-        { label: 'Binary Commission', path: ROUTES.ADMIN_REPORTS_BINARY },
-        { label: 'Login History', path: ROUTES.ADMIN_REPORTS_LOGIN },
-        { label: 'Notification History', path: ROUTES.ADMIN_REPORTS_NOTIFICATION },
+        {
+          label: "Transaction History",
+          path: ROUTES.ADMIN_REPORTS_TRANSACTION,
+        },
+        { label: "Invest Log", path: ROUTES.ADMIN_REPORTS_INVEST },
+        { label: "BV Log", path: ROUTES.ADMIN_REPORTS_BV },
+        { label: "Referral Commission", path: ROUTES.ADMIN_REPORTS_REFERRAL },
+        { label: "Binary Commission", path: ROUTES.ADMIN_REPORTS_BINARY },
+        { label: "Login History", path: ROUTES.ADMIN_REPORTS_LOGIN },
+        {
+          label: "Notification History",
+          path: ROUTES.ADMIN_REPORTS_NOTIFICATION,
+        },
       ],
-      menuKey: 'report',
+      menuKey: "report",
     },
-    { icon: FaThumbsUp, label: 'Subscribers', path: ROUTES.ADMIN_SUBSCRIBERS },
-    { icon: FaCog, label: 'System Setting', path: ROUTES.ADMIN_SETTINGS },
+    { icon: FaThumbsUp, label: "Subscribers", path: ROUTES.ADMIN_SUBSCRIBERS },
+    { icon: FaCog, label: "System Setting", path: ROUTES.ADMIN_SETTINGS },
     {
       icon: FaList,
-      label: 'Extra',
+      label: "Extra",
       path: ROUTES.ADMIN_EXTRA_APPLICATION,
       submenu: [
-        { label: 'Application', path: ROUTES.ADMIN_EXTRA_APPLICATION },
-        { label: 'Server', path: ROUTES.ADMIN_EXTRA_SERVER },
-        { label: 'Cache', path: ROUTES.ADMIN_EXTRA_CACHE },
-        { label: 'Update', path: ROUTES.ADMIN_EXTRA_UPDATE },
-        { label: 'Report & Request', path: ROUTES.ADMIN_EXTRA_REPORT_REQUEST },
+        { label: "Application", path: ROUTES.ADMIN_EXTRA_APPLICATION },
+        { label: "Server", path: ROUTES.ADMIN_EXTRA_SERVER },
+        { label: "Cache", path: ROUTES.ADMIN_EXTRA_CACHE },
+        { label: "Update", path: ROUTES.ADMIN_EXTRA_UPDATE },
+        { label: "Report & Request", path: ROUTES.ADMIN_EXTRA_REPORT_REQUEST },
       ],
-      menuKey: 'extra',
+      menuKey: "extra",
     },
   ];
 
   return (
     <div
-      className="w-64 text-white h-screen fixed left-0 top-0 overflow-y-auto sidebar-scrollbar"
-      style={{ backgroundColor: '#222831', borderRight: '1px solid rgba(255,255,255,0.1)' }}
+      className="w-64 text-white h-screen fixed left-0 top-0"
+      style={{
+        backgroundColor: "#222831",
+        borderRight: "1px solid rgba(255,255,255,0.1)",
+      }}
     >
       <div className="p-6 flex flex-col h-full">
-        <div className="flex items-center space-x-2 mb-8">
-          <div className="w-10 h-10 bg-[#00ADB5] rounded-lg flex items-center justify-center">
-            <FaUsers className="text-xl text-white" />
-          </div>
-          <h1 className="text-xl font-bold text-white">GlobeRise</h1>
+        <div className="mb-8">
+          <Logo variant="sidebar" />
         </div>
 
-        <nav className="space-y-1 -mx-6">
+        <nav className="space-y-1 -mx-6 flex-1 overflow-y-auto sidebar-scrollbar">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -180,15 +227,17 @@ const Sidebar = () => {
                   </button>
 
                   <div
-                    className={`mt-1 space-y-1 overflow-hidden sidebar-submenu ${isOpen ? 'open' : 'closed'
-                      }`}
+                    className={`mt-1 space-y-1 overflow-hidden sidebar-submenu ${
+                      isOpen ? "open" : "closed"
+                    }`}
                   >
                     {item.submenu.map((subItem) => (
                       <NavLink
                         key={subItem.label}
                         to={subItem.path}
                         className={({ isActive }) =>
-                          `flex items-center justify-between px-6 py-2 text-sm hover:bg-blue-800 hover:bg-opacity-10 transition-colors text-gray-400 hover:text-white ${isActive ? 'bg-blue-600 text-white' : ''
+                          `flex items-center justify-between px-6 py-2 text-sm hover:bg-blue-800 hover:bg-opacity-10 transition-colors text-gray-400 hover:text-white ${
+                            isActive ? "bg-blue-600 text-white" : ""
                           }`
                         }
                       >
@@ -210,9 +259,10 @@ const Sidebar = () => {
                 key={item.label}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center justify-between px-6 py-3 text-sm font-medium transition-colors ${isActive
-                    ? 'bg-blue-600 text-white'
-                    : 'text-gray-300 hover:text-white hover:bg-blue-800 hover:bg-opacity-10'
+                  `flex items-center justify-between px-6 py-3 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-blue-600 text-white"
+                      : "text-gray-300 hover:text-white hover:bg-blue-800 hover:bg-opacity-10"
                   }`
                 }
               >
@@ -235,4 +285,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
