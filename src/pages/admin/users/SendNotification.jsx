@@ -1,68 +1,8 @@
-import { useState, useMemo, Suspense, lazy, Component } from 'react';
+import { useState } from 'react';
 import { FaEnvelope, FaSms, FaBell, FaCheck, FaChevronDown } from 'react-icons/fa';
 import { userService } from '../../../services/userService';
 import Alert from '../../../components/common/Alert';
-
-// Import CSS for react-quill
-import 'react-quill/dist/quill.snow.css';
-
-// Dynamically import ReactQuill to avoid SSR and React 19 compatibility issues
-const ReactQuill = lazy(() => import('react-quill'));
-
-// Error boundary for ReactQuill
-class QuillErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('ReactQuill error:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      // Fallback to textarea if ReactQuill fails
-      return (
-        <textarea
-          value={this.props.value}
-          onChange={(e) => this.props.onChange(e.target.value)}
-          placeholder={this.props.placeholder}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-900 placeholder-gray-400 min-h-[300px]"
-          rows={12}
-        />
-      );
-    }
-
-    return this.props.children;
-  }
-}
-
-// Wrapper component for ReactQuill with error handling
-const QuillEditor = ({ value, onChange, modules, formats, placeholder }) => {
-  return (
-    <QuillErrorBoundary value={value} onChange={onChange} placeholder={placeholder}>
-      <Suspense fallback={
-        <div className="p-4 bg-white min-h-[300px] flex items-center justify-center border border-gray-300 rounded-lg">
-          <div className="text-gray-500">Loading editor...</div>
-        </div>
-      }>
-        <ReactQuill
-          theme="snow"
-          value={value}
-          onChange={onChange}
-          modules={modules}
-          formats={formats}
-          placeholder={placeholder}
-        />
-      </Suspense>
-    </QuillErrorBoundary>
-  );
-};
+import RichTextEditor from '../../../components/common/RichTextEditor';
 
 const SendNotification = () => {
   const [notificationMethod, setNotificationMethod] = useState('email');
@@ -75,30 +15,6 @@ const SendNotification = () => {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const modules = useMemo(() => ({
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'align': [] }],
-      [{ 'size': ['small', false, 'large', 'huge'] }],
-      [{ 'font': [] }],
-      [{ 'color': [] }, { 'background': [] }],
-      ['blockquote', 'code-block'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link', 'image'],
-      ['clean']
-    ],
-  }), []);
-
-  const formats = useMemo(() => [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike',
-    'color', 'background',
-    'list', 'bullet',
-    'align',
-    'link', 'image', 'code-block', 'blockquote'
-  ], []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -251,15 +167,11 @@ const SendNotification = () => {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Message <span className="text-red-500">*</span>
           </label>
-          <div className="border border-gray-300 rounded-lg overflow-hidden bg-white">
-            <QuillEditor
-              value={message}
-              onChange={setMessage}
-              modules={modules}
-              formats={formats}
-              placeholder="Enter your message..."
-            />
-          </div>
+          <RichTextEditor
+            value={message}
+            onChange={setMessage}
+            placeholder="Enter your message..."
+          />
         </div>
 
         {/* Batch and Timing Settings */}
