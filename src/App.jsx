@@ -83,122 +83,158 @@ import ClientSupport from './pages/client/Support';
 import TwoFactorAuthClient from './pages/client/TwoFactorAuth';
 import Profile from './pages/client/Profile';
 import ChangePassword from './pages/client/ChangePassword';
+import Wallets from './pages/client/Wallets';
+import DepositWallet from './pages/client/wallets/DepositWallet';
+import ROIWallet from './pages/client/wallets/ROIWallet';
+import StakingWallet from './pages/client/wallets/StakingWallet';
+import RewardsWallet from './pages/client/wallets/RewardsWallet';
+import WithdrawalWallet from './pages/client/wallets/WithdrawalWallet';
+import TeamBusiness from './pages/client/TeamBusiness';
+import IndividualBusiness from './pages/client/IndividualBusiness';
+import Royalties from './pages/client/Royalties';
+import Bonuses from './pages/client/Bonuses';
+import MyTeam from './pages/client/MyTeam';
+import RewardsLog from './pages/client/history/RewardsLog';
+import StakingLog from './pages/client/history/StakingLog';
+import Reports from './pages/client/Reports';
+import NetworkTree from './pages/client/NetworkTree';
+import RankProgress from './pages/client/RankProgress';
+import EarningsBreakdown from './pages/client/EarningsBreakdown';
+import ClientTransactionHistory from './pages/client/TransactionHistory';
 
 function App() {
   return (
     <AuthProvider>
       <WalletProvider>
         <Router>
-        <Routes>
-          {/* Public routes */}
-          <Route path={ROUTES.LOGIN} element={<Login />} />
-          <Route path={ROUTES.REGISTER} element={<Register />} />
-          <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
-          <Route path={`${ROUTES.RESET_PASSWORD}/:token`} element={<ResetPassword />} />
-          <Route path={`${ROUTES.VERIFY_EMAIL}/:token`} element={<VerifyEmail />} />
-          <Route path={ROUTES.RESEND_EMAIL} element={<ResendEmail />} />
-          <Route path={ROUTES.TWO_FA} element={<TwoFactorAuth />} />
+          <Routes>
+            {/* Public routes */}
+            <Route path={ROUTES.LOGIN} element={<Login />} />
+            <Route path={ROUTES.REGISTER} element={<Register />} />
+            <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
+            <Route path={`${ROUTES.RESET_PASSWORD}/:token`} element={<ResetPassword />} />
+            <Route path={`${ROUTES.VERIFY_EMAIL}/:token`} element={<VerifyEmail />} />
+            <Route path={ROUTES.RESEND_EMAIL} element={<ResendEmail />} />
+            <Route path={ROUTES.TWO_FA} element={<TwoFactorAuth />} />
 
-          {/* Admin routes */}
-          <Route
-            path="/admin/*"
-            element={
-              <ProtectedRoute>
-                <RoleGuard allowedRoles={[ROLES.ADMIN]}>
-                  <Layout>
-                    <Routes>
-                      <Route path="dashboard" element={<AdminDashboard />} />
-                      <Route path="plans" element={<Plans />} />
-                      <Route path="pins/all" element={<AllPins />} />
-                      <Route path="pins/user" element={<UserPins />} />
-                      <Route path="pins/admin" element={<AdminPins />} />
-                      <Route path="pins/used" element={<UsedPins />} />
-                      <Route path="pins/unused" element={<UnusedPins />} />
-                      <Route path="users/active" element={<ActiveUsers />} />
-                      <Route path="users/banned" element={<BannedUsers />} />
-                      <Route path="users/email-unverified" element={<EmailUnverified />} />
-                      <Route path="users/mobile-unverified" element={<MobileUnverified />} />
-                      <Route path="users/kyc-unverified" element={<KYCUnverified />} />
-                      <Route path="users/kyc-pending" element={<KYCPending />} />
-                      <Route path="users/paid" element={<PaidUsers />} />
-                      <Route path="users/all" element={<AllUsers />} />
-                      <Route path="users/details/:id" element={<UserDetails />} />
-                      <Route path="users/tree/:id" element={<UserTree />} />
-                      <Route path="users/send-notification" element={<SendNotification />} />
-                      <Route path="deposits/pending" element={<PendingDeposits />} />
-                      <Route path="deposits/approved" element={<ApprovedDeposits />} />
-                      <Route path="deposits/successful" element={<SuccessfulDeposits />} />
-                      <Route path="deposits/rejected" element={<RejectedDeposits />} />
-                      <Route path="deposits/initiated" element={<InitiatedDeposits />} />
-                      <Route path="deposits/all" element={<AllDeposits />} />
-                      <Route path="deposit/details/:id" element={<DepositDetails />} />
-                      <Route path="withdrawals/pending" element={<PendingWithdrawals />} />
-                      <Route path="withdrawals/approved" element={<ApprovedWithdrawals />} />
-                      <Route path="withdrawals/rejected" element={<RejectedWithdrawals />} />
-                      <Route path="withdrawals/all" element={<AllWithdrawals />} />
-                      <Route path="withdrawal/details/:id" element={<WithdrawalDetails />} />
-                      <Route path="support/pending" element={<PendingTicket />} />
-                      <Route path="support/closed" element={<ClosedTicket />} />
-                      <Route path="support/answered" element={<AnsweredTicket />} />
-                      <Route path="support/all" element={<AllTicket />} />
-                      <Route path="reports/transaction" element={<TransactionHistory />} />
-                      <Route path="reports/invest" element={<InvestLog />} />
-                      <Route path="reports/bv" element={<BVLog />} />
-                      <Route path="reports/referral" element={<ReferralCommission />} />
-                      <Route path="reports/binary" element={<BinaryCommission />} />
-                      <Route path="reports/login" element={<LoginHistory />} />
-                      <Route path="reports/notification" element={<NotificationHistory />} />
-                      <Route path="subscribers" element={<Subscribers />} />
-                      <Route path="settings" element={<SystemSetting />} />
-                      <Route path="extra/application" element={<Application />} />
-                      <Route path="extra/server" element={<Server />} />
-                      <Route path="extra/cache" element={<Cache />} />
-                      <Route path="extra/update" element={<Update />} />
-                      <Route path="extra/report-request" element={<ReportRequest />} />
-                      <Route path="ranking" element={<UserRanking />} />
-                      <Route path="*" element={<Navigate to={ROUTES.ADMIN_DASHBOARD} replace />} />
-                    </Routes>
-                  </Layout>
-                </RoleGuard>
-              </ProtectedRoute>
-            }
-          />
+            {/* Admin routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={[ROLES.ADMIN]}>
+                    <Layout>
+                      <Routes>
+                        <Route path="dashboard" element={<AdminDashboard />} />
+                        <Route path="plans" element={<Plans />} />
+                        <Route path="pins/all" element={<AllPins />} />
+                        <Route path="pins/user" element={<UserPins />} />
+                        <Route path="pins/admin" element={<AdminPins />} />
+                        <Route path="pins/used" element={<UsedPins />} />
+                        <Route path="pins/unused" element={<UnusedPins />} />
+                        <Route path="users/active" element={<ActiveUsers />} />
+                        <Route path="users/banned" element={<BannedUsers />} />
+                        <Route path="users/email-unverified" element={<EmailUnverified />} />
+                        <Route path="users/mobile-unverified" element={<MobileUnverified />} />
+                        <Route path="users/kyc-unverified" element={<KYCUnverified />} />
+                        <Route path="users/kyc-pending" element={<KYCPending />} />
+                        <Route path="users/paid" element={<PaidUsers />} />
+                        <Route path="users/all" element={<AllUsers />} />
+                        <Route path="users/details/:id" element={<UserDetails />} />
+                        <Route path="users/tree/:id" element={<UserTree />} />
+                        <Route path="users/send-notification" element={<SendNotification />} />
+                        <Route path="deposits/pending" element={<PendingDeposits />} />
+                        <Route path="deposits/approved" element={<ApprovedDeposits />} />
+                        <Route path="deposits/successful" element={<SuccessfulDeposits />} />
+                        <Route path="deposits/rejected" element={<RejectedDeposits />} />
+                        <Route path="deposits/initiated" element={<InitiatedDeposits />} />
+                        <Route path="deposits/all" element={<AllDeposits />} />
+                        <Route path="deposit/details/:id" element={<DepositDetails />} />
+                        <Route path="withdrawals/pending" element={<PendingWithdrawals />} />
+                        <Route path="withdrawals/approved" element={<ApprovedWithdrawals />} />
+                        <Route path="withdrawals/rejected" element={<RejectedWithdrawals />} />
+                        <Route path="withdrawals/all" element={<AllWithdrawals />} />
+                        <Route path="withdrawal/details/:id" element={<WithdrawalDetails />} />
+                        <Route path="support/pending" element={<PendingTicket />} />
+                        <Route path="support/closed" element={<ClosedTicket />} />
+                        <Route path="support/answered" element={<AnsweredTicket />} />
+                        <Route path="support/all" element={<AllTicket />} />
+                        <Route path="reports/transaction" element={<TransactionHistory />} />
+                        <Route path="reports/invest" element={<InvestLog />} />
+                        <Route path="reports/bv" element={<BVLog />} />
+                        <Route path="reports/referral" element={<ReferralCommission />} />
+                        <Route path="reports/binary" element={<BinaryCommission />} />
+                        <Route path="reports/login" element={<LoginHistory />} />
+                        <Route path="reports/notification" element={<NotificationHistory />} />
+                        <Route path="subscribers" element={<Subscribers />} />
+                        <Route path="settings" element={<SystemSetting />} />
+                        <Route path="extra/application" element={<Application />} />
+                        <Route path="extra/server" element={<Server />} />
+                        <Route path="extra/cache" element={<Cache />} />
+                        <Route path="extra/update" element={<Update />} />
+                        <Route path="extra/report-request" element={<ReportRequest />} />
+                        <Route path="ranking" element={<UserRanking />} />
+                        <Route path="*" element={<Navigate to={ROUTES.ADMIN_DASHBOARD} replace />} />
+                      </Routes>
+                    </Layout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Client routes */}
-          <Route
-            path="/client/*"
-            element={
-              <ProtectedRoute>
-                <RoleGuard allowedRoles={[ROLES.CLIENT]}>
-                  <ClientLayout>
-                    <Routes>
-                      <Route path="dashboard" element={<ClientDashboard />} />
-                      <Route path="plans" element={<ClientPlans />} />
-                      <Route path="bv-log" element={<BvLog />} />
-                      <Route path="my-referrals" element={<MyReferrals />} />
-                      <Route path="my-tree" element={<MyTree />} />
-                      <Route path="deposit" element={<Deposit />} />
-                      <Route path="withdraw" element={<Withdraw />} />
-                      <Route path="balance-transfer" element={<BalanceTransfer />} />
-                      <Route path="epin-recharge" element={<EPinRecharge />} />
-                      <Route path="transactions" element={<Transactions />} />
-                      <Route path="ranking" element={<Ranking />} />
-                      <Route path="support" element={<ClientSupport />} />
-                      <Route path="2fa" element={<TwoFactorAuthClient />} />
-                      <Route path="profile" element={<Profile />} />
-                      <Route path="change-password" element={<ChangePassword />} />
-                      <Route path="*" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
-                    </Routes>
-                  </ClientLayout>
-                </RoleGuard>
-              </ProtectedRoute>
-            }
-          />
+            {/* Client routes */}
+            <Route
+              path="/client/*"
+              element={
+                <ProtectedRoute>
+                  <RoleGuard allowedRoles={[ROLES.CLIENT]}>
+                    <ClientLayout>
+                      <Routes>
+                        <Route path="dashboard" element={<ClientDashboard />} />
+                        <Route path="plans" element={<ClientPlans />} />
+                        <Route path="bv-log" element={<BvLog />} />
+                        <Route path="my-referrals" element={<MyReferrals />} />
+                        <Route path="my-tree" element={<MyTree />} />
+                        <Route path="deposit" element={<Deposit />} />
+                        <Route path="withdraw" element={<Withdraw />} />
+                        <Route path="balance-transfer" element={<BalanceTransfer />} />
+                        <Route path="epin-recharge" element={<EPinRecharge />} />
+                        <Route path="transactions" element={<Transactions />} />
+                        <Route path="ranking" element={<Ranking />} />
+                        <Route path="support" element={<ClientSupport />} />
+                        <Route path="2fa" element={<TwoFactorAuthClient />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="change-password" element={<ChangePassword />} />
+                        <Route path="wallets" element={<Wallets />} />
+                        <Route path="wallets/deposit" element={<DepositWallet />} />
+                        <Route path="wallets/roi" element={<ROIWallet />} />
+                        <Route path="wallets/staking" element={<StakingWallet />} />
+                        <Route path="wallets/rewards" element={<RewardsWallet />} />
+                        <Route path="wallets/withdrawal" element={<WithdrawalWallet />} />
+                        <Route path="team-business" element={<TeamBusiness />} />
+                        <Route path="individual-business" element={<IndividualBusiness />} />
+                        <Route path="royalties" element={<Royalties />} />
+                        <Route path="bonuses" element={<Bonuses />} />
+                        <Route path="my-team" element={<MyTeam />} />
+                        <Route path="history/rewards" element={<RewardsLog />} />
+                        <Route path="history/staking" element={<StakingLog />} />
+                        <Route path="reports" element={<Reports />} />
+                        <Route path="network-tree" element={<NetworkTree />} />
+                        <Route path="rank-progress" element={<RankProgress />} />
+                        <Route path="earnings-breakdown" element={<EarningsBreakdown />} />
+                        <Route path="transaction-history" element={<ClientTransactionHistory />} />
+                        <Route path="*" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
+                      </Routes>
+                    </ClientLayout>
+                  </RoleGuard>
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Default redirect */}
-          <Route path="/" element={<Navigate to={ROUTES.LOGIN} replace />} />
-        </Routes>
-      </Router>
+            {/* Default redirect */}
+            <Route path="/" element={<Navigate to={ROUTES.LOGIN} replace />} />
+          </Routes>
+        </Router>
       </WalletProvider>
     </AuthProvider>
   );

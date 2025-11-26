@@ -1,6 +1,6 @@
-const Table = ({ 
-  columns, 
-  data, 
+const Table = ({
+  columns,
+  data,
   className = '',
   onRowClick,
 }) => {

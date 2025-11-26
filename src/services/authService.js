@@ -1,32 +1,20 @@
-import { delay } from '../utils/helpers';
+import api from './api';
 import { STORAGE_KEYS } from '../utils/constants';
-import { mockUsers } from '../data/mockUsers';
-
-// Initialize users in localStorage if not exists
-if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
-  localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(mockUsers));
-}
-
-const getUsers = () => {
-  const users = localStorage.getItem(STORAGE_KEYS.USERS);
-  return users ? JSON.parse(users) : [];
-};
-
-const saveUsers = (users) => {
-  localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-};
 
 export const authService = {
   async login(email, password) {
-    await delay(800);
-    const users = getUsers();
-    const user = users.find(u => u.email === email && u.password === password);
+    const response = await api.post('/auth/login', { email, password });
+    const { user, token, refreshToken, requiresTwoFactor, tempToken } = response.data.data;
     
-    if (!user) {
-      throw new Error('Invalid email or password');
+    if (requiresTwoFactor) {
+      return { requiresTwoFactor, tempToken };
     }
-    
-    const token = `token_${Date.now()}_${user.id}`;
+
+    // Normalize role
+    if (user.role === 'USER') user.role = 'client';
+    if (user.role === 'ADMIN') user.role = 'admin';
+    user.role = user.role.toLowerCase();
+
     localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
     
@@ -34,128 +22,71 @@ export const authService = {
   },
 
   async register(userData) {
-    await delay(1000);
-    const users = getUsers();
-    
-    // Check if email already exists
-    if (users.some(u => u.email === userData.email)) {
-      throw new Error('Email already registered');
-    }
-    
-    // Check if username already exists
-    if (users.some(u => u.username === userData.username)) {
-      throw new Error('Username already taken');
-    }
-    
-    const newUser = {
-      id: String(users.length + 1),
-      ...userData,
-      role: 'client',
-      emailVerified: false,
-      mobileVerified: false,
-      kycStatus: 'unverified',
-      status: 'active',
-      createdAt: new Date().toISOString().split('T')[0],
-      balance: 0,
-      totalDeposited: 0,
-      totalWithdrawn: 0,
-    };
-    
-    users.push(newUser);
-    saveUsers(users);
-    
-    return { user: newUser, message: 'Registration successful. Please verify your email.' };
+    const response = await api.post('/auth/register', userData);
+    return response.data;
   },
 
   async logout() {
-    await delay(300);
-    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
-    localStorage.removeItem(STORAGE_KEYS.USER);
+    try {
+      // Optional: Call logout endpoint if backend supports it
+      // await api.post('/auth/logout');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+      localStorage.removeItem(STORAGE_KEYS.USER);
+    }
   },
 
   async getCurrentUser() {
-    await delay(200);
-    const user = localStorage.getItem(STORAGE_KEYS.USER);
-    return user ? JSON.parse(user) : null;
+    try {
+      const response = await api.get('/auth/me');
+      const user = response.data.data.user;
+      
+      // Normalize role
+      if (user.role === 'USER') user.role = 'client';
+      if (user.role === 'ADMIN') user.role = 'admin';
+      user.role = user.role.toLowerCase();
+
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+      return user;
+    } catch (error) {
+      return null;
+    }
   },
 
   async forgotPassword(email) {
-    await delay(1000);
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
-    
-    if (!user) {
-      throw new Error('Email not found');
-    }
-    
-    // In real app, send reset link via email
-    // For demo, return a mock token
-    const resetToken = `reset_${Date.now()}_${user.id}`;
-    return { message: 'Reset link sent to your email', token: resetToken };
+    const response = await api.post('/auth/forgot-password', { email });
+    return response.data;
   },
 
   async resetPassword(token, newPassword) {
-    await delay(1000);
-    const users = getUsers();
-    const userId = token.split('_')[2];
-    const user = users.find(u => u.id === userId);
-    
-    if (!user) {
-      throw new Error('Invalid reset token');
-    }
-    
-    user.password = newPassword;
-    saveUsers(users);
-    
-    return { message: 'Password reset successful' };
+    const response = await api.post('/auth/reset-password', { token, password: newPassword });
+    return response.data;
   },
 
   async verifyEmail(token) {
-    await delay(800);
-    const users = getUsers();
-    const userId = token.split('_')[1];
-    const user = users.find(u => u.id === userId);
-    
-    if (!user) {
-      throw new Error('Invalid verification token');
-    }
-    
-    user.emailVerified = true;
-    saveUsers(users);
-    
-    // Update localStorage user if it's the current user
-    const currentUser = localStorage.getItem(STORAGE_KEYS.USER);
-    if (currentUser && JSON.parse(currentUser).id === user.id) {
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
-    }
-    
-    return { message: 'Email verified successfully' };
+    const response = await api.post('/auth/verify-email', { token });
+    return response.data;
   },
 
   async resendEmail(email) {
-    await delay(1000);
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
-    
-    if (!user) {
-      throw new Error('Email not found');
-    }
-    
-    if (user.emailVerified) {
-      throw new Error('Email already verified');
-    }
-    
-    return { message: 'Verification email sent' };
+    const response = await api.post('/auth/resend-verification', { email });
+    return response.data;
   },
 
-  async verify2FA(code) {
-    await delay(800);
-    // Mock 2FA verification - accept any 6-digit code
-    if (code.length !== 6 || !/^\d+$/.test(code)) {
-      throw new Error('Invalid 2FA code');
-    }
+  async verify2FA(tempToken, code) {
+    const response = await api.post('/2fa/verify-login', { tempToken, code });
+    const { user, token } = response.data.data;
     
-    return { message: '2FA verified successfully' };
+    // Normalize role
+    if (user.role === 'USER') user.role = 'client';
+    if (user.role === 'ADMIN') user.role = 'admin';
+    user.role = user.role.toLowerCase();
+
+    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+    
+    return { user, token };
   },
 };
-

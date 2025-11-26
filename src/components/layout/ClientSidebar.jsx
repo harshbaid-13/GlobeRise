@@ -15,7 +15,11 @@ import {
   FaShieldAlt,
   FaUser,
   FaKey,
-  FaSignOutAlt
+  FaSignOutAlt,
+  FaChartLine,
+  FaCrown,
+  FaGift,
+  FaHistory
 } from 'react-icons/fa';
 import { useAuth } from '../../hooks/useAuth';
 import { ROUTES } from '../../utils/constants';
@@ -44,6 +48,15 @@ const ClientSidebar = () => {
     { icon: FaTrophy, label: 'Ranking', path: ROUTES.CLIENT_RANKING },
     { icon: FaTicketAlt, label: 'Support Ticket', path: ROUTES.CLIENT_SUPPORT },
     { icon: FaShieldAlt, label: '2FA', path: ROUTES.CLIENT_2FA },
+    { icon: FaWallet, label: 'Wallets', path: ROUTES.CLIENT_WALLETS },
+    { icon: FaChartLine, label: 'Team Business', path: ROUTES.CLIENT_TEAM_BUSINESS },
+    { icon: FaChartLine, label: 'Individual Business', path: ROUTES.CLIENT_INDIVIDUAL_BUSINESS },
+    { icon: FaCrown, label: 'Royalties', path: ROUTES.CLIENT_ROYALTIES },
+    { icon: FaGift, label: 'Bonuses', path: ROUTES.CLIENT_BONUSES },
+    { icon: FaUsers, label: 'My Team', path: ROUTES.CLIENT_MY_TEAM },
+    { icon: FaFileAlt, label: 'Reports', path: ROUTES.CLIENT_REPORTS },
+    { icon: FaHistory, label: 'Rewards History', path: ROUTES.CLIENT_HISTORY_REWARDS },
+    { icon: FaHistory, label: 'Staking History', path: ROUTES.CLIENT_HISTORY_STAKING },
     { icon: FaUser, label: 'Profile', path: ROUTES.CLIENT_PROFILE },
     { icon: FaKey, label: 'Change Password', path: ROUTES.CLIENT_CHANGE_PASSWORD },
   ];
@@ -84,10 +97,9 @@ const ClientSidebar = () => {
                 key={item.label}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                    isActive
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-50'
+                  `flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${isActive
+                    ? 'bg-blue-50 text-blue-600'
+                    : 'text-gray-700 hover:bg-gray-50'
                   }`
                 }
               >
@@ -96,7 +108,7 @@ const ClientSidebar = () => {
               </NavLink>
             );
           })}
-          
+
           {/* Logout Button */}
           <button
             onClick={handleLogout}

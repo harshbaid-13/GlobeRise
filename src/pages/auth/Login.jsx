@@ -15,7 +15,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  
+
   const {
     register,
     handleSubmit,
@@ -28,9 +28,15 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      const user = await login(data.email, data.password);
+      const result = await login(data.email, data.password);
+
+      if (result.requiresTwoFactor) {
+        navigate(ROUTES.TWO_FA, { state: { tempToken: result.tempToken } });
+        return;
+      }
+
       // Redirect based on role
-      if (user.role === 'admin') {
+      if (result.role === 'admin') {
         navigate(ROUTES.ADMIN_DASHBOARD);
       } else {
         navigate(ROUTES.CLIENT_DASHBOARD);
@@ -56,12 +62,12 @@ const Login = () => {
             </Link>
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {error && (
             <Alert type="error" message={error} onClose={() => setError('')} />
           )}
-          
+
           <div className="space-y-4">
             <Input
               label="Email"
@@ -70,7 +76,7 @@ const Login = () => {
               required
               {...register('email')}
             />
-            
+
             <Input
               label="Password"
               type="password"

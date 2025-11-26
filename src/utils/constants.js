@@ -79,6 +79,26 @@ export const ROUTES = {
   CLIENT_2FA: '/client/2fa',
   CLIENT_PROFILE: '/client/profile',
   CLIENT_CHANGE_PASSWORD: '/client/change-password',
+  
+  // Wallet Routes
+  CLIENT_WALLETS: '/client/wallets',
+  CLIENT_WALLET_DEPOSIT: '/client/wallets/deposit',
+  CLIENT_WALLET_ROI: '/client/wallets/roi',
+  CLIENT_WALLET_STAKING: '/client/wallets/staking',
+  CLIENT_WALLET_REWARDS: '/client/wallets/rewards',
+  CLIENT_WALLET_WITHDRAWAL: '/client/wallets/withdrawal',
+
+  // MLM Routes
+  CLIENT_TEAM_BUSINESS: '/client/team-business',
+  CLIENT_INDIVIDUAL_BUSINESS: '/client/individual-business',
+  CLIENT_ROYALTIES: '/client/royalties',
+  CLIENT_BONUSES: '/client/bonuses',
+  CLIENT_MY_TEAM: '/client/my-team',
+
+  // History & Reports Routes
+  CLIENT_HISTORY_REWARDS: '/client/history/rewards',
+  CLIENT_HISTORY_STAKING: '/client/history/staking',
+  CLIENT_REPORTS: '/client/reports',
 };
 
 // LocalStorage keys
