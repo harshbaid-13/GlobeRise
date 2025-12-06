@@ -1,114 +1,42 @@
-import { delay } from '../utils/helpers';
-import { STORAGE_KEYS } from '../utils/constants';
-import { mockSupportTickets } from '../data/mockSupportTickets';
-
-// Initialize support tickets in localStorage if not exists
-if (!localStorage.getItem(STORAGE_KEYS.SUPPORT_TICKETS)) {
-  localStorage.setItem(STORAGE_KEYS.SUPPORT_TICKETS, JSON.stringify(mockSupportTickets));
-}
-
-const getTickets = () => {
-  const tickets = localStorage.getItem(STORAGE_KEYS.SUPPORT_TICKETS);
-  return tickets ? JSON.parse(tickets) : [];
-};
-
-const saveTickets = (tickets) => {
-  localStorage.setItem(STORAGE_KEYS.SUPPORT_TICKETS, JSON.stringify(tickets));
-};
+import api from './api';
 
 export const supportService = {
-  async getAllTickets() {
-    await delay(500);
-    return getTickets();
+  // Create a new ticket
+  async createTicket(data) {
+    const response = await api.post('/support/tickets', data);
+    return response.data.data.ticket;
   },
 
-  async getTicketsByStatus(status) {
-    await delay(500);
-    const tickets = getTickets();
-    return tickets.filter(t => t.status === status);
+  // Get user's tickets
+  async getMyTickets(status) {
+    const params = status ? `?status=${status}` : '';
+    const response = await api.get(`/support/tickets${params}`);
+    return response.data.data.tickets;
   },
 
-  async getPendingTickets() {
-    return this.getTicketsByStatus('pending');
+  // Get ticket by ID
+  async getTicket(id) {
+    const response = await api.get(`/support/tickets/${id}`);
+    return response.data.data.ticket;
   },
 
-  async getAnsweredTickets() {
-    return this.getTicketsByStatus('answered');
+  // Add response to ticket
+  async addResponse(ticketId, message) {
+    const response = await api.post(`/support/tickets/${ticketId}/response`, { message });
+    return response.data.data.ticket;
   },
 
-  async getClosedTickets() {
-    return this.getTicketsByStatus('closed');
+  // Cancel ticket (user can cancel their own OPEN tickets)
+  async cancelTicket(ticketId) {
+    const response = await api.delete(`/support/tickets/${ticketId}`);
+    return response.data.data.ticket;
   },
 
-  async getTicketById(id) {
-    await delay(300);
-    const tickets = getTickets();
-    return tickets.find(t => t.id === id);
-  },
-
-  async updateTicketStatus(id, status) {
-    await delay(800);
-    const tickets = getTickets();
-    const index = tickets.findIndex(t => t.id === id);
-    
-    if (index === -1) {
-      throw new Error('Ticket not found');
-    }
-    
-    tickets[index].status = status;
-    if (status === 'answered') {
-      tickets[index].answeredAt = new Date().toISOString();
-    }
-    if (status === 'closed') {
-      tickets[index].closedAt = new Date().toISOString();
-    }
-    
-    saveTickets(tickets);
-    return tickets[index];
-  },
-
-  async addResponse(ticketId, response) {
-    await delay(800);
-    const tickets = getTickets();
-    const index = tickets.findIndex(t => t.id === ticketId);
-    
-    if (index === -1) {
-      throw new Error('Ticket not found');
-    }
-    
-    if (!tickets[index].responses) {
-      tickets[index].responses = [];
-    }
-    
-    tickets[index].responses.push({
-      id: `resp_${Date.now()}`,
-      ...response,
-      createdAt: new Date().toISOString(),
-    });
-    
-    tickets[index].status = 'answered';
-    tickets[index].answeredAt = new Date().toISOString();
-    
-    saveTickets(tickets);
-    return tickets[index];
-  },
-
-  async createTicket(ticketData) {
-    await delay(800);
-    const tickets = getTickets();
-    const newTicket = {
-      id: `ticket_${Date.now()}`,
-      ...ticketData,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      answeredAt: null,
-      closedAt: null,
-      responses: [],
-    };
-    
-    tickets.push(newTicket);
-    saveTickets(tickets);
-    return newTicket;
+  // Get FAQs
+  async getFAQs(category) {
+    const params = category ? `?category=${category}` : '';
+    const response = await api.get(`/support/faqs${params}`);
+    return response.data.data.faqs;
   },
 };
 

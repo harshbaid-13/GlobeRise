@@ -1,21 +1,31 @@
 import { useState, useEffect } from 'react';
+import { useWallet } from '../../contexts/WalletContext';
 import { walletService } from '../../services/walletService';
 import { withdrawalService } from '../../services/withdrawalService';
+import { walletLinkService } from '../../services/walletLinkService';
 import { transactionService } from '../../services/transactionService';
-import { formatCurrency } from '../../utils/formatters';
-import { FaMoneyBillWave, FaCalendarAlt, FaExclamationTriangle, FaCheckCircle } from 'react-icons/fa';
+import { formatCurrency, formatWalletAddress } from '../../utils/formatters';
+import { FaMoneyBillWave, FaCalendarAlt, FaExclamationTriangle, FaCheckCircle, FaWallet, FaHistory, FaLink } from 'react-icons/fa';
 import Loading from '../../components/common/Loading';
 import Button from '../../components/common/Button';
+import Table from '../../components/common/Table';
+import WalletLinkModal from '../../components/wallet/WalletLinkModal';
 
 const Withdraw = () => {
+  const { wallet } = useWallet();
   const [withdrawalBalance, setWithdrawalBalance] = useState(0);
+  const [rewardBalance, setRewardBalance] = useState(0);
   const [amount, setAmount] = useState('');
+  const [selectedWalletAddress, setSelectedWalletAddress] = useState('');
+  const [linkedWallets, setLinkedWallets] = useState([]);
+  const [withdrawalHistory, setWithdrawalHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [pendingWithdrawals, setPendingWithdrawals] = useState([]);
   const [feePercent, setFeePercent] = useState(10); // Default 10%
+  const [showLinkModal, setShowLinkModal] = useState(false);
 
   const isMonday = () => {
     const today = new Date();
@@ -37,12 +47,29 @@ const Withdraw = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [balances, txs] = await Promise.all([
+      const [balances, txs, wallets] = await Promise.all([
         walletService.getBalances(),
-        transactionService.getTransactions({ type: 'WITHDRAWAL', limit: 10 })
+        transactionService.getTransactions({ type: 'WITHDRAWAL', limit: 50 }),
+        walletLinkService.getLinkedWallets().catch(() => [])
       ]);
       setWithdrawalBalance(balances.withdrawal || 0);
-      setPendingWithdrawals((txs.transactions || []).filter(t => t.status === 'PENDING'));
+      setRewardBalance(balances.reward || 0);
+      const allWithdrawals = txs.transactions || [];
+      setPendingWithdrawals(allWithdrawals.filter(t => t.status === 'PENDING'));
+      setWithdrawalHistory(allWithdrawals);
+      setLinkedWallets(wallets || []);
+      
+      // Auto-select connected wallet if available, otherwise first linked wallet
+      if (wallet?.address) {
+        const connectedWallet = wallets?.find(w => w.address.toLowerCase() === wallet.address.toLowerCase());
+        if (connectedWallet) {
+          setSelectedWalletAddress(connectedWallet.address);
+        } else if (wallets && wallets.length > 0 && !selectedWalletAddress) {
+          setSelectedWalletAddress(wallets[0].address);
+        }
+      } else if (wallets && wallets.length > 0 && !selectedWalletAddress) {
+        setSelectedWalletAddress(wallets[0].address);
+      }
     } catch (err) {
       console.error('Error fetching data:', err);
       setError('Failed to load withdrawal data');
@@ -72,9 +99,17 @@ const Withdraw = () => {
       return;
     }
 
+    if (!selectedWalletAddress && linkedWallets.length > 0) {
+      setError('Please select a linked wallet address');
+      return;
+    }
+
     try {
       setSubmitting(true);
-      await walletService.requestWithdrawal(amountNum);
+      await withdrawalService.requestWithdrawal({
+        amount: amountNum,
+        walletAddress: selectedWalletAddress || undefined
+      });
       setSuccess(`Withdrawal request of ${formatCurrency(amountNum)} submitted successfully!`);
       setAmount('');
       await fetchData();
@@ -103,10 +138,41 @@ const Withdraw = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white flex items-center gap-2">
-        <FaMoneyBillWave className="text-green-400" />
-        Withdrawal Request
-      </h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+          <FaMoneyBillWave className="text-green-400" />
+          Withdrawal Request
+        </h1>
+        {linkedWallets.length > 0 ? (
+          <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg">
+            <FaWallet className="text-blue-400" />
+            <span className="text-blue-300 text-sm">
+              {linkedWallets.length} Wallet{linkedWallets.length > 1 ? 's' : ''} Linked
+            </span>
+          </div>
+        ) : (
+          <button
+            onClick={() => setShowLinkModal(true)}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition-colors"
+          >
+            <FaLink />
+            Link Wallet
+          </button>
+        )}
+      </div>
+
+      {showLinkModal && (
+        <WalletLinkModal
+          isOpen={showLinkModal}
+          onClose={() => {
+            setShowLinkModal(false);
+            fetchData(); // Refresh linked wallets
+          }}
+          onLinked={() => {
+            fetchData(); // Refresh linked wallets after linking
+          }}
+        />
+      )}
 
       {/* Monday Status Banner */}
       {!mondayStatus && (
@@ -134,6 +200,25 @@ const Withdraw = () => {
           </div>
         </div>
       )}
+
+      {/* Rewards Wallet Balance - Prominent Display */}
+      <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/50 rounded-lg p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm text-yellow-300 mb-1">Rewards Wallet Balance</p>
+            <h2 className="text-4xl font-bold text-white mb-2">{formatCurrency(rewardBalance)} GRT</h2>
+            <p className="text-yellow-200 text-sm">
+              Transfer from Rewards to Withdrawal wallet to withdraw funds
+            </p>
+          </div>
+          <FaWallet className="text-5xl text-yellow-400 opacity-50" />
+        </div>
+        <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+          <p className="text-yellow-200 text-sm">
+            <strong>Max Withdrawable:</strong> <span className="text-white font-bold">{formatCurrency(rewardBalance)} GRT</span>
+          </p>
+        </div>
+      </div>
 
       {/* Withdrawal Form */}
       <div className="bg-gradient-to-br from-green-900/20 to-blue-900/20 border border-green-800 rounded-lg p-6">
@@ -168,6 +253,47 @@ const Withdraw = () => {
               step="0.01"
             />
           </div>
+
+          {/* Linked Wallet Selection */}
+          {linkedWallets.length > 0 && (
+            <div>
+              <label className="block text-sm font-medium text-green-200 mb-2">
+                Select Linked Wallet Address
+              </label>
+              <select
+                value={selectedWalletAddress}
+                onChange={(e) => setSelectedWalletAddress(e.target.value)}
+                className="w-full px-4 py-3 bg-green-950/50 border border-green-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                disabled={!mondayStatus || submitting}
+              >
+                <option value="">Select a wallet...</option>
+                {linkedWallets.map((wallet) => (
+                  <option key={wallet.id} value={wallet.address}>
+                    {wallet.walletType} - {formatWalletAddress(wallet.address)}
+                  </option>
+                ))}
+              </select>
+              {selectedWalletAddress && (
+                <p className="text-xs text-gray-400 mt-1">
+                  Selected: {formatWalletAddress(selectedWalletAddress)}
+                </p>
+              )}
+            </div>
+          )}
+
+          {linkedWallets.length === 0 && (
+            <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <FaExclamationTriangle className="text-yellow-400 mt-1" />
+                <div>
+                  <p className="text-yellow-300 font-semibold">No Linked Wallets</p>
+                  <p className="text-yellow-200 text-sm mt-1">
+                    Link your MetaMask or Trust Wallet to withdraw funds. Go to Wallets page to link a wallet.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {amount && parseFloat(amount) >= 10 && (
             <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4 space-y-2">
@@ -223,7 +349,10 @@ const Withdraw = () => {
       {/* Pending Withdrawals */}
       {pendingWithdrawals.length > 0 && (
         <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Pending Withdrawal Requests</h2>
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <FaExclamationTriangle className="text-yellow-400" />
+            Pending Withdrawal Requests
+          </h2>
           <div className="space-y-3">
             {pendingWithdrawals.map((withdrawal) => (
               <div key={withdrawal.id} className="bg-[#0f1419] rounded-lg p-4 border border-yellow-800/30">
@@ -233,6 +362,9 @@ const Withdraw = () => {
                     <p className="text-xs text-gray-400">
                       Requested: {new Date(withdrawal.createdAt).toLocaleDateString()}
                     </p>
+                    {withdrawal.description && (
+                      <p className="text-xs text-gray-500 mt-1">{withdrawal.description}</p>
+                    )}
                   </div>
                   <div className="px-3 py-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-full text-xs font-semibold">
                     PENDING
@@ -241,6 +373,50 @@ const Withdraw = () => {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Withdrawal History */}
+      {withdrawalHistory.length > 0 && (
+        <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <FaHistory className="text-blue-400" />
+            Withdrawal History
+          </h2>
+          <Table
+            columns={[
+              {
+                header: 'Date',
+                accessor: 'createdAt',
+                render: (value) => new Date(value).toLocaleDateString()
+              },
+              {
+                header: 'Amount',
+                accessor: 'amount',
+                render: (value) => formatCurrency(parseFloat(value || 0))
+              },
+              {
+                header: 'Status',
+                accessor: 'status',
+                render: (value) => (
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    value === 'COMPLETED' ? 'bg-green-500/20 text-green-400' :
+                    value === 'PENDING' ? 'bg-yellow-500/20 text-yellow-400' :
+                    value === 'REJECTED' ? 'bg-red-500/20 text-red-400' :
+                    'bg-gray-500/20 text-gray-400'
+                  }`}>
+                    {value}
+                  </span>
+                )
+              },
+              {
+                header: 'Description',
+                accessor: 'description',
+                render: (value) => value || 'N/A'
+              }
+            ]}
+            data={withdrawalHistory}
+          />
         </div>
       )}
 

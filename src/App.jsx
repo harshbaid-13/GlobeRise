@@ -104,6 +104,9 @@ import ClientTransactionHistory from './pages/client/TransactionHistory';
 import Investments from './pages/client/Investments';
 import Staking from './pages/client/Staking';
 import FiatWallet from './pages/client/wallets/FiatWallet';
+import Notifications from './pages/client/Notifications';
+import Rewards from './pages/client/Rewards';
+import Rules from './pages/client/Rules';
 
 function App() {
   return (
@@ -210,13 +213,6 @@ function App() {
                         <Route path="change-password" element={<ChangePassword />} />
                         <Route path="investments" element={<Investments />} />
                         <Route path="staking" element={<Staking />} />
-                        <Route path="wallets" element={<Wallets />} />
-                        <Route path="wallets/fiat" element={<FiatWallet />} />
-                        <Route path="wallets/deposit" element={<DepositWallet />} />
-                        <Route path="wallets/roi" element={<ROIWallet />} />
-                        <Route path="wallets/staking" element={<StakingWallet />} />
-                        <Route path="wallets/rewards" element={<RewardsWallet />} />
-                        <Route path="wallets/withdrawal" element={<WithdrawalWallet />} />
                         <Route path="team-business" element={<TeamBusiness />} />
                         <Route path="individual-business" element={<IndividualBusiness />} />
                         <Route path="royalties" element={<Royalties />} />
@@ -229,6 +225,9 @@ function App() {
                         <Route path="rank-progress" element={<RankProgress />} />
                         <Route path="earnings-breakdown" element={<EarningsBreakdown />} />
                         <Route path="transaction-history" element={<ClientTransactionHistory />} />
+                        <Route path="notifications" element={<Notifications />} />
+                        <Route path="rewards" element={<Rewards />} />
+                        <Route path="rules" element={<Rules />} />
                         <Route path="*" element={<Navigate to={ROUTES.CLIENT_DASHBOARD} replace />} />
                       </Routes>
                     </ClientLayout>

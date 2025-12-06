@@ -79,6 +79,7 @@ export const ROUTES = {
   CLIENT_2FA: '/client/2fa',
   CLIENT_PROFILE: '/client/profile',
   CLIENT_CHANGE_PASSWORD: '/client/change-password',
+  CLIENT_NOTIFICATIONS: '/client/notifications',
   
   // Wallet Routes
   CLIENT_WALLETS: '/client/wallets',

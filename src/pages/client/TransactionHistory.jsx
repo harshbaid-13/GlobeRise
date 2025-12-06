@@ -1,25 +1,50 @@
 import { useState, useEffect } from 'react';
 import { transactionService } from '../../services/transactionService';
+import { formatCurrency } from '../../utils/formatters';
 import Loading from '../../components/common/Loading';
 import Alert from '../../components/common/Alert';
 import TransactionFilters from '../../components/transactions/TransactionFilters';
 import TransactionDetailModal from '../../components/transactions/TransactionDetailModal';
 import Table from '../../components/common/Table';
-import { FaHistory, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaHistory, FaChevronLeft, FaChevronRight, FaDownload, FaFileCsv, FaFilePdf } from 'react-icons/fa';
 
 const TransactionHistory = () => {
     const [transactions, setTransactions] = useState([]);
+    const [allTransactions, setAllTransactions] = useState([]); // For export
     const [pagination, setPagination] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [filters, setFilters] = useState({ type: 'ALL', wallet: 'ALL' });
+    const [activeTab, setActiveTab] = useState('ALL'); // Filter tabs
+    const [dateRange, setDateRange] = useState({ startDate: '', endDate: '' });
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [exporting, setExporting] = useState(false);
+
+    const transactionTypes = [
+        { key: 'ALL', label: 'All' },
+        { key: 'DEPOSIT', label: 'Deposits' },
+        { key: 'ROI', label: 'ROI' },
+        { key: 'COMMISSION', label: 'Commissions' },
+        { key: 'TRANSFER', label: 'Transfers' },
+        { key: 'WITHDRAWAL', label: 'Withdrawals' },
+        { key: 'RANK_BONUS', label: 'Bonuses' },
+        { key: 'ROYALTY', label: 'Royalties' },
+        { key: 'INVESTMENT', label: 'Investments' }
+    ];
 
     useEffect(() => {
         loadTransactions();
-    }, [filters, currentPage]);
+    }, [filters, currentPage, activeTab, dateRange]);
+
+    useEffect(() => {
+        if (activeTab !== 'ALL') {
+            setFilters(prev => ({ ...prev, type: activeTab }));
+        } else {
+            setFilters(prev => ({ ...prev, type: 'ALL' }));
+        }
+    }, [activeTab]);
 
     const loadTransactions = async () => {
         try {
@@ -39,9 +64,24 @@ const TransactionHistory = () => {
                 params.wallet = filters.wallet;
             }
 
+            if (dateRange.startDate) {
+                params.startDate = dateRange.startDate;
+            }
+
+            if (dateRange.endDate) {
+                params.endDate = dateRange.endDate;
+            }
+
             const data = await transactionService.getTransactions(params);
             setTransactions(data.transactions || []);
             setPagination(data.pagination);
+
+            // Load all transactions for export (without pagination)
+            if (currentPage === 1) {
+                const exportParams = { ...params, limit: 1000, page: 1 };
+                const exportData = await transactionService.getTransactions(exportParams);
+                setAllTransactions(exportData.transactions || []);
+            }
         } catch (err) {
             console.error('Error loading transactions:', err);
             setError(err.response?.data?.message || 'Failed to load transactions');
@@ -53,6 +93,96 @@ const TransactionHistory = () => {
     const handleFilterChange = (newFilters) => {
         setFilters(newFilters);
         setCurrentPage(1); // Reset to first page when filters change
+    };
+
+    const exportToCSV = () => {
+        setExporting(true);
+        try {
+            const headers = ['Date', 'Type', 'Amount', 'Wallet', 'Status', 'Description'];
+            const rows = allTransactions.map(tx => [
+                new Date(tx.createdAt).toLocaleDateString(),
+                tx.type || 'N/A',
+                parseFloat(tx.amount || 0).toFixed(2),
+                tx.destWallet || tx.sourceWallet || '-',
+                tx.status || 'N/A',
+                tx.description || '-'
+            ]);
+
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transactions_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Export failed:', err);
+            setError('Failed to export CSV');
+        } finally {
+            setExporting(false);
+        }
+    };
+
+    const exportToPDF = () => {
+        setExporting(true);
+        // For PDF export, we'll create a simple HTML table and use browser print
+        // In production, you might want to use a library like jsPDF or pdfmake
+        try {
+            const printWindow = window.open('', '_blank');
+            const htmlContent = `
+                <html>
+                    <head>
+                        <title>Transaction History</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            table { width: 100%; border-collapse: collapse; }
+                            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                            th { background-color: #f2f2f2; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Transaction History</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Wallet</th>
+                                    <th>Status</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${allTransactions.map(tx => `
+                                    <tr>
+                                        <td>${new Date(tx.createdAt).toLocaleDateString()}</td>
+                                        <td>${tx.type || 'N/A'}</td>
+                                        <td>$${parseFloat(tx.amount || 0).toFixed(2)}</td>
+                                        <td>${tx.destWallet || tx.sourceWallet || '-'}</td>
+                                        <td>${tx.status || 'N/A'}</td>
+                                        <td>${tx.description || '-'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </body>
+                </html>
+            `;
+            printWindow.document.write(htmlContent);
+            printWindow.document.close();
+            printWindow.print();
+        } catch (err) {
+            console.error('Export failed:', err);
+            setError('Failed to export PDF');
+        } finally {
+            setExporting(false);
+        }
     };
 
     const handleRowClick = (transaction) => {
@@ -112,7 +242,7 @@ const TransactionHistory = () => {
             accessor: 'amount',
             render: (value) => (
                 <span className="text-white font-bold">
-                    ${value ? parseFloat(value).toFixed(2) : '0.00'}
+                    {formatCurrency(parseFloat(value || 0))}
                 </span>
             ),
         },
@@ -157,7 +287,56 @@ const TransactionHistory = () => {
 
             {error && <Alert type="error" message={error} />}
 
-            {/* Filters */}
+            {/* Filter Tabs */}
+            <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-4">
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {transactionTypes.map((type) => (
+                        <button
+                            key={type.key}
+                            onClick={() => setActiveTab(type.key)}
+                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                                activeTab === type.key
+                                    ? 'bg-[#00ADB5] text-white'
+                                    : 'bg-[#222831] text-gray-400 hover:text-white'
+                            }`}
+                        >
+                            {type.label}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Date Range Picker */}
+                <div className="flex gap-4 items-end">
+                    <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-400 mb-2">Start Date</label>
+                        <input
+                            type="date"
+                            value={dateRange.startDate}
+                            onChange={(e) => setDateRange(prev => ({ ...prev, startDate: e.target.value }))}
+                            className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                        />
+                    </div>
+                    <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-400 mb-2">End Date</label>
+                        <input
+                            type="date"
+                            value={dateRange.endDate}
+                            onChange={(e) => setDateRange(prev => ({ ...prev, endDate: e.target.value }))}
+                            className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                        />
+                    </div>
+                    {(dateRange.startDate || dateRange.endDate) && (
+                        <button
+                            onClick={() => setDateRange({ startDate: '', endDate: '' })}
+                            className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors"
+                        >
+                            Clear Dates
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Additional Filters */}
             <TransactionFilters
                 onFilterChange={handleFilterChange}
                 currentFilters={filters}
@@ -174,6 +353,24 @@ const TransactionHistory = () => {
                             </span>
                         )}
                     </h3>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={exportToCSV}
+                            disabled={exporting || allTransactions.length === 0}
+                            className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <FaFileCsv />
+                            Export CSV
+                        </button>
+                        <button
+                            onClick={exportToPDF}
+                            disabled={exporting || allTransactions.length === 0}
+                            className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <FaFilePdf />
+                            Export PDF
+                        </button>
+                    </div>
                 </div>
 
                 {loading ? (

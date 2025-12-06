@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaUser,
   FaWallet,
@@ -22,14 +22,35 @@ import {
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useWallet } from "../../contexts/WalletContext";
+import { walletLinkService } from "../../services/walletLinkService";
 import { formatWalletAddress } from "../../utils/formatters";
-import WalletConnectModal from "../wallet/WalletConnectModal";
+import WalletLinkModal from "../wallet/WalletLinkModal";
+import NotificationDropdown from "../notifications/NotificationDropdown";
+import UserMenu from "./UserMenu";
 
 const ClientHeader = () => {
   const { user: _user } = useAuth();
   const { address, isConnected, isCorrectNetwork, networkName } = useWallet();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [linkedWallets, setLinkedWallets] = useState([]);
   const location = useLocation();
+
+  useEffect(() => {
+    loadLinkedWallets();
+  }, []);
+
+  const loadLinkedWallets = async () => {
+    try {
+      const wallets = await walletLinkService.getLinkedWallets();
+      setLinkedWallets(wallets || []);
+    } catch (err) {
+      console.error('Error loading linked wallets:', err);
+    }
+  };
+
+  const handleWalletLinked = () => {
+    loadLinkedWallets();
+  };
 
   const handleWalletClick = () => {
     setIsModalOpen(true);
@@ -115,35 +136,48 @@ const ClientHeader = () => {
 
           {/* User Avatar and Wallet */}
           <div className="flex items-center space-x-3">
-            {isConnected ? (
+            {/* Notifications */}
+            <NotificationDropdown />
+            
+            {/* Wallet Status */}
+            {linkedWallets.length > 0 ? (
               <div className="flex items-center space-x-2">
-                {/* Network Indicator */}
-                <div
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-lg border ${
-                    isCorrectNetwork
-                      ? "bg-green-500/20 border-green-500"
-                      : "bg-red-500/20 border-red-500"
-                  }`}
-                >
+                {/* Network Indicator (if wallet is connected) */}
+                {isConnected && (
                   <div
-                    className={`w-2 h-2 rounded-full ${
-                      isCorrectNetwork ? "bg-green-500" : "bg-red-500"
-                    }`}
-                  ></div>
-                  <span
-                    className={`text-xs font-medium ${
-                      isCorrectNetwork ? "text-green-400" : "text-red-400"
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-lg border ${
+                      isCorrectNetwork
+                        ? "bg-green-500/20 border-green-500"
+                        : "bg-red-500/20 border-red-500"
                     }`}
                   >
-                    {networkName}
-                  </span>
-                </div>
+                    <div
+                      className={`w-2 h-2 rounded-full ${
+                        isCorrectNetwork ? "bg-green-500" : "bg-red-500"
+                      }`}
+                    ></div>
+                    <span
+                      className={`text-xs font-medium ${
+                        isCorrectNetwork ? "text-green-400" : "text-red-400"
+                      }`}
+                    >
+                      {networkName}
+                    </span>
+                  </div>
+                )}
+                {/* Show first linked wallet or connected wallet */}
                 <button
                   onClick={handleWalletClick}
                   className="flex items-center space-x-2 text-sm font-semibold text-[#00ADB5] px-4 py-2 rounded hover:bg-[#00ADB5]/10 transition-colors border border-[#00ADB5]"
                 >
                   <FaWallet className="w-4 h-4" />
-                  <span>{formatWalletAddress(address)}</span>
+                  <span>
+                    {isConnected && address
+                      ? formatWalletAddress(address)
+                      : linkedWallets[0]
+                      ? formatWalletAddress(linkedWallets[0].address)
+                      : "Link Wallet"}
+                  </span>
                 </button>
               </div>
             ) : (
@@ -152,18 +186,19 @@ const ClientHeader = () => {
                 className="flex items-center space-x-2 text-sm font-semibold text-[#00ADB5] px-4 py-2 rounded hover:bg-[#00ADB5]/10 transition-colors border border-[#00ADB5]"
               >
                 <FaWallet className="w-4 h-4" />
-                <span>Connect Wallet</span>
+                <span>Link Wallet</span>
               </button>
             )}
-            <div className="w-10 h-10 bg-[#00ADB5] rounded-full flex items-center justify-center">
-              <FaUser className="w-5 h-5 text-white" />
-            </div>
+            
+            {/* User Menu */}
+            <UserMenu />
           </div>
         </div>
       </div>
-      <WalletConnectModal
+      <WalletLinkModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onLinked={handleWalletLinked}
       />
     </>
   );

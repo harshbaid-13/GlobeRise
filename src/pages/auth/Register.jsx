@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../hooks/useAuth';
@@ -16,14 +16,24 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const { register: registerAuth } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const refCodeFromUrl = searchParams.get('ref');
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
+
+  // Pre-fill referral code from URL parameter
+  useEffect(() => {
+    if (refCodeFromUrl) {
+      setValue('referralCode', refCodeFromUrl.toUpperCase());
+    }
+  }, [refCodeFromUrl, setValue]);
 
   const onSubmit = async (data) => {
     setError('');

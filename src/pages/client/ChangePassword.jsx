@@ -49,11 +49,16 @@ const ChangePassword = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Change Password</h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-white mb-2">Change Password</h1>
+        <p className="text-sm text-gray-400">
+          Update your password to keep your account secure.
+        </p>
+      </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="bg-[#393E46] border border-[#4b5563] rounded-xl shadow-sm p-6 md:p-8">
+        <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
           {error && <Alert type="error" message={error} />}
           {success && <Alert type="success" message={success} />}
 
@@ -86,7 +91,7 @@ const ChangePassword = () => {
             minLength={8}
           />
 
-          <Button type="submit" disabled={loading} className="w-full md:w-auto">
+          <Button type="submit" disabled={loading} className="w-full md:w-auto px-8">
             {loading ? 'Changing Password...' : 'Change Password'}
           </Button>
         </form>

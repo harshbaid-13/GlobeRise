@@ -83,6 +83,11 @@ export const WalletProvider = ({ children }) => {
     return typeof window !== 'undefined' && window.ethereum && window.ethereum.isMetaMask;
   };
 
+  // Check if Trust Wallet is installed
+  const isTrustWalletInstalled = () => {
+    return typeof window !== 'undefined' && window.ethereum && window.ethereum.isTrust;
+  };
+
   // Check network (from Integration Guide)
   const checkNetwork = useCallback(async (provider) => {
     if (!provider) return false;
@@ -156,7 +161,7 @@ export const WalletProvider = ({ children }) => {
     }
   }, []);
 
-  // Connect wallet
+  // Connect wallet (MetaMask)
   const connectWallet = useCallback(async () => {
     try {
       if (!isMetamaskInstalled()) {
@@ -198,6 +203,52 @@ export const WalletProvider = ({ children }) => {
     } catch (error) {
       const errorMessage = handleError(error);
       console.error('Error connecting wallet:', errorMessage);
+      throw new Error(errorMessage);
+    }
+  }, [checkNetwork, initializeContracts]);
+
+  // Connect Trust Wallet
+  const connectTrustWallet = useCallback(async () => {
+    try {
+      if (!isTrustWalletInstalled()) {
+        throw new Error('Trust Wallet is not installed. Please install Trust Wallet extension.');
+      }
+
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
+      const network = await provider.getNetwork();
+      const chainId = Number(network.chainId);
+
+      // Check network
+      const isCorrect = await checkNetwork(provider);
+
+      // Initialize contracts
+      const { token, platform } = await initializeContracts(signer);
+
+      setWallet({
+        address,
+        provider,
+        signer,
+        isConnected: true,
+        chainId,
+      });
+
+      // Store in localStorage using STORAGE_KEYS
+      localStorage.setItem(STORAGE_KEYS.WALLET_ADDRESS, address);
+      localStorage.setItem(STORAGE_KEYS.WALLET_CONNECTED, 'true');
+
+      // Listen for account changes
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('chainChanged', handleChainChanged);
+
+      return { address, provider, signer, token, platform };
+    } catch (error) {
+      const errorMessage = handleError(error);
+      console.error('Error connecting Trust Wallet:', errorMessage);
       throw new Error(errorMessage);
     }
   }, [checkNetwork, initializeContracts]);
@@ -301,9 +352,11 @@ export const WalletProvider = ({ children }) => {
     
     // Functions
     connectWallet,
+    connectTrustWallet,
     disconnect,
     switchNetwork,
     isMetamaskInstalled,
+    isTrustWalletInstalled,
   };
 
   return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;

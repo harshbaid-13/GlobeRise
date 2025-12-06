@@ -1,18 +1,14 @@
-// Wallet Type Constants
+// Wallet Type Constants (3 Wallets Only)
 export const WALLET_TYPES = {
-    FIAT: 'FIAT',
     DEPOSIT: 'DEPOSIT',
-    STAKING: 'STAKING',
     REWARD: 'REWARD',
     WITHDRAWAL: 'WITHDRAWAL'
 };
 
-// Wallet Display Names (aliased as WALLET_LABELS for component compatibility)
+// Wallet Display Names
 export const WALLET_LABELS = {
-    FIAT: 'Fiat Wallet',
     DEPOSIT: 'Deposit Wallet',
-    STAKING: 'Staking Wallet',
-    REWARD: 'Reward Wallet',
+    REWARD: 'Rewards Wallet',
     WITHDRAWAL: 'Withdrawal Wallet'
 };
 
@@ -21,27 +17,24 @@ export const WALLET_NAMES = WALLET_LABELS;
 
 // Wallet Descriptions
 export const WALLET_DESCRIPTIONS = {
-    FIAT: 'Gateway for deposits - Transfer to Deposit or Staking',
-    DEPOSIT: 'Active MLM packages generating ROI',
-    STAKING: 'Fixed-term locked deposits',
-    REWARD: 'All earnings - Transfer to Deposit (reinvest) or Withdrawal (cashout)',
-    WITHDRAWAL: 'Ready for cashout - Request payout on Mondays'
+    DEPOSIT: 'Deposit from linked wallets (MetaMask/Trust Wallet) to create packages',
+    REWARD: 'All ROI and income - Transfer to Deposit (reinvest) or Withdrawal (cashout)',
+    WITHDRAWAL: 'Transfer from Rewards, then withdraw to linked wallet on Mondays'
 };
 
 // Allowed Transfer Paths
+// User → Deposit (from linked wallet)
+// Rewards → Deposit (reinvest) or Withdrawal (cashout)
+// Withdrawal → User (to linked wallet on Mondays)
 export const ALLOWED_TRANSFERS = {
-    FIAT: ['DEPOSIT', 'STAKING'],
     REWARD: ['DEPOSIT', 'WITHDRAWAL'],
-    DEPOSIT: [],  // Locked
-    STAKING: [],  // Locked
-    WITHDRAWAL: []  // Locked
+    DEPOSIT: [],  // Locked (used for packages)
+    WITHDRAWAL: []  // Locked (withdraws to linked wallet)
 };
 
 // Wallet Colors
 export const WALLET_COLORS = {
-    FIAT: 'green',
     DEPOSIT: 'blue',
-    STAKING: 'purple',
     REWARD: 'yellow',
     WITHDRAWAL: 'red'
 };
