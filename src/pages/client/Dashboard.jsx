@@ -108,16 +108,16 @@ const ClientDashboard = () => {
 
     return (
       <div
-        className={`bg-[#393E46] rounded-lg shadow-md border-l-4 ${colors.border} p-4 md:p-6 hover:shadow-lg transition-shadow`}
+        className={`bg-[var(--card-bg)] rounded-lg shadow-md border-l-4 ${colors.border} p-4 md:p-6 hover:shadow-lg transition-all duration-200`}
       >
         <div className="flex items-center justify-between mb-2 md:mb-3">
-          <h3 className="text-xs md:text-sm font-medium text-gray-400">{title}</h3>
+          <h3 className="text-xs md:text-sm font-medium text-[var(--text-tertiary)]">{title}</h3>
           <div className={`p-2 md:p-3 ${colors.iconBg} rounded-full`}>
             <Icon className={`${colors.icon} text-lg md:text-xl`} />
           </div>
         </div>
-        <div className="text-2xl md:text-3xl font-bold text-white mb-1">{value}</div>
-        {subtitle && <p className="text-xs md:text-sm text-gray-400">{subtitle}</p>}
+        <div className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-1">{value}</div>
+        {subtitle && <p className="text-xs md:text-sm text-[var(--text-tertiary)]">{subtitle}</p>}
       </div>
     );
   };
@@ -135,14 +135,14 @@ const ClientDashboard = () => {
 
     return (
       <div
-        className={`bg-[#222831] rounded-lg border-2 ${color.border} p-3 md:p-4 hover:shadow-lg transition-all`}
+        className={`bg-[var(--bg-primary)] rounded-lg border-2 ${color.border} p-3 md:p-4 hover:shadow-lg transition-all duration-200`}
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+            <p className="text-xs text-[var(--text-tertiary)] uppercase tracking-wider mb-1">
               {title}
             </p>
-            <p className="text-xl md:text-2xl font-bold text-white">
+            <p className="text-xl md:text-2xl font-bold text-[var(--text-primary)]">
               {formatCurrency(balance)}
             </p>
           </div>
@@ -206,7 +206,7 @@ const ClientDashboard = () => {
       y: {
         beginAtZero: true,
         grid: {
-          color: "rgba(255, 255, 255, 0.1)",
+          color: "rgba(128, 128, 128, 0.2)",
         },
         ticks: {
           color: "#9ca3af",
@@ -232,7 +232,7 @@ const ClientDashboard = () => {
       <AnnouncementBanner />
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-[var(--text-primary)]">
           Welcome back, {user?.email?.split("@")[0] || "User"}!
         </h1>
         <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full self-start sm:self-auto">
@@ -290,8 +290,8 @@ const ClientDashboard = () => {
       </div>
 
       {/* Wallet Balances Section */}
-      <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-4 md:p-6">
-        <h2 className="text-lg md:text-xl font-bold text-white mb-4 flex items-center gap-2">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-4 md:p-6 transition-colors duration-200">
+        <h2 className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
           <FaWallet className="text-blue-400" />
           Wallet Balances
         </h2>
@@ -315,15 +315,15 @@ const ClientDashboard = () => {
       </div>
 
       {/* Earnings Chart */}
-      <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-4 md:p-6">
-        <h2 className="text-lg md:text-xl font-bold text-white mb-4">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-4 md:p-6 transition-colors duration-200">
+        <h2 className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-4">
           Earnings Trend (Last 7 Days)
         </h2>
         <div className="h-64 md:h-80">
           {chartData.length > 0 ? (
             <Line data={earningsChartConfig} options={chartOptions} />
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-400">
+            <div className="flex items-center justify-center h-full text-[var(--text-tertiary)]">
               <p className="text-sm md:text-base">No earnings data available yet</p>
             </div>
           )}

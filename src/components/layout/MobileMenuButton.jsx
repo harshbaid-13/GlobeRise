@@ -4,7 +4,7 @@ const MobileMenuButton = ({ isOpen, onClick }) => {
     return (
         <button
             onClick={onClick}
-            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg text-gray-300 hover:bg-[#393E46] transition-colors touch-target"
+            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] transition-colors touch-target"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
         >

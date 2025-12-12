@@ -69,11 +69,11 @@ const WalletTransferModal = ({ isOpen, onClose, onTransfer, sourceWallet, balanc
         >
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">Target Wallet</label>
+                    <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">Target Wallet</label>
                     <select
                         value={targetWallet}
                         onChange={(e) => setTargetWallet(e.target.value)}
-                        className="w-full px-3 py-2 bg-[#393E46] border border-[#4b5563] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-white"
+                        className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[var(--text-primary)] transition-colors duration-200"
                         required
                     >
                         <option value="">Select Wallet</option>
@@ -97,7 +97,7 @@ const WalletTransferModal = ({ isOpen, onClose, onTransfer, sourceWallet, balanc
                     error={error}
                 />
 
-                <div className="text-sm text-gray-400">
+                <div className="text-sm text-[var(--text-tertiary)]">
                     Available Balance: ${parseFloat(balances?.[sourceWallet] || 0).toFixed(2)}
                 </div>
 

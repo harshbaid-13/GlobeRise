@@ -13,11 +13,11 @@ const Button = ({
 
   const variants = {
     primary: 'bg-[#00ADB5] text-white hover:bg-[#008c92] focus:ring-[#00ADB5] font-semibold',
-    secondary: 'bg-[#393E46] text-gray-300 hover:bg-[#4b5563] focus:ring-gray-500',
+    secondary: 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] focus:ring-gray-500 border border-[var(--border-color)]',
     success: 'bg-[#10b981] text-white hover:bg-[#059669] focus:ring-[#10b981]',
     danger: 'bg-[#ef4444] text-white hover:bg-[#dc2626] focus:ring-[#ef4444]',
     warning: 'bg-[#f59e0b] text-white hover:bg-[#d97706] focus:ring-[#f59e0b]',
-    outline: 'border-2 border-[#00ADB5] text-[#00ADB5] hover:bg-[#393E46] focus:ring-[#00ADB5]',
+    outline: 'border-2 border-[#00ADB5] text-[#00ADB5] hover:bg-[var(--bg-secondary)] focus:ring-[#00ADB5]',
   };
 
   const sizes = {
@@ -42,4 +42,3 @@ const Button = ({
 };
 
 export default Button;
-

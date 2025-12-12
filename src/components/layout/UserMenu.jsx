@@ -45,7 +45,7 @@ const UserMenu = () => {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[#393E46] transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[var(--bg-hover)] transition-colors"
       >
         <div className="w-8 h-8 bg-[#00ADB5] rounded-full flex items-center justify-center text-white font-semibold text-sm">
           {user?.profile?.avatarUrl ? (
@@ -58,25 +58,25 @@ const UserMenu = () => {
             getInitials()
           )}
         </div>
-        <span className="text-white text-sm font-medium hidden md:block">
+        <span className="text-[var(--text-primary)] text-sm font-medium hidden md:block">
           {user?.profile?.firstName || user?.email?.split('@')[0] || 'User'}
         </span>
         <FaChevronDown
-          className={`w-3 h-3 text-gray-400 transition-transform ${
+          className={`w-3 h-3 text-[var(--text-tertiary)] transition-transform ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-[#393E46] border border-[#4b5563] rounded-lg shadow-xl z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-48 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg shadow-xl z-50 overflow-hidden">
           <div className="p-2">
             <button
               onClick={() => {
                 navigate(ROUTES.CLIENT_PROFILE);
                 setIsOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-left text-gray-300 hover:bg-[#4b5563] rounded transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-left text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] rounded transition-colors"
             >
               <FaUser className="w-4 h-4" />
               <span>Profile</span>
@@ -86,15 +86,15 @@ const UserMenu = () => {
                 navigate(ROUTES.CLIENT_CHANGE_PASSWORD);
                 setIsOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2 text-left text-gray-300 hover:bg-[#4b5563] rounded transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-left text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] rounded transition-colors"
             >
               <FaKey className="w-4 h-4" />
               <span>Change Password</span>
             </button>
-            <div className="border-t border-[#4b5563] my-1"></div>
+            <div className="border-t border-[var(--border-color)] my-1"></div>
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-3 py-2 text-left text-red-400 hover:bg-[#4b5563] rounded transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2 text-left text-red-400 hover:bg-[var(--bg-hover)] rounded transition-colors"
             >
               <FaSignOutAlt className="w-4 h-4" />
               <span>Logout</span>
@@ -107,4 +107,3 @@ const UserMenu = () => {
 };
 
 export default UserMenu;
-

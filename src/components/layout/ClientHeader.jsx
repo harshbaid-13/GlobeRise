@@ -18,10 +18,13 @@ import {
   FaHistory,
   FaChartLine,
   FaFileAlt,
+  FaSun,
+  FaMoon,
 } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useWallet } from "../../contexts/WalletContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { walletLinkService } from "../../services/walletLinkService";
 import { formatWalletAddress } from "../../utils/formatters";
 import WalletLinkModal from "../wallet/WalletLinkModal";
@@ -32,6 +35,7 @@ import MobileMenuButton from "./MobileMenuButton";
 const ClientHeader = ({ onMenuToggle }) => {
   const { user: _user } = useAuth();
   const { address, isConnected, isCorrectNetwork, networkName } = useWallet();
+  const { theme, toggleTheme } = useTheme();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [linkedWallets, setLinkedWallets] = useState([]);
   const location = useLocation();
@@ -120,7 +124,7 @@ const ClientHeader = ({ onMenuToggle }) => {
 
   return (
     <>
-      <div className="bg-[#393E46] shadow-sm border-b border-[#4b5563] px-4 md:px-6 py-3 md:py-4">
+      <div className="bg-[var(--bg-secondary)] shadow-sm border-b border-[var(--border-color)] px-4 md:px-6 py-3 md:py-4 transition-colors duration-200">
         <div className="flex items-center justify-between">
           {/* Mobile Menu Button & Page Title */}
           <div className="flex items-center space-x-3">
@@ -130,7 +134,7 @@ const ClientHeader = ({ onMenuToggle }) => {
               return (
                 <div className="flex items-center space-x-2">
                   {Icon && <Icon className="w-4 h-4 md:w-5 md:h-5 text-[#00ADB5]" />}
-                  <h1 className="text-base md:text-xl font-bold text-white tracking-wide truncate">
+                  <h1 className="text-base md:text-xl font-bold text-[var(--text-primary)] tracking-wide truncate">
                     {title}
                   </h1>
                 </div>
@@ -140,6 +144,19 @@ const ClientHeader = ({ onMenuToggle }) => {
 
           {/* User Avatar and Wallet */}
           <div className="flex items-center space-x-2 md:space-x-3">
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-[var(--bg-primary)] hover:bg-[var(--bg-hover)] border border-[var(--border-color)] transition-all duration-200"
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? (
+                <FaSun className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" />
+              ) : (
+                <FaMoon className="w-4 h-4 md:w-5 md:h-5 text-slate-600" />
+              )}
+            </button>
+
             {/* Notifications */}
             <NotificationDropdown />
 

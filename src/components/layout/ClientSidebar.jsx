@@ -150,7 +150,7 @@ const ClientSidebar = ({ isOpen = false, onClose = () => { } }) => {
 
   return (
     <div
-      className={`w-64 bg-[#222831] h-screen fixed left-0 top-0 border-r border-[#4b5563] z-50 transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+      className={`w-64 bg-[var(--sidebar-bg)] h-screen fixed left-0 top-0 border-r border-[var(--border-color)] z-50 transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
     >
       <div className="p-4 flex flex-col h-full">
@@ -159,7 +159,7 @@ const ClientSidebar = ({ isOpen = false, onClose = () => { } }) => {
           {/* Mobile Close Button */}
           <button
             onClick={onClose}
-            className="lg:hidden p-2 rounded-lg text-gray-400 hover:bg-[#393E46] hover:text-white transition-colors"
+            className="lg:hidden p-2 rounded-lg text-[var(--text-tertiary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)] transition-colors"
             aria-label="Close menu"
           >
             <FaTimes className="w-5 h-5" />
@@ -181,7 +181,7 @@ const ClientSidebar = ({ isOpen = false, onClose = () => { } }) => {
                       onClick={() => toggleMenu(item.label)}
                       className={`flex items-center justify-between w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors ${isActive
                         ? "bg-[#00ADB5]/10 text-[#00ADB5]"
-                        : "text-gray-300 hover:bg-[#393E46]"
+                        : "text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]"
                         }`}
                     >
                       <div className="flex items-center space-x-3">
@@ -208,7 +208,7 @@ const ClientSidebar = ({ isOpen = false, onClose = () => { } }) => {
                               }
                               className={`flex items-center w-full px-4 py-2 text-sm rounded-lg transition-colors ${isSubmenuActive
                                 ? "text-[#00ADB5] bg-[#00ADB5]/10 font-semibold"
-                                : "text-gray-400 hover:text-[#00ADB5] hover:bg-[#393E46]"
+                                : "text-[var(--text-tertiary)] hover:text-[#00ADB5] hover:bg-[var(--bg-secondary)]"
                                 }`}
                             >
                               <span className="ml-6">{submenu.label}</span>
@@ -230,7 +230,7 @@ const ClientSidebar = ({ isOpen = false, onClose = () => { } }) => {
                     className={({ isActive }) =>
                       `flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${isActive
                         ? "bg-[#00ADB5]/10 text-[#00ADB5]"
-                        : "text-gray-300 hover:bg-[#393E46]"
+                        : "text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]"
                       }`
                     }
                   >
@@ -245,7 +245,7 @@ const ClientSidebar = ({ isOpen = false, onClose = () => { } }) => {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-300 hover:bg-[#393E46] w-full mt-2"
+            className="flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] w-full mt-2"
           >
             <FaSignOutAlt className="w-5 h-5" />
             <span>Logout</span>

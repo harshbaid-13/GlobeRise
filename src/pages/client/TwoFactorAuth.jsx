@@ -120,14 +120,14 @@ const TwoFactorAuth = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3">
           <FaShieldAlt className="text-blue-500" />
           Two-Factor Authentication
         </h1>
       </div>
 
       {/* Status Card */}
-      <div className="bg-[#393E46] border border-[#4b5563] rounded-lg p-6">
+      <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-6 transition-colors duration-200">
         {error && <Alert type="error" message={error} />}
         {success && <Alert type="success" message={success} />}
 
@@ -135,19 +135,19 @@ const TwoFactorAuth = () => {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className={`p-3 rounded-full ${enabled ? 'bg-green-500/20' : 'bg-gray-700'}`}>
-                <FaLock className={`text-xl ${enabled ? 'text-green-500' : 'text-gray-500'}`} />
+              <div className={`p-3 rounded-full ${enabled ? 'bg-green-500/20' : 'bg-[var(--bg-secondary)]'}`}>
+                <FaLock className={`text-xl ${enabled ? 'text-green-500' : 'text-[var(--text-muted)]'}`} />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">2FA Status</h3>
-                <p className="text-sm text-gray-400">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)]">2FA Status</h3>
+                <p className="text-sm text-[var(--text-tertiary)]">
                   {enabled ? 'Two-factor authentication is enabled' : 'Two-factor authentication is disabled'}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${enabled ? 'bg-green-500' : 'bg-gray-600'}`} />
-              <span className={`text-sm font-medium ${enabled ? 'text-green-500' : 'text-gray-400'}`}>
+              <div className={`w-3 h-3 rounded-full ${enabled ? 'bg-green-500' : 'bg-[var(--text-muted)]'}`} />
+              <span className={`text-sm font-medium ${enabled ? 'text-green-500' : 'text-[var(--text-tertiary)]'}`}>
                 {enabled ? 'Active' : 'Inactive'}
               </span>
             </div>
@@ -155,7 +155,7 @@ const TwoFactorAuth = () => {
 
           {/* Information */}
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-[var(--text-secondary)]">
               Two-factor authentication adds an extra layer of security to your account by requiring both your password
               and an authentication code from your mobile device to sign in.
             </p>
@@ -165,7 +165,7 @@ const TwoFactorAuth = () => {
         {/* Enable 2FA Flow */}
         {!enabled && !setupData && (
           <div>
-            <p className="text-gray-300 mb-4">
+            <p className="text-[var(--text-secondary)] mb-4">
               Enable two-factor authentication to secure your account with an additional verification step.
             </p>
             <Button onClick={handleSetup} disabled={loading}>
@@ -178,11 +178,11 @@ const TwoFactorAuth = () => {
         {!enabled && setupData && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
                 <FaKey className="text-blue-500" />
                 Step 1: Scan QR Code
               </h3>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-[var(--text-tertiary)] mb-4">
                 Scan this QR code with your authenticator app (Google Authenticator, Authy, Microsoft Authenticator, etc.)
               </p>
 
@@ -192,10 +192,10 @@ const TwoFactorAuth = () => {
               </div>
 
               {/* Manual Entry Option */}
-              <div className="bg-gray-800 rounded-lg p-4">
-                <p className="text-sm text-gray-400 mb-2">Or enter this secret key manually:</p>
+              <div className="bg-[var(--bg-primary)] rounded-lg p-4 border border-[var(--border-color)]">
+                <p className="text-sm text-[var(--text-tertiary)] mb-2">Or enter this secret key manually:</p>
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 bg-gray-900 px-3 py-2 rounded text-green-400 font-mono text-sm">
+                  <code className="flex-1 bg-[var(--bg-secondary)] px-3 py-2 rounded text-green-400 font-mono text-sm border border-[var(--border-color)]">
                     {setupData.secret}
                   </code>
                   <button
@@ -211,21 +211,21 @@ const TwoFactorAuth = () => {
             {/* Backup Codes */}
             {setupData.backupCodes && setupData.backupCodes.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Backup Codes</h3>
-                <p className="text-sm text-gray-400 mb-4">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Backup Codes</h3>
+                <p className="text-sm text-[var(--text-tertiary)] mb-4">
                   Save these backup codes in a secure location. You can use them to access your account if you lose access to your authenticator app.
                 </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 bg-gray-800 p-4 rounded-lg">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 bg-[var(--bg-primary)] p-4 rounded-lg border border-[var(--border-color)]">
                   {setupData.backupCodes.map((code, index) => (
                     <div key={index} className="flex items-center gap-2">
-                      <code className="flex-1 bg-gray-900 px-3 py-2 rounded text-yellow-400 font-mono text-sm">
+                      <code className="flex-1 bg-[var(--bg-secondary)] px-3 py-2 rounded text-yellow-400 font-mono text-sm border border-[var(--border-color)]">
                         {code}
                       </code>
                       <button
                         onClick={() => copyToClipboard(code, index)}
-                        className="p-2 hover:bg-gray-700 rounded transition-colors"
+                        className="p-2 hover:bg-[var(--bg-secondary)] rounded transition-colors"
                       >
-                        {copiedCode === index ? <FaCheckCircle className="text-green-500" /> : <FaCopy className="text-gray-400" />}
+                        {copiedCode === index ? <FaCheckCircle className="text-green-500" /> : <FaCopy className="text-[var(--text-tertiary)]" />}
                       </button>
                     </div>
                   ))}
@@ -236,15 +236,15 @@ const TwoFactorAuth = () => {
             {/* Verification Form */}
             <form onSubmit={handleEnable} className="space-y-4">
               <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Step 2: Verify Code</h3>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Step 2: Verify Code</h3>
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                   Enter the 6-digit code from your authenticator app
                 </label>
                 <input
                   type="text"
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  className="w-full md:w-64 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg tracking-widest text-center"
+                  className="w-full md:w-64 px-4 py-3 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg tracking-widest text-center transition-colors duration-200"
                   placeholder="000000"
                   maxLength={6}
                   required
@@ -262,7 +262,7 @@ const TwoFactorAuth = () => {
           <div>
             {!showDisableForm ? (
               <div className="space-y-4">
-                <p className="text-gray-300">
+                <p className="text-[var(--text-secondary)]">
                   Two-factor authentication is currently protecting your account.
                 </p>
                 <div className="flex gap-3">
@@ -277,27 +277,27 @@ const TwoFactorAuth = () => {
             ) : (
               <form onSubmit={handleDisable} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                     Enter your password
                   </label>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full md:w-96 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full md:w-96 px-4 py-3 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
                     placeholder="Enter your password"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                     Enter 2FA code
                   </label>
                   <input
                     type="text"
                     value={verificationCode}
                     onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    className="w-full md:w-64 px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg tracking-widest text-center"
+                    className="w-full md:w-64 px-4 py-3 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg tracking-widest text-center transition-colors duration-200"
                     placeholder="000000"
                     maxLength={6}
                     required
@@ -326,4 +326,3 @@ const TwoFactorAuth = () => {
 };
 
 export default TwoFactorAuth;
-

@@ -28,12 +28,12 @@ const ClientLayout = ({ children }) => {
   }, [isMobileSidebarOpen]);
 
   return (
-    <div className="flex h-screen bg-[#222831]">
+    <div className="flex h-screen bg-[var(--bg-primary)] transition-colors duration-200">
       <ClientSidebar isOpen={isMobileSidebarOpen} onClose={closeSidebar} />
       <Backdrop isOpen={isMobileSidebarOpen} onClick={closeSidebar} />
       <div className="flex-1 lg:ml-64 flex flex-col overflow-hidden">
         <ClientHeader onMenuToggle={toggleSidebar} />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#222831]">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-[var(--bg-primary)] transition-colors duration-200">
           {children}
         </main>
       </div>
@@ -42,4 +42,3 @@ const ClientLayout = ({ children }) => {
 };
 
 export default ClientLayout;
-

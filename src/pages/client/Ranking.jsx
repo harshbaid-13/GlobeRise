@@ -64,7 +64,7 @@ const Ranking = () => {
 
   if (!rankProgress) {
     return (
-      <div className="text-center py-12 text-gray-400">
+      <div className="text-center py-12 text-[var(--text-tertiary)]">
         <p>No rank data available</p>
       </div>
     );
@@ -97,7 +97,7 @@ const Ranking = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3">
           <FaTrophy className="text-yellow-500" />
           Ranking System
         </h1>
@@ -109,22 +109,22 @@ const Ranking = () => {
       <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-lg p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center md:text-left">
-            <p className="text-gray-400 text-sm mb-2">Current Rank</p>
+            <p className="text-[var(--text-tertiary)] text-sm mb-2">Current Rank</p>
             <div className="flex items-center gap-3 justify-center md:justify-start">
               {getRankIcon(currentRank, currentRankIndex)}
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-2xl font-bold text-[var(--text-primary)]">
                 {capitalizeFirst(currentRank)}
               </h2>
             </div>
           </div>
           <div className="text-center md:text-left">
-            <p className="text-gray-400 text-sm mb-2">Your Team Business</p>
+            <p className="text-[var(--text-tertiary)] text-sm mb-2">Your Team Business</p>
             <h2 className="text-2xl font-bold text-green-400">
               ${teamBusiness.toLocaleString()}
             </h2>
           </div>
           <div className="text-center md:text-left">
-            <p className="text-gray-400 text-sm mb-2">Next Rank</p>
+            <p className="text-[var(--text-tertiary)] text-sm mb-2">Next Rank</p>
             <h2 className="text-2xl font-bold text-blue-400">
               {nextRank ? capitalizeFirst(nextRank.name) : "MAX RANK"}
             </h2>
@@ -135,14 +135,14 @@ const Ranking = () => {
         {nextRank && (
           <div className="mt-6">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-[var(--text-secondary)]">
                 Progress to {capitalizeFirst(nextRank.name)}
               </span>
-              <span className="text-sm text-gray-300">
+              <span className="text-sm text-[var(--text-secondary)]">
                 {Math.max(0, Math.min(100, progressPercentage)).toFixed(1)}%
               </span>
             </div>
-            <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-[var(--border-color)] rounded-full h-3 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full transition-all duration-500"
                 style={{
@@ -150,9 +150,9 @@ const Ranking = () => {
                 }}
               />
             </div>
-            <p className="text-sm text-gray-400 mt-2">
+            <p className="text-sm text-[var(--text-tertiary)] mt-2">
               Remaining BV:{" "}
-              <span className="text-white font-bold">
+              <span className="text-[var(--text-primary)] font-bold">
                 ${Math.max(0, remainingBV).toLocaleString()}
               </span>
             </p>
@@ -161,7 +161,7 @@ const Ranking = () => {
         {!nextRank && (
           <div className="mt-6">
             <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
-              <p className="text-green-300 text-sm font-semibold">
+              <p className="text-green-400 text-sm font-semibold">
                 🎉 You've reached the maximum rank!
               </p>
             </div>
@@ -170,13 +170,13 @@ const Ranking = () => {
       </div>
 
       {/* Rankings Table */}
-      <div className="bg-[#393E46] border border-[#4b5563] rounded-lg overflow-hidden">
-        <div className="p-6 border-b border-[#4b5563]">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+      <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg overflow-hidden transition-colors duration-200">
+        <div className="p-6 border-b border-[var(--border-color)]">
+          <h3 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
             <FaStar className="text-yellow-500" />
             All Ranking Tiers
           </h3>
-          <p className="text-gray-400 text-sm mt-1">
+          <p className="text-[var(--text-tertiary)] text-sm mt-1">
             Achieve higher ranks to unlock bigger bonuses and exclusive benefits
           </p>
         </div>
@@ -184,26 +184,26 @@ const Ranking = () => {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#0f1419]">
+            <thead className="bg-[var(--bg-primary)]">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">
                   Rank
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">
                   Total Team Business
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">
                   One Time Bonus
                 </th>
-                <th className="px-6 py-4 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-center text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider">
                   Progress
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#4b5563]">
+            <tbody className="divide-y divide-[var(--border-color)]">
               {allRanks.map((tier, index) => {
                 const achieved = isRankAchieved(tier.name);
                 const isCurrent = tier.name === currentRank;
@@ -222,14 +222,14 @@ const Ranking = () => {
                           : ""
                       }
                       ${achieved && !isCurrent ? "bg-green-500/5" : ""}
-                      hover:bg-white/5 transition-colors
+                      hover:bg-[var(--bg-hover)] transition-colors
                     `}
                   >
                     <td className="px-6 py-4">
                       {achieved ? (
                         <FaCheckCircle className="text-green-500 text-xl" />
                       ) : (
-                        <FaLock className="text-gray-600 text-xl" />
+                        <FaLock className="text-[var(--text-muted)] text-xl" />
                       )}
                     </td>
                     <td className="px-6 py-4">
@@ -241,19 +241,19 @@ const Ranking = () => {
                               ? "text-blue-400"
                               : achieved
                               ? "text-green-400"
-                              : "text-gray-300"
+                              : "text-[var(--text-secondary)]"
                           }`}
                         >
                           {tier.name}
                           {isCurrent && (
-                            <span className="ml-2 text-xs bg-blue-500 px-2 py-1 rounded-full">
+                            <span className="ml-2 text-xs bg-blue-500 px-2 py-1 rounded-full text-white">
                               Current
                             </span>
                           )}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-white">
+                    <td className="px-6 py-4 text-right font-mono text-[var(--text-primary)]">
                       {formatCurrency(parseFloat(tier.requiredBusiness || 0))}
                     </td>
                     <td className="px-6 py-4 text-right font-mono text-yellow-400 font-bold">
@@ -261,7 +261,7 @@ const Ranking = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 bg-gray-700 rounded-full h-2 overflow-hidden">
+                        <div className="flex-1 bg-[var(--border-color)] rounded-full h-2 overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all ${
                               achieved ? "bg-green-500" : "bg-blue-500"
@@ -269,7 +269,7 @@ const Ranking = () => {
                             style={{ width: `${achieved ? 100 : progress}%` }}
                           />
                         </div>
-                        <span className="text-xs text-gray-400 w-12 text-right">
+                        <span className="text-xs text-[var(--text-tertiary)] w-12 text-right">
                           {achieved ? "100" : progress.toFixed(0)}%
                         </span>
                       </div>
@@ -283,9 +283,9 @@ const Ranking = () => {
       </div>
 
       {/* Leaderboard Section */}
-      <div className="bg-[#393E46] border border-[#4b5563] rounded-lg overflow-hidden">
-        <div className="p-6 border-b border-[#4b5563]">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-4">
+      <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg overflow-hidden transition-colors duration-200">
+        <div className="p-6 border-b border-[var(--border-color)]">
+          <h3 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2 mb-4">
             <FaTrophy className="text-yellow-500" />
             Top Performers
           </h3>
@@ -297,7 +297,7 @@ const Ranking = () => {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 leaderboardType === "earnings"
                   ? "bg-[#00ADB5] text-white"
-                  : "bg-[#222831] text-gray-400 hover:text-white"
+                  : "bg-[var(--bg-primary)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <FaCoins className="inline mr-2" />
@@ -308,7 +308,7 @@ const Ranking = () => {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 leaderboardType === "referrals"
                   ? "bg-[#00ADB5] text-white"
-                  : "bg-[#222831] text-gray-400 hover:text-white"
+                  : "bg-[var(--bg-primary)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <FaUsers className="inline mr-2" />
@@ -319,7 +319,7 @@ const Ranking = () => {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 leaderboardType === "investments"
                   ? "bg-[#00ADB5] text-white"
-                  : "bg-[#222831] text-gray-400 hover:text-white"
+                  : "bg-[var(--bg-primary)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
               }`}
             >
               <FaMedal className="inline mr-2" />
@@ -331,18 +331,18 @@ const Ranking = () => {
         {/* Leaderboard Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-[#0f1419]">
+            <thead className="bg-[var(--bg-primary)]">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--text-tertiary)] uppercase">
                   Rank
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--text-tertiary)] uppercase">
                   Name
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase">
+                <th className="px-6 py-4 text-left text-xs font-semibold text-[var(--text-tertiary)] uppercase">
                   Rank
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-400 uppercase">
+                <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--text-tertiary)] uppercase">
                   {leaderboardType === "earnings"
                     ? "Total Earnings"
                     : leaderboardType === "referrals"
@@ -351,12 +351,12 @@ const Ranking = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#4b5563]">
+            <tbody className="divide-y divide-[var(--border-color)]">
               {leaderboard[leaderboardType]?.length > 0 ? (
                 leaderboard[leaderboardType].map((entry) => (
                   <tr
                     key={entry.userId}
-                    className="hover:bg-white/5 transition-colors"
+                    className="hover:bg-[var(--bg-hover)] transition-colors"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
@@ -371,13 +371,13 @@ const Ranking = () => {
                             }`}
                           />
                         ) : (
-                          <span className="text-gray-400 font-bold">
+                          <span className="text-[var(--text-tertiary)] font-bold">
                             #{entry.rank}
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-white font-medium">
+                    <td className="px-6 py-4 text-[var(--text-primary)] font-medium">
                       {entry.name}
                     </td>
                     <td className="px-6 py-4">
@@ -385,7 +385,7 @@ const Ranking = () => {
                         {entry.rankName}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right font-mono text-white font-bold">
+                    <td className="px-6 py-4 text-right font-mono text-[var(--text-primary)] font-bold">
                       {leaderboardType === "referrals"
                         ? entry.value
                         : formatCurrency(parseFloat(entry.value || 0))}
@@ -396,7 +396,7 @@ const Ranking = () => {
                 <tr>
                   <td
                     colSpan={4}
-                    className="px-6 py-8 text-center text-gray-400"
+                    className="px-6 py-8 text-center text-[var(--text-tertiary)]"
                   >
                     No data available
                   </td>
@@ -409,16 +409,16 @@ const Ranking = () => {
 
       {/* Benefits Info */}
       <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-lg p-6">
-        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+        <h3 className="text-lg font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
           <FaTrophy className="text-yellow-500" />
           Rank Benefits
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-300">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-[var(--text-secondary)]">
           <div className="flex items-start gap-2">
             <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
             <p>
               Receive a{" "}
-              <strong className="text-white">one-time cash bonus</strong> upon
+              <strong className="text-[var(--text-primary)]">one-time cash bonus</strong> upon
               achieving each new rank
             </p>
           </div>
@@ -426,7 +426,7 @@ const Ranking = () => {
             <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
             <p>
               Unlock{" "}
-              <strong className="text-white">higher commission rates</strong> on
+              <strong className="text-[var(--text-primary)]">higher commission rates</strong> on
               team business volume
             </p>
           </div>
@@ -434,7 +434,7 @@ const Ranking = () => {
             <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
             <p>
               Gain access to{" "}
-              <strong className="text-white">
+              <strong className="text-[var(--text-primary)]">
                 exclusive leadership training
               </strong>{" "}
               and resources
@@ -443,7 +443,7 @@ const Ranking = () => {
           <div className="flex items-start gap-2">
             <FaCheckCircle className="text-green-500 mt-1 flex-shrink-0" />
             <p>
-              Earn <strong className="text-white">monthly royalties</strong>{" "}
+              Earn <strong className="text-[var(--text-primary)]">monthly royalties</strong>{" "}
               from company profits
             </p>
           </div>

@@ -40,15 +40,15 @@ const TransactionFilters = ({ onFilterChange, currentFilters }) => {
     };
 
     return (
-        <div className="bg-[#393E46] border border-[#4b5563] rounded-lg p-4">
+        <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-4 transition-colors duration-200">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-white font-semibold flex items-center">
+                <h3 className="text-[var(--text-primary)] font-semibold flex items-center">
                     <FaFilter className="mr-2 text-blue-500" />
                     Filters
                 </h3>
                 <button
                     onClick={resetFilters}
-                    className="px-3 py-1 text-sm text-gray-400 hover:text-white border border-[#4b5563] hover:border-blue-500 rounded transition-colors"
+                    className="px-3 py-1 text-sm text-[var(--text-tertiary)] hover:text-[var(--text-primary)] border border-[var(--border-color)] hover:border-blue-500 rounded transition-colors"
                 >
                     Reset
                 </button>
@@ -57,13 +57,13 @@ const TransactionFilters = ({ onFilterChange, currentFilters }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Transaction Type Filter */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                    <label className="block text-sm font-medium text-[var(--text-tertiary)] mb-2">
                         Transaction Type
                     </label>
                     <select
                         value={filters.type || 'ALL'}
                         onChange={(e) => handleFilterChange('type', e.target.value)}
-                        className="w-full bg-[#0f1419] border border-[#4b5563] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+                        className="w-full bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-200"
                     >
                         {transactionTypes.map((type) => (
                             <option key={type.value} value={type.value}>
@@ -75,13 +75,13 @@ const TransactionFilters = ({ onFilterChange, currentFilters }) => {
 
                 {/* Wallet Filter */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                    <label className="block text-sm font-medium text-[var(--text-tertiary)] mb-2">
                         Wallet
                     </label>
                     <select
                         value={filters.wallet || 'ALL'}
                         onChange={(e) => handleFilterChange('wallet', e.target.value)}
-                        className="w-full bg-[#0f1419] border border-[#4b5563] text-white rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+                        className="w-full bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors duration-200"
                     >
                         {walletTypes.map((wallet) => (
                             <option key={wallet.value} value={wallet.value}>

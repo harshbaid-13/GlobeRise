@@ -195,11 +195,11 @@ const Rewards = () => {
       accessor: "status",
       render: (value) => (
         <span
-          className={`px-2 py-1 rounded text-xs ${value === "COMPLETED"
-            ? "bg-green-500/20 text-green-400"
+          className={`px-2 py-1 rounded text-xs font-medium border ${value === "COMPLETED"
+            ? "bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/30"
             : value === "PENDING"
-              ? "bg-yellow-500/20 text-yellow-400"
-              : "bg-gray-500/20 text-gray-400"
+              ? "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-500/30"
+              : "bg-gray-500/20 text-gray-600 dark:text-gray-400 border-gray-500/30"
             }`}
         >
           {value || "N/A"}
@@ -211,7 +211,7 @@ const Rewards = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">Rewards</h1>
+        <h1 className="text-3xl font-bold text-[var(--text-primary)]">Rewards</h1>
       </div>
 
       {error && <Alert type="error" message={error} />}
@@ -220,11 +220,11 @@ const Rewards = () => {
       <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="text-gray-400 text-sm mb-1">Total Earnings</p>
-            <h2 className="text-4xl font-bold text-white mb-2">
+            <p className="text-[var(--text-tertiary)] text-sm mb-1">Total Earnings</p>
+            <h2 className="text-4xl font-bold text-[var(--text-primary)] mb-2">
               {formatCurrency(totalEarnings)}
             </h2>
-            <p className="text-gray-400 text-sm">
+            <p className="text-[var(--text-tertiary)] text-sm">
               Available in Rewards Wallet:{" "}
               <span className="text-green-400 font-semibold">
                 {formatCurrency(rewardBalance)} RISE
@@ -283,12 +283,12 @@ const Rewards = () => {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex gap-2 border-b border-[#4b5563]">
+      <div className="flex gap-2 border-b border-[var(--border-color)]">
         <button
           onClick={() => handleTabChange("roi")}
           className={`px-6 py-3 font-semibold transition-colors ${activeTab === "roi"
             ? "text-[#00ADB5] border-b-2 border-[#00ADB5]"
-            : "text-gray-400 hover:text-white"
+            : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
             }`}
         >
           <FaChartLine className="inline mr-2" />
@@ -298,7 +298,7 @@ const Rewards = () => {
           onClick={() => handleTabChange("levelIncome")}
           className={`px-6 py-3 font-semibold transition-colors ${activeTab === "levelIncome"
             ? "text-[#00ADB5] border-b-2 border-[#00ADB5]"
-            : "text-gray-400 hover:text-white"
+            : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
             }`}
         >
           <FaCoins className="inline mr-2" />
@@ -308,7 +308,7 @@ const Rewards = () => {
           onClick={() => handleTabChange("bonuses")}
           className={`px-6 py-3 font-semibold transition-colors ${activeTab === "bonuses"
             ? "text-[#00ADB5] border-b-2 border-[#00ADB5]"
-            : "text-gray-400 hover:text-white"
+            : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
             }`}
         >
           <FaGift className="inline mr-2" />
@@ -318,7 +318,7 @@ const Rewards = () => {
           onClick={() => handleTabChange("royalties")}
           className={`px-6 py-3 font-semibold transition-colors ${activeTab === "royalties"
             ? "text-[#00ADB5] border-b-2 border-[#00ADB5]"
-            : "text-gray-400 hover:text-white"
+            : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
             }`}
         >
           <FaCrown className="inline mr-2" />
@@ -327,22 +327,22 @@ const Rewards = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
         {activeTab === "roi" && (
           <>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <FaChartLine className="text-blue-500" />
                 ROI Earnings
               </h2>
-              <span className="text-gray-400 text-sm">
+              <span className="text-[var(--text-tertiary)] text-sm">
                 Total: {formatCurrency(totalROI)}
               </span>
             </div>
             {transactions.roi && transactions.roi.length > 0 ? (
               <Table columns={columns} data={transactions.roi} />
             ) : (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-[var(--text-tertiary)]">
                 <p>No ROI earnings yet</p>
               </div>
             )}
@@ -352,18 +352,18 @@ const Rewards = () => {
         {!tabLoading && activeTab === "levelIncome" && (
           <>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <FaCoins className="text-green-500" />
                 Level Income (Commissions)
               </h2>
-              <span className="text-gray-400 text-sm">
+              <span className="text-[var(--text-tertiary)] text-sm">
                 Total: {formatCurrency(totalCommission)}
               </span>
             </div>
             {transactions.levelIncome && transactions.levelIncome.length > 0 ? (
               <Table columns={columns} data={transactions.levelIncome} />
             ) : (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-[var(--text-tertiary)]">
                 <p>No level income yet</p>
               </div>
             )}
@@ -373,19 +373,19 @@ const Rewards = () => {
         {!tabLoading && activeTab === "bonuses" && (
           <>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <FaGift className="text-yellow-500" />
                 Rank Bonuses
               </h2>
-              <span className="text-gray-400 text-sm">
+              <span className="text-[var(--text-tertiary)] text-sm">
                 Total: {formatCurrency(totalRankBonus)}
               </span>
             </div>
             {transactions.bonuses && transactions.bonuses.length > 0 ? (
               <Table columns={columns} data={transactions.bonuses} />
             ) : (
-              <div className="text-center py-8 text-gray-400">
-                <FaTrophy className="mx-auto text-5xl text-gray-600 mb-4" />
+              <div className="text-center py-8 text-[var(--text-tertiary)]">
+                <FaTrophy className="mx-auto text-5xl text-[var(--text-muted)] mb-4" />
                 <p>No rank bonuses yet</p>
                 <p className="text-sm mt-2">
                   Achieve higher ranks to earn bonuses!
@@ -398,19 +398,19 @@ const Rewards = () => {
         {!tabLoading && activeTab === "royalties" && (
           <>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
                 <FaCrown className="text-purple-500" />
                 Royalties
               </h2>
-              <span className="text-gray-400 text-sm">
+              <span className="text-[var(--text-tertiary)] text-sm">
                 Total: {formatCurrency(totalRoyalty)}
               </span>
             </div>
             {transactions.royalties && transactions.royalties.length > 0 ? (
               <Table columns={columns} data={transactions.royalties} />
             ) : (
-              <div className="text-center py-8 text-gray-400">
-                <FaCrown className="mx-auto text-5xl text-gray-600 mb-4" />
+              <div className="text-center py-8 text-[var(--text-tertiary)]">
+                <FaCrown className="mx-auto text-5xl text-[var(--text-muted)] mb-4" />
                 <p>No royalties yet</p>
                 <p className="text-sm mt-2">
                   Earn royalties based on your rank and team performance
@@ -433,14 +433,14 @@ const Rewards = () => {
       >
         <div className="space-y-4">
           <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-            <p className="text-sm text-blue-300 mb-2">Available Balance:</p>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-sm text-blue-400 mb-2">Available Balance:</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">
               {formatCurrency(rewardBalance)} RISE
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
               Transfer Amount (RISE)
             </label>
             <input
@@ -448,13 +448,13 @@ const Rewards = () => {
               value={transferAmount}
               onChange={(e) => setTransferAmount(e.target.value)}
               placeholder="Enter amount to transfer"
-              className="w-full px-4 py-3 bg-[#222831] border border-[#4b5563] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200"
               min="0.01"
               step="0.01"
               max={rewardBalance}
               disabled={transferring}
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-[var(--text-tertiary)] mt-1">
               Maximum: {formatCurrency(rewardBalance)} RISE
             </p>
           </div>

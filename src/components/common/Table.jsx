@@ -6,23 +6,23 @@ const Table = ({
 }) => {
   return (
     <div className="table-responsive">
-      <table className={`min-w-full divide-y divide-[#4b5563] ${className}`}>
-        <thead className="bg-[#393E46]">
+      <table className={`min-w-full divide-y divide-[var(--border-color)] ${className}`}>
+        <thead className="bg-[var(--bg-secondary)]">
           <tr>
             {columns.map((column, index) => (
               <th
                 key={index}
-                className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-[var(--text-tertiary)] uppercase tracking-wider"
               >
                 {column.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="bg-[#393E46] divide-y divide-[#4b5563]">
+        <tbody className="bg-[var(--card-bg)] divide-y divide-[var(--border-color)]">
           {data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-400">
+              <td colSpan={columns.length} className="px-6 py-4 text-center text-[var(--text-tertiary)]">
                 No data available
               </td>
             </tr>
@@ -30,11 +30,11 @@ const Table = ({
             data.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
-                className={onRowClick ? 'cursor-pointer hover:bg-[#393E46] transition-colors' : ''}
+                className={onRowClick ? 'cursor-pointer hover:bg-[var(--bg-hover)] transition-colors' : ''}
                 onClick={() => onRowClick && onRowClick(row)}
               >
                 {columns.map((column, colIndex) => (
-                  <td key={colIndex} className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-xs md:text-sm text-gray-300">
+                  <td key={colIndex} className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-xs md:text-sm text-[var(--text-secondary)]">
                     {column.render ? column.render(row[column.accessor], row) : row[column.accessor]}
                   </td>
                 ))}
@@ -48,4 +48,3 @@ const Table = ({
 };
 
 export default Table;
-
