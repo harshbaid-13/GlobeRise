@@ -108,16 +108,16 @@ const ClientDashboard = () => {
 
     return (
       <div
-        className={`bg-[#393E46] rounded-lg shadow-md border-l-4 ${colors.border} p-6 hover:shadow-lg transition-shadow`}
+        className={`bg-[var(--card-bg)] rounded-lg shadow-md border-l-4 ${colors.border} p-4 md:p-6 hover:shadow-lg transition-all duration-200`}
       >
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-gray-400">{title}</h3>
-          <div className={`p-3 ${colors.iconBg} rounded-full`}>
-            <Icon className={`${colors.icon} text-xl`} />
+        <div className="flex items-center justify-between mb-2 md:mb-3">
+          <h3 className="text-xs md:text-sm font-medium text-[var(--text-tertiary)]">{title}</h3>
+          <div className={`p-2 md:p-3 ${colors.iconBg} rounded-full`}>
+            <Icon className={`${colors.icon} text-lg md:text-xl`} />
           </div>
         </div>
-        <div className="text-3xl font-bold text-white mb-1">{value}</div>
-        {subtitle && <p className="text-sm text-gray-400">{subtitle}</p>}
+        <div className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-1">{value}</div>
+        {subtitle && <p className="text-xs md:text-sm text-[var(--text-tertiary)]">{subtitle}</p>}
       </div>
     );
   };
@@ -135,18 +135,18 @@ const ClientDashboard = () => {
 
     return (
       <div
-        className={`bg-[#222831] rounded-lg border-2 ${color.border} p-4 hover:shadow-lg transition-all`}
+        className={`bg-[var(--bg-primary)] rounded-lg border-2 ${color.border} p-3 md:p-4 hover:shadow-lg transition-all duration-200`}
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+            <p className="text-xs text-[var(--text-tertiary)] uppercase tracking-wider mb-1">
               {title}
             </p>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-xl md:text-2xl font-bold text-[var(--text-primary)]">
               {formatCurrency(balance)}
             </p>
           </div>
-          <FaWallet className={`${color.icon} text-2xl`} />
+          <FaWallet className={`${color.icon} text-xl md:text-2xl`} />
         </div>
       </div>
     );
@@ -206,7 +206,7 @@ const ClientDashboard = () => {
       y: {
         beginAtZero: true,
         grid: {
-          color: "rgba(255, 255, 255, 0.1)",
+          color: "rgba(128, 128, 128, 0.2)",
         },
         ticks: {
           color: "#9ca3af",
@@ -231,12 +231,12 @@ const ClientDashboard = () => {
       {/* Announcements Banner */}
       <AnnouncementBanner />
 
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-[var(--text-primary)]">
           Welcome back, {user?.email?.split("@")[0] || "User"}!
         </h1>
-        <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full">
-          <span className="text-white font-bold text-sm">
+        <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full self-start sm:self-auto">
+          <span className="text-white font-bold text-xs md:text-sm">
             Rank: {stats?.rank || "NONE"}
           </span>
         </div>
@@ -246,7 +246,7 @@ const ClientDashboard = () => {
       <LiveRatesWidget />
 
       {/* Main Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
         <StatCard
           title="Total Earnings"
           value={formatCurrency(stats?.totalEarnings || 0)}
@@ -262,9 +262,8 @@ const ClientDashboard = () => {
           subtitle={
             stats?.rule6040 ? (
               <span
-                className={`flex items-center gap-2 ${
-                  stats.rule6040.isValid ? "text-green-400" : "text-red-400"
-                }`}
+                className={`flex items-center gap-2 ${stats.rule6040.isValid ? "text-green-400" : "text-red-400"
+                  }`}
               >
                 Stronger Leg is bringing{" "}
                 {stats.rule6040.strongerLegPercent.toFixed(1)}%
@@ -291,12 +290,12 @@ const ClientDashboard = () => {
       </div>
 
       {/* Wallet Balances Section */}
-      <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-        <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-4 md:p-6 transition-colors duration-200">
+        <h2 className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
           <FaWallet className="text-blue-400" />
           Wallet Balances
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
           <WalletCard
             title="Deposit Wallet"
             balance={stats?.walletBalances?.deposit || 0}
@@ -316,47 +315,47 @@ const ClientDashboard = () => {
       </div>
 
       {/* Earnings Chart */}
-      <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-        <h2 className="text-xl font-bold text-white mb-4">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-4 md:p-6 transition-colors duration-200">
+        <h2 className="text-lg md:text-xl font-bold text-[var(--text-primary)] mb-4">
           Earnings Trend (Last 7 Days)
         </h2>
-        <div className="h-80">
+        <div className="h-64 md:h-80">
           {chartData.length > 0 ? (
             <Line data={earningsChartConfig} options={chartOptions} />
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-400">
-              <p>No earnings data available yet</p>
+            <div className="flex items-center justify-center h-full text-[var(--text-tertiary)]">
+              <p className="text-sm md:text-base">No earnings data available yet</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
         <a
           href="/client/investments"
-          className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-6 text-white hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 shadow-lg"
+          className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-4 md:p-6 text-white hover:from-blue-700 hover:to-blue-800 transition-all hover:shadow-xl shadow-lg touch-target"
         >
-          <h3 className="text-lg font-bold mb-2">Create Package</h3>
-          <p className="text-sm text-blue-100">
+          <h3 className="text-base md:text-lg font-bold mb-2">Create Package</h3>
+          <p className="text-xs md:text-sm text-blue-100">
             Start earning with MLM investments
           </p>
         </a>
         <a
           href="/client/staking"
-          className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg p-6 text-white hover:from-purple-700 hover:to-purple-800 transition-all transform hover:scale-105 shadow-lg"
+          className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg p-4 md:p-6 text-white hover:from-purple-700 hover:to-purple-800 transition-all hover:shadow-xl shadow-lg touch-target"
         >
-          <h3 className="text-lg font-bold mb-2">Fixed Staking</h3>
-          <p className="text-sm text-purple-100">
+          <h3 className="text-base md:text-lg font-bold mb-2">Fixed Staking</h3>
+          <p className="text-xs md:text-sm text-purple-100">
             Lock funds for guaranteed returns
           </p>
         </a>
         <a
           href="/client/my-team"
-          className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg p-6 text-white hover:from-green-700 hover:to-green-800 transition-all transform hover:scale-105 shadow-lg"
+          className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg p-4 md:p-6 text-white hover:from-green-700 hover:to-green-800 transition-all hover:shadow-xl shadow-lg touch-target sm:col-span-2 md:col-span-1"
         >
-          <h3 className="text-lg font-bold mb-2">View Team</h3>
-          <p className="text-sm text-green-100">Manage your downline network</p>
+          <h3 className="text-base md:text-lg font-bold mb-2">View Team</h3>
+          <p className="text-xs md:text-sm text-green-100">Manage your downline network</p>
         </a>
       </div>
     </div>

@@ -9,13 +9,13 @@ const Input = ({
   return (
     <div className="w-full">
       {label && (
-        <label className="block text-sm font-medium text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
           {label} {required && <span className="text-[#ef4444]">*</span>}
         </label>
       )}
       <input
         type={type}
-        className={`w-full px-3 py-2 bg-[#393E46] border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-white placeholder-gray-400 ${error ? 'border-[#ef4444]' : 'border-[#4b5563]'
+        className={`w-full px-3 py-2.5 bg-[var(--input-bg)] border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-muted)] touch-target transition-colors duration-200 ${error ? 'border-[#ef4444]' : 'border-[var(--border-color)]'
           } ${className}`}
         {...props}
       />
@@ -25,4 +25,3 @@ const Input = ({
 };
 
 export default Input;
-

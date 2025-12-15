@@ -112,12 +112,12 @@ const Reports = () => {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold text-white">Reports</h1>
+                <h1 className="text-3xl font-bold text-[var(--text-primary)]">Reports</h1>
                 <div className="flex gap-2">
                     <select
                         value={dateRange}
                         onChange={(e) => setDateRange(Number(e.target.value))}
-                        className="px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                        className="px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                     >
                         <option value={7}>Last 7 days</option>
                         <option value={30}>Last 30 days</option>
@@ -161,9 +161,9 @@ const Reports = () => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div className="bg-[#393E46] p-6 rounded-lg border border-[#4b5563]">
+                        <div className="bg-[var(--card-bg)] p-6 rounded-lg border border-[var(--border-color)] transition-colors duration-200">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-semibold text-white">Earnings Breakdown</h3>
+                                <h3 className="text-lg font-semibold text-[var(--text-primary)]">Earnings Breakdown</h3>
                                 <button
                                     onClick={() => earningsReport?.chartData && exportToCSV(earningsReport.chartData, 'earnings')}
                                     className="px-3 py-1 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded text-sm flex items-center gap-2"
@@ -174,13 +174,13 @@ const Reports = () => {
                             {earningsReport?.breakdown ? (
                                 <CustomPieChart data={earningsReport.breakdown} />
                             ) : (
-                                <div className="text-center text-gray-400 py-12">No data available</div>
+                                <div className="text-center text-[var(--text-tertiary)] py-12">No data available</div>
                             )}
                         </div>
 
-                        <div className="bg-[#393E46] p-6 rounded-lg border border-[#4b5563]">
+                        <div className="bg-[var(--card-bg)] p-6 rounded-lg border border-[var(--border-color)] transition-colors duration-200">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-semibold text-white">Earnings Over Time</h3>
+                                <h3 className="text-lg font-semibold text-[var(--text-primary)]">Earnings Over Time</h3>
                                 <button
                                     onClick={() => chartData && exportToPDF('Earnings Report', chartData)}
                                     className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded text-sm flex items-center gap-2"
@@ -191,7 +191,7 @@ const Reports = () => {
                             {chartData.length > 0 ? (
                                 <CustomLineChart data={chartData} color="#00ADB5" name="Earnings" />
                             ) : (
-                                <div className="text-center text-gray-400 py-12">No data available</div>
+                                <div className="text-center text-[var(--text-tertiary)] py-12">No data available</div>
                             )}
                         </div>
                     </div>
@@ -216,9 +216,9 @@ const Reports = () => {
                         />
                     </div>
 
-                    <div className="bg-[#393E46] p-6 rounded-lg border border-[#4b5563]">
+                    <div className="bg-[var(--card-bg)] p-6 rounded-lg border border-[var(--border-color)] transition-colors duration-200">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-white">Investment Trend</h3>
+                            <h3 className="text-lg font-semibold text-[var(--text-primary)]">Investment Trend</h3>
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => investmentReport?.chartData && exportToCSV(investmentReport.chartData, 'investments')}
@@ -237,7 +237,7 @@ const Reports = () => {
                         {investmentReport?.chartData && investmentReport.chartData.length > 0 ? (
                             <CustomLineChart data={investmentReport.chartData} color="#10B981" name="Investments" />
                         ) : (
-                            <div className="text-center text-gray-400 py-12">No investment data available</div>
+                            <div className="text-center text-[var(--text-tertiary)] py-12">No investment data available</div>
                         )}
                     </div>
                 </>

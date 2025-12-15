@@ -31,7 +31,7 @@ const StakingLog = () => {
         { header: 'Description', accessor: 'description' },
         {
             header: 'Status', accessor: 'status', render: (row) => (
-                <span className={`px-2 py-1 rounded text-xs ${row.status === 'COMPLETED' ? 'bg-green-500/20 text-green-500' : 'bg-yellow-500/20 text-yellow-500'}`}>
+                <span className={`px-2 py-1 rounded text-xs font-medium border ${row.status === 'COMPLETED' ? 'bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/40' : 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-500/40'}`}>
                     {row.status}
                 </span>
             )

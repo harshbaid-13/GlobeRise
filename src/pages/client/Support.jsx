@@ -195,7 +195,7 @@ const ClientSupport = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3">
           <FaTicketAlt className="text-blue-500" />
           Support & Help
         </h1>
@@ -205,13 +205,13 @@ const ClientSupport = () => {
       {success && <Alert type="success" message={success} />}
 
       {/* Tab Navigation */}
-      <div className="flex gap-2 border-b border-[#4b5563]">
+      <div className="flex gap-2 border-b border-[var(--border-color)]">
         <button
           onClick={() => setActiveTab('create')}
           className={`px-6 py-3 font-semibold transition-colors ${
             activeTab === 'create'
               ? 'text-[#00ADB5] border-b-2 border-[#00ADB5]'
-              : 'text-gray-400 hover:text-white'
+              : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <FaPlus className="inline mr-2" />
@@ -222,7 +222,7 @@ const ClientSupport = () => {
           className={`px-6 py-3 font-semibold transition-colors ${
             activeTab === 'tickets'
               ? 'text-[#00ADB5] border-b-2 border-[#00ADB5]'
-              : 'text-gray-400 hover:text-white'
+              : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <FaTicketAlt className="inline mr-2" />
@@ -233,7 +233,7 @@ const ClientSupport = () => {
           className={`px-6 py-3 font-semibold transition-colors ${
             activeTab === 'faqs'
               ? 'text-[#00ADB5] border-b-2 border-[#00ADB5]'
-              : 'text-gray-400 hover:text-white'
+              : 'text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
           }`}
         >
           <FaQuestionCircle className="inline mr-2" />
@@ -243,18 +243,18 @@ const ClientSupport = () => {
 
       {/* Create Ticket Tab */}
       {activeTab === 'create' && (
-        <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-          <h2 className="text-xl font-bold text-white mb-4">Create Support Ticket</h2>
+        <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Create Support Ticket</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                   Category
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                  className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                   required
                 >
                   {TICKET_CATEGORIES.map((cat) => (
@@ -265,13 +265,13 @@ const ClientSupport = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                   Priority
                 </label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value)}
-                  className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                  className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                   required
                 >
                   {PRIORITY_OPTIONS.map((opt) => (
@@ -284,28 +284,28 @@ const ClientSupport = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                 Subject
               </label>
               <input
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                 placeholder="Enter ticket subject"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                 Message
               </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={6}
-                className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                 placeholder="Describe your issue in detail..."
                 required
               />
@@ -324,17 +324,17 @@ const ClientSupport = () => {
           {ticketsLoading ? (
             <Loading />
           ) : tickets.length === 0 ? (
-            <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-12 text-center">
-              <FaTicketAlt className="mx-auto text-5xl text-gray-600 mb-4" />
-              <p className="text-gray-400 text-lg">No tickets yet</p>
-              <p className="text-gray-500 text-sm mt-2">Create a support ticket to get help</p>
+            <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-12 text-center transition-colors duration-200">
+              <FaTicketAlt className="mx-auto text-5xl text-[var(--text-muted)] mb-4" />
+              <p className="text-[var(--text-tertiary)] text-lg">No tickets yet</p>
+              <p className="text-[var(--text-muted)] text-sm mt-2">Create a support ticket to get help</p>
             </div>
           ) : (
             <div className="space-y-4">
               {tickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6 hover:border-[#00ADB5] transition-colors"
+                  className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 hover:border-[#00ADB5] transition-colors"
                 >
                   <div className="flex items-start justify-between">
                     <div 
@@ -342,12 +342,12 @@ const ClientSupport = () => {
                       onClick={() => handleViewTicket(ticket.id)}
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-semibold text-white">{ticket.subject}</h3>
+                        <h3 className="text-lg font-semibold text-[var(--text-primary)]">{ticket.subject}</h3>
                         {getStatusBadge(ticket.status)}
                         {getPriorityBadge(ticket.priority)}
                       </div>
-                      <p className="text-gray-400 text-sm mb-2 line-clamp-2">{ticket.message}</p>
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                      <p className="text-[var(--text-tertiary)] text-sm mb-2 line-clamp-2">{ticket.message}</p>
+                      <div className="flex items-center gap-4 text-xs text-[var(--text-muted)]">
                         <span>Category: {TICKET_CATEGORIES.find(c => c.value === ticket.category)?.label || ticket.category}</span>
                         <span>Created: {formatDate(ticket.createdAt)}</span>
                       </div>
@@ -375,11 +375,11 @@ const ClientSupport = () => {
       {/* FAQs Tab */}
       {activeTab === 'faqs' && (
         <>
-          <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-4 mb-6">
+          <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-4 mb-6 transition-colors duration-200">
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full md:w-64 px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+              className="w-full md:w-64 px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
             >
               <option value="ALL">All Categories</option>
               {TICKET_CATEGORIES.map((cat) => (
@@ -393,22 +393,22 @@ const ClientSupport = () => {
           {faqsLoading ? (
             <Loading />
           ) : faqs.length === 0 ? (
-            <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-12 text-center">
-              <FaQuestionCircle className="mx-auto text-5xl text-gray-600 mb-4" />
-              <p className="text-gray-400">No FAQs available</p>
+            <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-12 text-center transition-colors duration-200">
+              <FaQuestionCircle className="mx-auto text-5xl text-[var(--text-muted)] mb-4" />
+              <p className="text-[var(--text-tertiary)]">No FAQs available</p>
             </div>
           ) : (
             <div className="space-y-4">
               {faqs.map((faq) => (
                 <div
                   key={faq.id}
-                  className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6"
+                  className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200"
                 >
                   <div className="flex items-start gap-3 mb-3">
                     <FaQuestionCircle className="text-blue-400 mt-1 flex-shrink-0" />
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white mb-2">{faq.question}</h3>
-                      <p className="text-gray-300 whitespace-pre-wrap">{faq.answer}</p>
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">{faq.question}</h3>
+                      <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{faq.answer}</p>
                       <span className="inline-block mt-3 px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">
                         {TICKET_CATEGORIES.find(c => c.value === faq.category)?.label || faq.category}
                       </span>
@@ -423,13 +423,13 @@ const ClientSupport = () => {
 
       {/* Ticket Detail Modal */}
       {selectedTicket && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#393E46] rounded-lg border border-[#4b5563] max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-[#4b5563] flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">{selectedTicket.subject}</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-[var(--border-color)] flex items-center justify-between">
+              <h2 className="text-xl font-bold text-[var(--text-primary)]">{selectedTicket.subject}</h2>
               <button
                 onClick={() => setSelectedTicket(null)}
-                className="text-gray-400 hover:text-white"
+                className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
               >
                 <FaTimes className="w-5 h-5" />
               </button>
@@ -439,23 +439,23 @@ const ClientSupport = () => {
                 <div className="flex items-center gap-3 mb-4">
                   {getStatusBadge(selectedTicket.status)}
                   {getPriorityBadge(selectedTicket.priority)}
-                  <span className="text-gray-400 text-sm">
+                  <span className="text-[var(--text-tertiary)] text-sm">
                     {TICKET_CATEGORIES.find(c => c.value === selectedTicket.category)?.label || selectedTicket.category}
                   </span>
                 </div>
-                <div className="bg-[#222831] rounded-lg p-4 mb-4">
-                  <p className="text-white whitespace-pre-wrap">{selectedTicket.message}</p>
-                  <p className="text-gray-400 text-xs mt-2">Created: {formatDate(selectedTicket.createdAt)}</p>
+                <div className="bg-[var(--bg-primary)] rounded-lg p-4 mb-4 border border-[var(--border-color)]">
+                  <p className="text-[var(--text-primary)] whitespace-pre-wrap">{selectedTicket.message}</p>
+                  <p className="text-[var(--text-muted)] text-xs mt-2">Created: {formatDate(selectedTicket.createdAt)}</p>
                 </div>
               </div>
 
               {selectedTicket.adminResponse && (
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Admin Response</h3>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Admin Response</h3>
                   <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                    <p className="text-gray-200 whitespace-pre-wrap">{selectedTicket.adminResponse}</p>
+                    <p className="text-[var(--text-secondary)] whitespace-pre-wrap">{selectedTicket.adminResponse}</p>
                     {selectedTicket.respondedAt && (
-                      <p className="text-gray-400 text-xs mt-2">Responded: {formatDate(selectedTicket.respondedAt)}</p>
+                      <p className="text-[var(--text-muted)] text-xs mt-2">Responded: {formatDate(selectedTicket.respondedAt)}</p>
                     )}
                   </div>
                 </div>
@@ -463,12 +463,12 @@ const ClientSupport = () => {
 
               {selectedTicket.status !== 'CLOSED' && (
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-3">Add Response</h3>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Add Response</h3>
                   <textarea
                     value={responseMessage}
                     onChange={(e) => setResponseMessage(e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00ADB5] mb-3"
+                    className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] mb-3 transition-colors duration-200"
                     placeholder="Type your response..."
                   />
                   <Button onClick={handleAddResponse} disabled={loading || !responseMessage.trim()}>
@@ -485,4 +485,3 @@ const ClientSupport = () => {
 };
 
 export default ClientSupport;
-

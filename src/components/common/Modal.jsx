@@ -6,7 +6,6 @@ const Modal = ({
   title,
   children,
   size = 'md',
-  variant = 'dark',
   className = ''
 }) => {
   if (!isOpen) return null;
@@ -18,13 +17,6 @@ const Modal = ({
     xl: 'max-w-4xl',
   };
 
-  const isLight = variant === 'light';
-  const bgColor = isLight ? 'bg-white' : 'bg-[#393E46]';
-  const borderColor = isLight ? 'border-gray-200' : 'border-[#4b5563]';
-  const textColor = isLight ? 'text-gray-800' : 'text-white';
-  const titleColor = isLight ? 'text-gray-800' : 'text-white';
-  const closeButtonColor = isLight ? 'text-gray-400 hover:text-gray-600' : 'text-gray-400 hover:text-white';
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Blurred backdrop */}
@@ -34,22 +26,22 @@ const Modal = ({
       ></div>
 
       {/* Modal content */}
-      <div className="relative z-50 flex items-center justify-center min-h-screen px-4 py-4">
+      <div className="relative z-50 flex items-center justify-center min-h-screen p-4">
         <div
-          className={`relative ${bgColor} rounded-lg text-left overflow-hidden shadow-2xl border ${borderColor} transform transition-all ${sizes[size]} w-full max-h-[90vh] overflow-y-auto ${className}`}
+          className={`relative bg-[var(--card-bg)] rounded-lg text-left overflow-hidden shadow-2xl border border-[var(--border-color)] transform transition-all w-full ${sizes[size]} md:max-h-[90vh] max-h-screen overflow-y-auto ${className}`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={`${bgColor} px-4 pt-5 pb-4 sm:p-6`}>
-            <div className="flex justify-between items-center mb-4">
-              {title && <h3 className={`text-lg font-medium ${titleColor}`}>{title}</h3>}
+          <div className="bg-[var(--card-bg)] px-4 pt-4 pb-4 sm:p-6">
+            <div className="flex justify-between items-start mb-4">
+              {title && <h3 className="text-base md:text-lg font-medium text-[var(--text-primary)]">{title}</h3>}
               <button
                 onClick={onClose}
-                className={`${closeButtonColor} focus:outline-none transition-colors`}
+                className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] focus:outline-none transition-colors touch-target p-1"
               >
                 <FaTimes className="w-5 h-5" />
               </button>
             </div>
-            <div className={textColor}>
+            <div className="text-[var(--text-primary)]">
               {children}
             </div>
           </div>
@@ -60,4 +52,3 @@ const Modal = ({
 };
 
 export default Modal;
-

@@ -58,7 +58,7 @@ const Withdraw = () => {
       setPendingWithdrawals(allWithdrawals.filter(t => t.status === 'PENDING'));
       setWithdrawalHistory(allWithdrawals);
       setLinkedWallets(wallets || []);
-      
+
       // Auto-select connected wallet if available, otherwise first linked wallet
       if (wallet?.address) {
         const connectedWallet = wallets?.find(w => w.address.toLowerCase() === wallet.address.toLowerCase());
@@ -139,14 +139,14 @@ const Withdraw = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-2">
           <FaMoneyBillWave className="text-green-400" />
           Withdrawal Request
         </h1>
         {linkedWallets.length > 0 ? (
           <div className="flex items-center gap-2 px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-lg">
             <FaWallet className="text-blue-400" />
-            <span className="text-blue-300 text-sm">
+            <span className="text-blue-400 text-sm">
               {linkedWallets.length} Wallet{linkedWallets.length > 1 ? 's' : ''} Linked
             </span>
           </div>
@@ -176,12 +176,12 @@ const Withdraw = () => {
 
       {/* Monday Status Banner */}
       {!mondayStatus && (
-        <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-6">
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-6">
           <div className="flex items-center gap-3">
             <FaCalendarAlt className="text-yellow-400 text-2xl" />
             <div>
-              <h3 className="text-yellow-300 font-bold text-lg">Withdrawals Open on Mondays Only</h3>
-              <p className="text-yellow-200 text-sm mt-1">
+              <h3 className="text-yellow-400 font-bold text-lg">Withdrawals Open on Mondays Only</h3>
+              <p className="text-[var(--text-secondary)] text-sm mt-1">
                 Next withdrawal window: <strong>{daysUntilMonday} {daysUntilMonday === 1 ? 'day' : 'days'}</strong> from now
               </p>
             </div>
@@ -190,12 +190,12 @@ const Withdraw = () => {
       )}
 
       {mondayStatus && (
-        <div className="bg-green-900/20 border border-green-800 rounded-lg p-4">
+        <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
           <div className="flex items-center gap-3">
             <FaCheckCircle className="text-green-400 text-xl" />
             <div>
-              <h3 className="text-green-300 font-bold">Withdrawal Window Open!</h3>
-              <p className="text-green-200 text-sm">You can submit withdrawal requests today</p>
+              <h3 className="text-green-400 font-bold">Withdrawal Window Open!</h3>
+              <p className="text-[var(--text-secondary)] text-sm">You can submit withdrawal requests today</p>
             </div>
           </div>
         </div>
@@ -205,41 +205,41 @@ const Withdraw = () => {
       <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/50 rounded-lg p-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-yellow-300 mb-1">Rewards Wallet Balance</p>
-            <h2 className="text-4xl font-bold text-white mb-2">{formatCurrency(rewardBalance)} GRT</h2>
-            <p className="text-yellow-200 text-sm">
+            <p className="text-sm text-yellow-400 mb-1">Rewards Wallet Balance</p>
+            <h2 className="text-4xl font-bold text-[var(--text-primary)] mb-2">{formatCurrency(rewardBalance)} RISE</h2>
+            <p className="text-[var(--text-secondary)] text-sm">
               Transfer from Rewards to Withdrawal wallet to withdraw funds
             </p>
           </div>
           <FaWallet className="text-5xl text-yellow-400 opacity-50" />
         </div>
         <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-          <p className="text-yellow-200 text-sm">
-            <strong>Max Withdrawable:</strong> <span className="text-white font-bold">{formatCurrency(rewardBalance)} GRT</span>
+          <p className="text-[var(--text-secondary)] text-sm">
+            <strong>Max Withdrawable:</strong> <span className="text-[var(--text-primary)] font-bold">{formatCurrency(rewardBalance)} RISE</span>
           </p>
         </div>
       </div>
 
       {/* Withdrawal Form */}
-      <div className="bg-gradient-to-br from-green-900/20 to-blue-900/20 border border-green-800 rounded-lg p-6">
+      <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg border border-green-500 p-6">
         <h2 className="text-2xl font-bold text-white mb-4">Request Withdrawal</h2>
 
-        <div className="bg-green-950/50 rounded-lg p-4 mb-6">
+        <div className="bg-green-800/50 rounded-lg p-4 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-sm text-green-300">Withdrawal Wallet Balance</p>
+              <p className="text-sm text-green-200">Withdrawal Wallet Balance</p>
               <p className="text-3xl font-bold text-white">{formatCurrency(withdrawalBalance)}</p>
             </div>
             <div className="text-right">
-              <p className="text-xs text-gray-400">Minimum Withdrawal</p>
-              <p className="text-lg font-bold text-green-400">$10.00</p>
+              <p className="text-xs text-green-200">Minimum Withdrawal</p>
+              <p className="text-lg font-bold text-green-300">$10.00</p>
             </div>
           </div>
         </div>
 
         <form onSubmit={handleWithdraw} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-green-200 mb-2">
+            <label className="block text-sm font-medium text-green-100 mb-2">
               Withdrawal Amount
             </label>
             <input
@@ -247,7 +247,7 @@ const Withdraw = () => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount (min $10)"
-              className="w-full px-4 py-3 bg-green-950/50 border border-green-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-4 py-3 bg-green-800/50 border border-green-500 rounded-lg text-white placeholder-green-300 focus:outline-none focus:ring-2 focus:ring-green-400"
               disabled={!mondayStatus || submitting}
               min="10"
               step="0.01"
@@ -257,13 +257,13 @@ const Withdraw = () => {
           {/* Linked Wallet Selection */}
           {linkedWallets.length > 0 && (
             <div>
-              <label className="block text-sm font-medium text-green-200 mb-2">
+              <label className="block text-sm font-medium text-green-100 mb-2">
                 Select Linked Wallet Address
               </label>
               <select
                 value={selectedWalletAddress}
                 onChange={(e) => setSelectedWalletAddress(e.target.value)}
-                className="w-full px-4 py-3 bg-green-950/50 border border-green-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-4 py-3 bg-green-800/50 border border-green-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-400"
                 disabled={!mondayStatus || submitting}
               >
                 <option value="">Select a wallet...</option>
@@ -274,7 +274,7 @@ const Withdraw = () => {
                 ))}
               </select>
               {selectedWalletAddress && (
-                <p className="text-xs text-gray-400 mt-1">
+                <p className="text-xs text-green-200 mt-1">
                   Selected: {formatWalletAddress(selectedWalletAddress)}
                 </p>
               )}
@@ -282,11 +282,11 @@ const Withdraw = () => {
           )}
 
           {linkedWallets.length === 0 && (
-            <div className="bg-yellow-900/20 border border-yellow-800 rounded-lg p-4">
+            <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-4">
               <div className="flex items-start gap-3">
                 <FaExclamationTriangle className="text-yellow-400 mt-1" />
                 <div>
-                  <p className="text-yellow-300 font-semibold">No Linked Wallets</p>
+                  <p className="text-yellow-400 font-semibold">No Linked Wallets</p>
                   <p className="text-yellow-200 text-sm mt-1">
                     Link your MetaMask or Trust Wallet to withdraw funds. Go to Wallets page to link a wallet.
                   </p>
@@ -296,19 +296,19 @@ const Withdraw = () => {
           )}
 
           {amount && parseFloat(amount) >= 10 && (
-            <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-4 space-y-2">
+            <div className="bg-green-800/70 border border-green-600 rounded-lg p-4 space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Gross Amount:</span>
+                <span className="text-green-200">Gross Amount:</span>
                 <span className="text-white font-bold">{formatCurrency(parseFloat(amount))}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Withdrawal Fee ({feePercent}%):</span>
-                <span className="text-red-400 font-bold">-{formatCurrency(calculateFee())}</span>
+                <span className="text-green-200">Withdrawal Fee ({feePercent}%):</span>
+                <span className="text-red-300 font-bold">-{formatCurrency(calculateFee())}</span>
               </div>
-              <div className="border-t border-gray-700 pt-2 mt-2">
+              <div className="border-t border-green-600 pt-2 mt-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-300 font-medium">Net Amount:</span>
-                  <span className="text-green-400 font-bold text-lg">{formatCurrency(calculateNetAmount())}</span>
+                  <span className="text-green-100 font-medium">Net Amount:</span>
+                  <span className="text-green-300 font-bold text-lg">{formatCurrency(calculateNetAmount())}</span>
                 </div>
               </div>
             </div>
@@ -322,7 +322,7 @@ const Withdraw = () => {
           )}
 
           {success && (
-            <div className="bg-green-500/20 border border-green-500 text-green-200 px-4 py-3 rounded-lg flex items-center gap-2">
+            <div className="bg-green-500/20 border border-green-400 text-green-200 px-4 py-3 rounded-lg flex items-center gap-2">
               <FaCheckCircle />
               {success}
             </div>
@@ -331,7 +331,7 @@ const Withdraw = () => {
           <Button
             type="submit"
             variant="primary"
-            className="w-full py-3 text-lg font-bold bg-green-600 hover:bg-green-700"
+            className="w-full py-3 text-lg font-bold"
             disabled={!mondayStatus || submitting}
           >
             {submitting ? 'Submitting Request...' : 'Request Withdrawal'}
@@ -348,22 +348,22 @@ const Withdraw = () => {
 
       {/* Pending Withdrawals */}
       {pendingWithdrawals.length > 0 && (
-        <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <FaExclamationTriangle className="text-yellow-400" />
             Pending Withdrawal Requests
           </h2>
           <div className="space-y-3">
             {pendingWithdrawals.map((withdrawal) => (
-              <div key={withdrawal.id} className="bg-[#0f1419] rounded-lg p-4 border border-yellow-800/30">
+              <div key={withdrawal.id} className="bg-[var(--bg-primary)] rounded-lg p-4 border border-yellow-500/30">
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="text-white font-bold">{formatCurrency(withdrawal.amount)}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-[var(--text-primary)] font-bold">{formatCurrency(withdrawal.amount)}</p>
+                    <p className="text-xs text-[var(--text-tertiary)]">
                       Requested: {new Date(withdrawal.createdAt).toLocaleDateString()}
                     </p>
                     {withdrawal.description && (
-                      <p className="text-xs text-gray-500 mt-1">{withdrawal.description}</p>
+                      <p className="text-xs text-[var(--text-muted)] mt-1">{withdrawal.description}</p>
                     )}
                   </div>
                   <div className="px-3 py-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-full text-xs font-semibold">
@@ -378,8 +378,8 @@ const Withdraw = () => {
 
       {/* Withdrawal History */}
       {withdrawalHistory.length > 0 && (
-        <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+        <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
+          <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <FaHistory className="text-blue-400" />
             Withdrawal History
           </h2>
@@ -399,12 +399,11 @@ const Withdraw = () => {
                 header: 'Status',
                 accessor: 'status',
                 render: (value) => (
-                  <span className={`px-2 py-1 rounded text-xs ${
-                    value === 'COMPLETED' ? 'bg-green-500/20 text-green-400' :
-                    value === 'PENDING' ? 'bg-yellow-500/20 text-yellow-400' :
-                    value === 'REJECTED' ? 'bg-red-500/20 text-red-400' :
-                    'bg-gray-500/20 text-gray-400'
-                  }`}>
+                  <span className={`px-2 py-1 rounded text-xs font-medium border ${value === 'COMPLETED' ? 'bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/40' :
+                      value === 'PENDING' ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-500/40' :
+                        value === 'REJECTED' ? 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/40' :
+                          'bg-gray-500/20 text-gray-600 dark:text-gray-400 border-gray-500/40'
+                    }`}>
                     {value}
                   </span>
                 )
@@ -421,9 +420,9 @@ const Withdraw = () => {
       )}
 
       {/* Withdrawal Info */}
-      <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-6">
-        <h3 className="text-lg font-bold text-blue-300 mb-3">Withdrawal Information</h3>
-        <ul className="space-y-2 text-sm text-blue-200">
+      <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-6">
+        <h3 className="text-lg font-bold text-blue-400 mb-3">Withdrawal Information</h3>
+        <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
           <li>• <strong>Withdrawal Window:</strong> Mondays only (UTC timezone)</li>
           <li>• <strong>Minimum Amount:</strong> $10.00</li>
           <li>• <strong>Withdrawal Fee:</strong> {feePercent}% (deducted from gross amount)</li>

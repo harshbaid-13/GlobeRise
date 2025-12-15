@@ -86,7 +86,7 @@ const Wallets = () => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-white">My Wallets</h1>
+                <h1 className="text-3xl font-bold text-[var(--text-primary)]">My Wallets</h1>
             </div>
 
             {error && <Alert type="error" message={error} />}
@@ -96,8 +96,8 @@ const Wallets = () => {
             <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-lg p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <p className="text-gray-400 text-sm mb-1">Total Balance Across All Wallets</p>
-                        <h2 className="text-4xl font-bold text-white">{formatCurrency(totalBalance)}</h2>
+                        <p className="text-[var(--text-tertiary)] text-sm mb-1">Total Balance Across All Wallets</p>
+                        <h2 className="text-4xl font-bold text-[var(--text-primary)]">{formatCurrency(totalBalance)}</h2>
                     </div>
                     <FaWallet className="text-5xl text-green-400 opacity-50" />
                 </div>
@@ -105,7 +105,7 @@ const Wallets = () => {
 
             {/* Wallet Cards Grid */}
             <div>
-                <h2 className="text-xl font-bold text-white mb-4">Platform Wallets</h2>
+                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Platform Wallets</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Deposit Wallet */}
                     <WalletCard
@@ -160,9 +160,9 @@ const Wallets = () => {
             </div>
 
             {/* Linked Blockchain Wallets */}
-            <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
+            <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                    <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-2">
                         <FaLink className="text-blue-500" />
                         Linked Blockchain Wallets
                     </h2>
@@ -176,7 +176,7 @@ const Wallets = () => {
                 </div>
 
                 {linkedWallets.length === 0 ? (
-                    <div className="text-center py-8 text-gray-400">
+                    <div className="text-center py-8 text-[var(--text-tertiary)]">
                         <FaWallet className="mx-auto text-5xl mb-4 opacity-50" />
                         <p>No linked wallets yet</p>
                         <p className="text-sm mt-2">Link your MetaMask or Trust Wallet to view balances</p>
@@ -186,7 +186,7 @@ const Wallets = () => {
                         {linkedWallets.map((wallet) => (
                             <div
                                 key={wallet.id}
-                                className="bg-[#222831] rounded-lg border border-[#4b5563] p-4 flex items-center justify-between"
+                                className="bg-[var(--bg-primary)] rounded-lg border border-[var(--border-color)] p-4 flex items-center justify-between"
                             >
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-2">
@@ -197,9 +197,9 @@ const Wallets = () => {
                                         }`}>
                                             {wallet.walletType}
                                         </span>
-                                        <span className="text-gray-400 text-sm">Chain ID: {wallet.chainId}</span>
+                                        <span className="text-[var(--text-tertiary)] text-sm">Chain ID: {wallet.chainId}</span>
                                     </div>
-                                    <p className="text-white font-mono text-sm break-all">{wallet.address}</p>
+                                    <p className="text-[var(--text-primary)] font-mono text-sm break-all">{wallet.address}</p>
                                     {wallet.balance && (
                                         <p className="text-green-400 font-semibold mt-2">
                                             Balance: {formatCurrency(parseFloat(wallet.balance || 0))}
@@ -220,12 +220,12 @@ const Wallets = () => {
             </div>
 
             {/* Quick Transfer Section */}
-            <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-                <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
+                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
                     <FaExchangeAlt className="text-green-500" />
                     Quick Transfer
                 </h2>
-                <p className="text-gray-400 text-sm mb-4">
+                <p className="text-[var(--text-tertiary)] text-sm mb-4">
                     Click on any wallet card above and use the transfer button to move funds between wallets
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
@@ -235,7 +235,7 @@ const Wallets = () => {
                             <button
                                 key={key}
                                 onClick={() => handleTransferClick(walletType)}
-                                className="px-4 py-2 bg-[#222831] hover:bg-[#00ADB5]/20 border border-[#4b5563] hover:border-[#00ADB5] rounded-lg text-white text-sm transition-colors"
+                                className="px-4 py-2 bg-[var(--bg-primary)] hover:bg-[#00ADB5]/20 border border-[var(--border-color)] hover:border-[#00ADB5] rounded-lg text-[var(--text-primary)] text-sm transition-colors"
                             >
                                 {walletType}
                             </button>

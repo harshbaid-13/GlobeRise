@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { transactionService } from '../../services/transactionService';
 import { formatCurrency } from '../../utils/formatters';
 import Loading from '../../components/common/Loading';
@@ -9,13 +10,16 @@ import Table from '../../components/common/Table';
 import { FaHistory, FaChevronLeft, FaChevronRight, FaDownload, FaFileCsv, FaFilePdf } from 'react-icons/fa';
 
 const TransactionHistory = () => {
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const tabFromUrl = searchParams.get('tab') || 'ALL';
     const [transactions, setTransactions] = useState([]);
     const [allTransactions, setAllTransactions] = useState([]); // For export
     const [pagination, setPagination] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [filters, setFilters] = useState({ type: 'ALL', wallet: 'ALL' });
-    const [activeTab, setActiveTab] = useState('ALL'); // Filter tabs
+    const [activeTab, setActiveTab] = useState(tabFromUrl); // Filter tabs
     const [dateRange, setDateRange] = useState({ startDate: '', endDate: '' });
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -37,6 +41,11 @@ const TransactionHistory = () => {
     useEffect(() => {
         loadTransactions();
     }, [filters, currentPage, activeTab, dateRange]);
+
+    useEffect(() => {
+        const tabFromUrl = searchParams.get('tab') || 'ALL';
+        setActiveTab(tabFromUrl);
+    }, [searchParams]);
 
     useEffect(() => {
         if (activeTab !== 'ALL') {
@@ -93,6 +102,10 @@ const TransactionHistory = () => {
     const handleFilterChange = (newFilters) => {
         setFilters(newFilters);
         setCurrentPage(1); // Reset to first page when filters change
+    };
+
+    const handleTabChange = (tab) => {
+        navigate(`?tab=${tab}`);
     };
 
     const exportToCSV = () => {
@@ -206,12 +219,12 @@ const TransactionHistory = () => {
 
     const getStatusColor = (status) => {
         const colors = {
-            COMPLETED: 'bg-green-500/20 text-green-400 border-green-500/30',
-            PENDING: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-            FAILED: 'bg-red-500/20 text-red-400 border-red-500/30',
-            REJECTED: 'bg-red-500/20 text-red-400 border-red-500/30',
+            COMPLETED: 'bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/40',
+            PENDING: 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-500/40',
+            FAILED: 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/40',
+            REJECTED: 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/40',
         };
-        return colors[status] || 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+        return colors[status] || 'bg-gray-500/20 text-gray-600 dark:text-gray-400 border-gray-500/40';
     };
 
     const columns = [
@@ -219,7 +232,7 @@ const TransactionHistory = () => {
             header: 'Date',
             accessor: 'createdAt',
             render: (value) => (
-                <span className="text-gray-300">
+                <span className="text-[var(--text-secondary)]">
                     {value ? new Date(value).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
@@ -241,7 +254,7 @@ const TransactionHistory = () => {
             header: 'Amount',
             accessor: 'amount',
             render: (value) => (
-                <span className="text-white font-bold">
+                <span className="text-[var(--text-primary)] font-bold">
                     {formatCurrency(parseFloat(value || 0))}
                 </span>
             ),
@@ -250,7 +263,7 @@ const TransactionHistory = () => {
             header: 'Wallet',
             accessor: 'destWallet',
             render: (value, row) => (
-                <span className="text-gray-400">
+                <span className="text-[var(--text-tertiary)]">
                     {value || row.sourceWallet || '-'}
                 </span>
             ),
@@ -268,7 +281,7 @@ const TransactionHistory = () => {
             header: 'Description',
             accessor: 'description',
             render: (value) => (
-                <span className="text-gray-400 truncate max-w-xs">
+                <span className="text-[var(--text-tertiary)] truncate max-w-xs">
                     {value || '-'}
                 </span>
             ),
@@ -278,27 +291,26 @@ const TransactionHistory = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl font-bold text-white flex items-center">
+                <h1 className="text-2xl font-bold text-[var(--text-primary)] flex items-center">
                     <FaHistory className="mr-3 text-blue-500" />
                     Transaction History
                 </h1>
-                <p className="text-gray-400 mt-1">Complete history of all your transactions</p>
+                <p className="text-[var(--text-tertiary)] mt-1">Complete history of all your transactions</p>
             </div>
 
             {error && <Alert type="error" message={error} />}
 
             {/* Filter Tabs */}
-            <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-4">
+            <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-4 transition-colors duration-200">
                 <div className="flex flex-wrap gap-2 mb-4">
                     {transactionTypes.map((type) => (
                         <button
                             key={type.key}
-                            onClick={() => setActiveTab(type.key)}
-                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                                activeTab === type.key
-                                    ? 'bg-[#00ADB5] text-white'
-                                    : 'bg-[#222831] text-gray-400 hover:text-white'
-                            }`}
+                            onClick={() => handleTabChange(type.key)}
+                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${activeTab === type.key
+                                ? 'bg-[#00ADB5] text-white'
+                                : 'bg-[var(--bg-primary)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)]'
+                                }`}
                         >
                             {type.label}
                         </button>
@@ -308,21 +320,21 @@ const TransactionHistory = () => {
                 {/* Date Range Picker */}
                 <div className="flex gap-4 items-end">
                     <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-400 mb-2">Start Date</label>
+                        <label className="block text-sm font-medium text-[var(--text-tertiary)] mb-2">Start Date</label>
                         <input
                             type="date"
                             value={dateRange.startDate}
                             onChange={(e) => setDateRange(prev => ({ ...prev, startDate: e.target.value }))}
-                            className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                            className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                         />
                     </div>
                     <div className="flex-1">
-                        <label className="block text-sm font-medium text-gray-400 mb-2">End Date</label>
+                        <label className="block text-sm font-medium text-[var(--text-tertiary)] mb-2">End Date</label>
                         <input
                             type="date"
                             value={dateRange.endDate}
                             onChange={(e) => setDateRange(prev => ({ ...prev, endDate: e.target.value }))}
-                            className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                            className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                         />
                     </div>
                     {(dateRange.startDate || dateRange.endDate) && (
@@ -343,12 +355,12 @@ const TransactionHistory = () => {
             />
 
             {/* Transactions Table */}
-            <div className="bg-[#393E46] border border-[#4b5563] rounded-lg p-6">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg p-6 transition-colors duration-200">
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-white">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)]">
                         Transactions
                         {pagination && (
-                            <span className="text-gray-400 text-sm ml-2">
+                            <span className="text-[var(--text-tertiary)] text-sm ml-2">
                                 ({pagination.total} total)
                             </span>
                         )}
@@ -377,9 +389,9 @@ const TransactionHistory = () => {
                     <Loading />
                 ) : transactions.length === 0 ? (
                     <div className="text-center py-12">
-                        <FaHistory className="mx-auto text-5xl text-gray-600 mb-4" />
-                        <p className="text-gray-400">No transactions found</p>
-                        <p className="text-gray-500 text-sm mt-2">
+                        <FaHistory className="mx-auto text-5xl text-[var(--text-muted)] mb-4" />
+                        <p className="text-[var(--text-tertiary)]">No transactions found</p>
+                        <p className="text-[var(--text-muted)] text-sm mt-2">
                             {filters.type !== 'ALL' || filters.wallet !== 'ALL'
                                 ? 'Try adjusting your filters'
                                 : 'Transactions will appear here once you start earning or investing'}
@@ -397,22 +409,22 @@ const TransactionHistory = () => {
 
                         {/* Pagination */}
                         {pagination && pagination.totalPages > 1 && (
-                            <div className="flex items-center justify-between mt-6 pt-4 border-t border-[#4b5563]">
-                                <div className="text-gray-400 text-sm">
+                            <div className="flex items-center justify-between mt-6 pt-4 border-t border-[var(--border-color)]">
+                                <div className="text-[var(--text-tertiary)] text-sm">
                                     Page {pagination.page} of {pagination.totalPages}
                                 </div>
                                 <div className="flex space-x-2">
                                     <button
                                         onClick={() => setCurrentPage(currentPage - 1)}
                                         disabled={currentPage === 1}
-                                        className="px-4 py-2 bg-[#0f1419] border border-[#4b5563] text-white rounded-lg hover:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-lg hover:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <FaChevronLeft />
                                     </button>
                                     <button
                                         onClick={() => setCurrentPage(currentPage + 1)}
                                         disabled={currentPage === pagination.totalPages}
-                                        className="px-4 py-2 bg-[#0f1419] border border-[#4b5563] text-white rounded-lg hover:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-4 py-2 bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] rounded-lg hover:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <FaChevronRight />
                                     </button>

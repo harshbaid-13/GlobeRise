@@ -29,15 +29,56 @@
   --shadow-glow-red: 0 0 20px -5px rgba(255, 46, 99, 0.5);
 }
 
+/* Theme CSS Variables - Dark theme is default */
+:root {
+  --bg-primary: #222831;
+  --bg-secondary: #393E46;
+  --bg-tertiary: #2d333b;
+  --bg-hover: #4a5568;
+  --border-color: #4b5563;
+  --border-light: #6b7280;
+  --text-primary: #ffffff;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #9ca3af;
+  --text-muted: #6b7280;
+  --sidebar-bg: #222831;
+  --card-bg: #393E46;
+  --input-bg: #222831;
+  --scrollbar-track: #222831;
+  --scrollbar-thumb: #393E46;
+  --scrollbar-thumb-hover: #4b5563;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e2e8f0;
+  --bg-hover: #e2e8f0;
+  --border-color: #cbd5e1;
+  --border-light: #e2e8f0;
+  --text-primary: #1e293b;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
+  --sidebar-bg: #ffffff;
+  --card-bg: #ffffff;
+  --input-bg: #f8fafc;
+  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #94a3b8;
+}
+
 body {
-  background-color: var(--color-dark-bg);
-  color: var(--color-text-primary);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Custom Sidebar Scrollbar */
 .sidebar-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #393E46 #222831;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 .sidebar-scrollbar::-webkit-scrollbar {
@@ -45,16 +86,16 @@ body {
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-track {
-  background: #222831;
+  background: var(--scrollbar-track);
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #393E46;
+  background-color: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 .sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #4b5563;
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 /* Sidebar Submenu Animation */
@@ -76,4 +117,89 @@ body {
 .sidebar-submenu.open {
   max-height: 1000px;
   opacity: 1;
+}
+
+/* Mobile Responsive Utilities */
+@media (max-width: 1023px) {
+  .mobile-sidebar-enter {
+    transform: translateX(-100%);
+  }
+  
+  .mobile-sidebar-enter-active {
+    transform: translateX(0);
+    transition: transform 300ms ease-in-out;
+  }
+  
+  .mobile-sidebar-exit {
+    transform: translateX(0);
+  }
+  
+  .mobile-sidebar-exit-active {
+    transform: translateX(-100%);
+    transition: transform 300ms ease-in-out;
+  }
+}
+
+/* Backdrop Animation */
+.backdrop-enter {
+  opacity: 0;
+}
+
+.backdrop-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+}
+
+.backdrop-exit {
+  opacity: 1;
+}
+
+.backdrop-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+/* Mobile Optimizations */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Table Responsive Wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.mobile-menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Theme toggle button animation */
+.theme-toggle-icon {
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+
+.theme-toggle-icon.rotate {
+  transform: rotate(180deg);
 }

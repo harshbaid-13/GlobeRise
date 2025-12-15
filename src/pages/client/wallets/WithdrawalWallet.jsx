@@ -56,9 +56,9 @@ const WithdrawalWallet = () => {
         { header: 'Amount', accessor: 'amount', render: (value) => value ? `$${parseFloat(value).toFixed(2)}` : '$0.00' },
         {
             header: 'Status', accessor: 'status', render: (value) => (
-                <span className={`px-2 py-1 rounded-full text-xs ${value === 'COMPLETED' ? 'bg-green-500/20 text-green-400' :
-                    value === 'PENDING' ? 'bg-yellow-500/20 text-yellow-400' :
-                        'bg-red-500/20 text-red-400'
+                <span className={`px-2 py-1 rounded-full text-xs font-medium border ${value === 'COMPLETED' ? 'bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/40' :
+                    value === 'PENDING' ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-500/40' :
+                        'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/40'
                     }`}>
                     {value || 'N/A'}
                 </span>

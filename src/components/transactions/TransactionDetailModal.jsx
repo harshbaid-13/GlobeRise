@@ -7,14 +7,14 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
     const getStatusColor = (status) => {
         switch (status) {
             case 'COMPLETED':
-                return 'text-green-400 bg-green-500/20 border-green-500/30';
+                return 'text-green-600 dark:text-green-400 bg-green-500/20 border-green-500/40';
             case 'PENDING':
-                return 'text-yellow-400 bg-yellow-500/20 border-yellow-500/30';
+                return 'text-yellow-600 dark:text-yellow-400 bg-yellow-500/20 border-yellow-500/40';
             case 'FAILED':
             case 'REJECTED':
-                return 'text-red-400 bg-red-500/20 border-red-500/30';
+                return 'text-red-600 dark:text-red-400 bg-red-500/20 border-red-500/40';
             default:
-                return 'text-gray-400 bg-gray-500/20 border-gray-500/30';
+                return 'text-gray-600 dark:text-gray-400 bg-gray-500/20 border-gray-500/40';
         }
     };
 
@@ -44,13 +44,13 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-[#393E46] border border-[#4b5563] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-200">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-[#4b5563]">
-                    <h2 className="text-xl font-bold text-white">Transaction Details</h2>
+                <div className="flex items-center justify-between p-6 border-b border-[var(--border-color)]">
+                    <h2 className="text-xl font-bold text-[var(--text-primary)]">Transaction Details</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-white transition-colors"
+                        className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition-colors"
                     >
                         <FaTimes className="text-xl" />
                     </button>
@@ -60,7 +60,7 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
                 <div className="p-6 space-y-6">
                     {/* Amount & Status */}
                     <div className="text-center py-4">
-                        <div className="text-4xl font-bold text-white mb-2">
+                        <div className="text-4xl font-bold text-[var(--text-primary)] mb-2">
                             ${parseFloat(transaction.amount).toFixed(2)}
                         </div>
                         <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border ${getStatusColor(transaction.status)}`}>
@@ -73,16 +73,16 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
 
                     {/* Basic Info */}
                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-[#0f1419] rounded-lg p-4">
-                            <div className="text-gray-400 text-sm mb-1">Transaction Type</div>
+                        <div className="bg-[var(--bg-primary)] rounded-lg p-4">
+                            <div className="text-[var(--text-tertiary)] text-sm mb-1">Transaction Type</div>
                             <div className={`font-semibold ${getTypeColor(transaction.type)}`}>
                                 {transaction.type}
                             </div>
                         </div>
 
-                        <div className="bg-[#0f1419] rounded-lg p-4">
-                            <div className="text-gray-400 text-sm mb-1">Transaction ID</div>
-                            <div className="text-white font-mono text-sm truncate">
+                        <div className="bg-[var(--bg-primary)] rounded-lg p-4">
+                            <div className="text-[var(--text-tertiary)] text-sm mb-1">Transaction ID</div>
+                            <div className="text-[var(--text-primary)] font-mono text-sm truncate">
                                 {transaction.id}
                             </div>
                         </div>
@@ -90,13 +90,13 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
 
                     {/* Wallet Information */}
                     {(transaction.sourceWallet || transaction.destWallet) && (
-                        <div className="bg-[#0f1419] rounded-lg p-4">
-                            <div className="text-gray-400 text-sm mb-3">Wallet Transfer</div>
+                        <div className="bg-[var(--bg-primary)] rounded-lg p-4">
+                            <div className="text-[var(--text-tertiary)] text-sm mb-3">Wallet Transfer</div>
                             <div className="flex items-center justify-center space-x-4">
                                 {transaction.sourceWallet && (
                                     <div className="text-center">
-                                        <div className="text-xs text-gray-500 mb-1">From</div>
-                                        <div className="px-3 py-2 bg-[#393E46] rounded border border-[#4b5563] text-white font-semibold">
+                                        <div className="text-xs text-[var(--text-muted)] mb-1">From</div>
+                                        <div className="px-3 py-2 bg-[var(--bg-secondary)] rounded border border-[var(--border-color)] text-[var(--text-primary)] font-semibold">
                                             {transaction.sourceWallet}
                                         </div>
                                     </div>
@@ -108,8 +108,8 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
 
                                 {transaction.destWallet && (
                                     <div className="text-center">
-                                        <div className="text-xs text-gray-500 mb-1">To</div>
-                                        <div className="px-3 py-2 bg-[#393E46] rounded border border-[#4b5563] text-white font-semibold">
+                                        <div className="text-xs text-[var(--text-muted)] mb-1">To</div>
+                                        <div className="px-3 py-2 bg-[var(--bg-secondary)] rounded border border-[var(--border-color)] text-[var(--text-primary)] font-semibold">
                                             {transaction.destWallet}
                                         </div>
                                     </div>
@@ -120,21 +120,21 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
 
                     {/* Description */}
                     {transaction.description && (
-                        <div className="bg-[#0f1419] rounded-lg p-4">
-                            <div className="text-gray-400 text-sm mb-2">Description</div>
-                            <div className="text-white">{transaction.description}</div>
+                        <div className="bg-[var(--bg-primary)] rounded-lg p-4">
+                            <div className="text-[var(--text-tertiary)] text-sm mb-2">Description</div>
+                            <div className="text-[var(--text-primary)]">{transaction.description}</div>
                         </div>
                     )}
 
                     {/* Metadata */}
                     {transaction.metadata && Object.keys(transaction.metadata).length > 0 && (
-                        <div className="bg-[#0f1419] rounded-lg p-4">
-                            <div className="text-gray-400 text-sm mb-2">Additional Information</div>
+                        <div className="bg-[var(--bg-primary)] rounded-lg p-4">
+                            <div className="text-[var(--text-tertiary)] text-sm mb-2">Additional Information</div>
                             <div className="space-y-2">
                                 {Object.entries(transaction.metadata).map(([key, value]) => (
                                     <div key={key} className="flex justify-between">
-                                        <span className="text-gray-500 capitalize">{key.replace(/_/g, ' ')}:</span>
-                                        <span className="text-white font-medium">{String(value)}</span>
+                                        <span className="text-[var(--text-muted)] capitalize">{key.replace(/_/g, ' ')}:</span>
+                                        <span className="text-[var(--text-primary)] font-medium">{String(value)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -142,14 +142,14 @@ const TransactionDetailModal = ({ isOpen, onClose, transaction }) => {
                     )}
 
                     {/* Timestamp */}
-                    <div className="bg-[#0f1419] rounded-lg p-4">
-                        <div className="text-gray-400 text-sm mb-2">Date & Time</div>
-                        <div className="text-white">{formatDate(transaction.createdAt)}</div>
+                    <div className="bg-[var(--bg-primary)] rounded-lg p-4">
+                        <div className="text-[var(--text-tertiary)] text-sm mb-2">Date & Time</div>
+                        <div className="text-[var(--text-primary)]">{formatDate(transaction.createdAt)}</div>
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-[#4b5563]">
+                <div className="p-6 border-t border-[var(--border-color)]">
                     <button
                         onClick={onClose}
                         className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"

@@ -48,7 +48,7 @@ const handleError = (error) => {
     return 'Please approve tokens first';
   }
   if (error.message?.includes('ERC20InsufficientBalance')) {
-    return 'Insufficient GRT token balance';
+    return 'Insufficient RISE token balance';
   }
 
   // User rejected
@@ -146,7 +146,7 @@ export const WalletProvider = ({ children }) => {
       // When ABIs are available, uncomment and use:
       // const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
       // const platform = new ethers.Contract(PLATFORM_ADDRESS, PLATFORM_ABI, signer);
-      
+
       // Placeholder for contract initialization
       const token = null;
       const platform = null;
@@ -341,15 +341,15 @@ export const WalletProvider = ({ children }) => {
     isConnected: wallet.isConnected,
     chainId: wallet.chainId,
     isCorrectNetwork,
-    
+
     // Contracts
     platform,
     token,
-    
+
     // Network info
     expectedChainId: EXPECTED_CHAIN_ID,
     networkName: SUPPORTED_NETWORKS[EXPECTED_CHAIN_ID]?.name || 'Unknown',
-    
+
     // Functions
     connectWallet,
     connectTrustWallet,

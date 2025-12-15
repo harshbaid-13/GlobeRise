@@ -79,15 +79,15 @@ const MyTeam = () => {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold text-white">My Team</h1>
+                <h1 className="text-3xl font-bold text-[var(--text-primary)]">My Team</h1>
             </div>
 
             {/* Referral Code Card */}
             <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-lg p-6 space-y-4">
                 <div>
-                    <h3 className="text-white font-semibold mb-3">Your Referral Code</h3>
+                    <h3 className="text-[var(--text-primary)] font-semibold mb-3">Your Referral Code</h3>
                     <div className="flex items-center space-x-4">
-                        <code className="bg-[#0f1419] px-4 py-3 rounded text-blue-400 text-xl font-mono font-bold flex-1">
+                        <code className="bg-[var(--bg-primary)] px-4 py-3 rounded text-blue-400 text-xl font-mono font-bold flex-1 border border-[var(--border-color)]">
                             {treeData?.myCode || 'N/A'}
                         </code>
                         <button
@@ -98,14 +98,14 @@ const MyTeam = () => {
                             <span>{copySuccess ? 'Copied!' : 'Copy'}</span>
                         </button>
                     </div>
-                    <p className="text-gray-400 text-sm mt-3">
+                    <p className="text-[var(--text-tertiary)] text-sm mt-3">
                         Share this code with others to build your network
                     </p>
                 </div>
 
                 {/* Referral Link Section */}
                 <div className="border-t border-blue-500/30 pt-4">
-                    <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                    <h3 className="text-[var(--text-primary)] font-semibold mb-3 flex items-center gap-2">
                         <FaLink className="text-blue-400" />
                         Your Referral Link
                     </h3>
@@ -114,7 +114,7 @@ const MyTeam = () => {
                             type="text"
                             readOnly
                             value={getReferralLink()}
-                            className="bg-[#0f1419] px-4 py-3 rounded text-blue-400 text-sm font-mono flex-1 border border-[#4b5563] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="bg-[var(--bg-primary)] px-4 py-3 rounded text-blue-400 text-sm font-mono flex-1 border border-[var(--border-color)] focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <button
                             onClick={copyReferralLink}
@@ -124,7 +124,7 @@ const MyTeam = () => {
                             <span>{linkCopySuccess ? 'Copied!' : 'Copy Link'}</span>
                         </button>
                     </div>
-                    <p className="text-gray-400 text-sm mt-3">
+                    <p className="text-[var(--text-tertiary)] text-sm mt-3">
                         Share this link - new users will have your referral code pre-filled when they register!
                     </p>
                 </div>
@@ -153,9 +153,9 @@ const MyTeam = () => {
             </div>
 
             {/* Referrals Table */}
-            <div className="bg-[#393E46] rounded-lg border border-[#4b5563] overflow-hidden">
-                <div className="p-4 border-b border-[#4b5563]">
-                    <h3 className="text-lg font-semibold text-white">Direct Referrals ({totalDirect})</h3>
+            <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] overflow-hidden transition-colors duration-200">
+                <div className="p-4 border-b border-[var(--border-color)]">
+                    <h3 className="text-lg font-semibold text-[var(--text-primary)]">Direct Referrals ({totalDirect})</h3>
                 </div>
                 <Table columns={columns} data={referrals} />
             </div>

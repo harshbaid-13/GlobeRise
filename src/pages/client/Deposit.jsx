@@ -35,10 +35,16 @@ const Deposit = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Make Deposit</h1>
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Make Deposit</h1>
+        <p className="text-sm text-[var(--text-tertiary)]">
+          Add funds to your account by submitting a deposit request.
+        </p>
+      </div>
+
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] shadow-sm p-6 transition-colors duration-200">
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-xl">
           {error && <Alert type="error" message={error} />}
           {success && <Alert type="success" message={success} />}
           
@@ -54,13 +60,13 @@ const Deposit = () => {
           />
           
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1">
               Payment Method
             </label>
             <select
               value={method}
               onChange={(e) => setMethod(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
             >
               <option>Bank Transfer</option>
               <option>Credit Card</option>
@@ -79,4 +85,3 @@ const Deposit = () => {
 };
 
 export default Deposit;
-

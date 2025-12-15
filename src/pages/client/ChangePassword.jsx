@@ -51,13 +51,13 @@ const ChangePassword = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Change Password</h1>
-        <p className="text-sm text-gray-400">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Change Password</h1>
+        <p className="text-sm text-[var(--text-tertiary)]">
           Update your password to keep your account secure.
         </p>
       </div>
 
-      <div className="bg-[#393E46] border border-[#4b5563] rounded-xl shadow-sm p-6 md:p-8">
+      <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-xl shadow-sm p-6 md:p-8 transition-colors duration-200">
         <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
           {error && <Alert type="error" message={error} />}
           {success && <Alert type="success" message={success} />}
@@ -101,4 +101,3 @@ const ChangePassword = () => {
 };
 
 export default ChangePassword;
-

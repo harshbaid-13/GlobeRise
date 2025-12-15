@@ -70,7 +70,7 @@ export const ROUTES = {
   CLIENT_MY_REFERRALS: '/client/my-referrals',
   CLIENT_MY_TREE: '/client/my-tree',
   CLIENT_DEPOSIT: '/client/deposit',
-  CLIENT_WITHDRAW: '/client/withdraw',
+  CLIENT_WITHDRAW: '/client/withdrawal',
   CLIENT_BALANCE_TRANSFER: '/client/balance-transfer',
   CLIENT_EPIN_RECHARGE: '/client/epin-recharge',
   CLIENT_TRANSACTIONS: '/client/transactions',

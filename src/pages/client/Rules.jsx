@@ -89,7 +89,7 @@ const Rules = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+        <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3">
           <FaBook className="text-blue-500" />
           Rules & Guidelines
         </h1>
@@ -98,18 +98,18 @@ const Rules = () => {
       {error && <Alert type="error" message={error} />}
 
       {/* Search and Filter */}
-      <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
-              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-tertiary)]" />
               <input
                 type="text"
                 placeholder="Search rules..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
               />
             </div>
           </div>
@@ -119,7 +119,7 @@ const Rules = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+              className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
             >
               {RULE_CATEGORIES.map((cat) => (
                 <option key={cat.key} value={cat.key}>
@@ -133,22 +133,22 @@ const Rules = () => {
 
       {/* Rules Display */}
       {filteredRules.length === 0 ? (
-        <div className="bg-[#393E46] rounded-lg border border-[#4b5563] p-12 text-center">
-          <FaBook className="mx-auto text-5xl text-gray-600 mb-4" />
-          <p className="text-gray-400 text-lg">No rules found</p>
-          <p className="text-gray-500 text-sm mt-2">
+        <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-12 text-center transition-colors duration-200">
+          <FaBook className="mx-auto text-5xl text-[var(--text-muted)] mb-4" />
+          <p className="text-[var(--text-tertiary)] text-lg">No rules found</p>
+          <p className="text-[var(--text-muted)] text-sm mt-2">
             {searchQuery ? 'Try adjusting your search query' : 'No rules available in this category'}
           </p>
         </div>
       ) : (
         <div className="space-y-6">
           {Object.keys(groupedRules).map((category) => (
-            <div key={category} className="bg-[#393E46] rounded-lg border border-[#4b5563] p-6">
-              <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+            <div key={category} className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] p-6 transition-colors duration-200">
+              <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${getCategoryColor(category)}`}>
                   {RULE_CATEGORIES.find(c => c.key === category)?.label || category}
                 </span>
-                <span className="text-gray-400 text-sm">
+                <span className="text-[var(--text-tertiary)] text-sm">
                   ({groupedRules[category].length} {groupedRules[category].length === 1 ? 'rule' : 'rules'})
                 </span>
               </h2>
@@ -157,25 +157,25 @@ const Rules = () => {
                 {groupedRules[category].map((rule) => (
                   <div
                     key={rule.id}
-                    className="bg-[#222831] rounded-lg border border-[#4b5563] p-4 hover:border-[#00ADB5] transition-colors"
+                    className="bg-[var(--bg-primary)] rounded-lg border border-[var(--border-color)] p-4 hover:border-[#00ADB5] transition-colors"
                   >
                     <button
                       onClick={() => setExpandedRule(expandedRule === rule.id ? null : rule.id)}
                       className="w-full text-left flex items-center justify-between"
                     >
-                      <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-[var(--text-primary)] flex items-center gap-2">
                         <FaInfoCircle className="text-blue-400" />
                         {rule.title}
                       </h3>
-                      <span className="text-gray-400 text-sm">
+                      <span className="text-[var(--text-tertiary)] text-sm">
                         {expandedRule === rule.id ? '▼' : '▶'}
                       </span>
                     </button>
 
                     {expandedRule === rule.id && (
-                      <div className="mt-4 pt-4 border-t border-[#4b5563]">
+                      <div className="mt-4 pt-4 border-t border-[var(--border-color)]">
                         <div className="prose prose-invert max-w-none">
-                          <div className="text-gray-300 whitespace-pre-wrap leading-relaxed">
+                          <div className="text-[var(--text-secondary)] whitespace-pre-wrap leading-relaxed">
                             {rule.content}
                           </div>
                         </div>
@@ -193,4 +193,3 @@ const Rules = () => {
 };
 
 export default Rules;
-

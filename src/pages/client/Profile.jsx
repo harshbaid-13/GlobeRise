@@ -109,22 +109,22 @@ const Profile = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white mb-1">Profile</h1>
-        <p className="text-sm text-gray-400">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-1">Profile</h1>
+        <p className="text-sm text-[var(--text-tertiary)]">
           Manage your account information and keep your details up to date.
         </p>
       </div>
 
-      <div className="bg-[#393E46] border border-[#4b5563] rounded-xl shadow-sm p-6 md:p-8">
+      <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-xl shadow-sm p-6 md:p-8 transition-colors duration-200">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Left: Profile summary */}
           <div className="flex flex-col items-center md:items-start space-y-4">
             <AvatarPicker selectedAvatar={selectedAvatar} onSelect={handleAvatarSelect} />
             <div className="text-center md:text-left space-y-1">
-              <p className="text-lg font-semibold text-white">
+              <p className="text-lg font-semibold text-[var(--text-primary)]">
                 {firstName && lastName ? `${firstName} ${lastName}` : firstName || lastName || user?.name || user?.username || 'User'}
               </p>
-              <p className="text-sm text-gray-300">{profile?.email || user?.email}</p>
+              <p className="text-sm text-[var(--text-secondary)]">{profile?.email || user?.email}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#00ADB5]/10 text-[#00ADB5] border border-[#00ADB5]/40">
                   {roleLabel}
@@ -151,10 +151,10 @@ const Profile = () => {
                   disabled
                 />
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                     Email Verification Status
                   </label>
-                  <div className="px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg">
+                  <div className="px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg">
                     <span className={`text-sm ${profile?.emailVerified ? 'text-green-400' : 'text-yellow-400'}`}>
                       {profile?.emailVerified ? '✓ Verified' : '⚠ Not Verified'}
                     </span>
@@ -179,14 +179,14 @@ const Profile = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                     Phone Number
                   </label>
                   <div className="flex gap-2">
                     <select
                       value={phoneCountryCode}
                       onChange={(e) => setPhoneCountryCode(e.target.value)}
-                      className="px-3 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                      className="px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                     >
                       {COUNTRY_CODES.map((cc) => (
                         <option key={cc.code} value={cc.code}>
@@ -199,18 +199,18 @@ const Profile = () => {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="Phone number"
-                      className="flex-1 px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                      className="flex-1 px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
                     Country
                   </label>
                   <select
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                    className="w-full px-4 py-2 bg-[#222831] border border-[#4b5563] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                    className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#00ADB5] transition-colors duration-200"
                   >
                     <option value="">Select country</option>
                     {COUNTRIES.map((c) => (
@@ -271,4 +271,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
