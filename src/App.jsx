@@ -16,15 +16,11 @@ import ResetPassword from './pages/auth/ResetPassword';
 import VerifyEmail from './pages/auth/VerifyEmail';
 import ResendEmail from './pages/auth/ResendEmail';
 import TwoFactorAuth from './pages/auth/TwoFactorAuth';
+import GoogleCallback from './pages/auth/GoogleCallback';
+import GoogleOAuthRedirect from './pages/auth/GoogleOAuthRedirect';
 
 // Admin pages
 import AdminDashboard from './pages/admin/Dashboard';
-import Plans from './pages/admin/Plans';
-import AllPins from './pages/admin/pins/AllPins';
-import UserPins from './pages/admin/pins/UserPins';
-import AdminPins from './pages/admin/pins/AdminPins';
-import UsedPins from './pages/admin/pins/UsedPins';
-import UnusedPins from './pages/admin/pins/UnusedPins';
 import ActiveUsers from './pages/admin/users/ActiveUsers';
 import BannedUsers from './pages/admin/users/BannedUsers';
 import EmailUnverified from './pages/admin/users/EmailUnverified';
@@ -57,15 +53,15 @@ import InvestLog from './pages/admin/reports/InvestLog';
 import BVLog from './pages/admin/reports/BVLog';
 import ReferralCommission from './pages/admin/reports/ReferralCommission';
 import BinaryCommission from './pages/admin/reports/BinaryCommission';
+import LevelCommission from './pages/admin/reports/LevelCommission';
+import ManageAdmins from './pages/admin/admins/ManageAdmins';
+import CreateAdmin from './pages/admin/admins/CreateAdmin';
+import ROIConfiguration from './pages/admin/plans/ROIConfiguration';
+import StakingPlans from './pages/admin/plans/StakingPlans';
+import UninvestedUsers from './pages/admin/users/UninvestedUsers';
 import LoginHistory from './pages/admin/reports/LoginHistory';
 import NotificationHistory from './pages/admin/reports/NotificationHistory';
-import Subscribers from './pages/admin/Subscribers';
 import SystemSetting from './pages/admin/settings/SystemSetting';
-import Application from './pages/admin/extra/Application';
-import Server from './pages/admin/extra/Server';
-import Cache from './pages/admin/extra/Cache';
-import Update from './pages/admin/extra/Update';
-import ReportRequest from './pages/admin/extra/ReportRequest';
 import UserRanking from './pages/admin/ranking/UserRanking';
 
 // Client pages
@@ -120,10 +116,13 @@ function App() {
               <Route path={ROUTES.LOGIN} element={<Login />} />
               <Route path={ROUTES.REGISTER} element={<Register />} />
               <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPassword />} />
-              <Route path={`${ROUTES.RESET_PASSWORD}/:token`} element={<ResetPassword />} />
-              <Route path={`${ROUTES.VERIFY_EMAIL}/:token`} element={<VerifyEmail />} />
+              <Route path={ROUTES.RESET_PASSWORD} element={<ResetPassword />} />
+              <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmail />} />
               <Route path={ROUTES.RESEND_EMAIL} element={<ResendEmail />} />
               <Route path={ROUTES.TWO_FA} element={<TwoFactorAuth />} />
+              <Route path={ROUTES.AUTH_CALLBACK} element={<GoogleCallback />} />
+              {/* Handle Google OAuth callback if misconfigured to point to frontend */}
+              <Route path="/auth/google/callback" element={<GoogleOAuthRedirect />} />
 
               {/* Admin routes */}
               <Route
@@ -134,14 +133,9 @@ function App() {
                       <Layout>
                         <Routes>
                           <Route path="dashboard" element={<AdminDashboard />} />
-                          <Route path="plans" element={<Plans />} />
-                          <Route path="pins/all" element={<AllPins />} />
-                          <Route path="pins/user" element={<UserPins />} />
-                          <Route path="pins/admin" element={<AdminPins />} />
-                          <Route path="pins/used" element={<UsedPins />} />
-                          <Route path="pins/unused" element={<UnusedPins />} />
                           <Route path="users/active" element={<ActiveUsers />} />
                           <Route path="users/banned" element={<BannedUsers />} />
+                          <Route path="users/uninvested" element={<UninvestedUsers />} />
                           <Route path="users/email-unverified" element={<EmailUnverified />} />
                           <Route path="users/mobile-unverified" element={<MobileUnverified />} />
                           <Route path="users/kyc-unverified" element={<KYCUnverified />} />
@@ -171,17 +165,15 @@ function App() {
                           <Route path="reports/invest" element={<InvestLog />} />
                           <Route path="reports/bv" element={<BVLog />} />
                           <Route path="reports/referral" element={<ReferralCommission />} />
-                          <Route path="reports/binary" element={<BinaryCommission />} />
+                          <Route path="reports/binary" element={<LevelCommission />} />
                           <Route path="reports/login" element={<LoginHistory />} />
                           <Route path="reports/notification" element={<NotificationHistory />} />
-                          <Route path="subscribers" element={<Subscribers />} />
                           <Route path="settings" element={<SystemSetting />} />
-                          <Route path="extra/application" element={<Application />} />
-                          <Route path="extra/server" element={<Server />} />
-                          <Route path="extra/cache" element={<Cache />} />
-                          <Route path="extra/update" element={<Update />} />
-                          <Route path="extra/report-request" element={<ReportRequest />} />
                           <Route path="ranking" element={<UserRanking />} />
+                          <Route path="admins" element={<ManageAdmins />} />
+                          <Route path="admins/create" element={<CreateAdmin />} />
+                          <Route path="plans/roi" element={<ROIConfiguration />} />
+                          <Route path="plans/staking" element={<StakingPlans />} />
                           <Route path="*" element={<Navigate to={ROUTES.ADMIN_DASHBOARD} replace />} />
                         </Routes>
                       </Layout>

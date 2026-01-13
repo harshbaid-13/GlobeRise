@@ -3,10 +3,14 @@ import { FaEnvelope, FaSms, FaBell, FaCheck, FaChevronDown } from 'react-icons/f
 import { userService } from '../../../services/userService';
 import Alert from '../../../components/common/Alert';
 import RichTextEditor from '../../../components/common/RichTextEditor';
+import PermissionGuard from '../../../components/auth/PermissionGuard';
+import { FEATURES, ACCESS } from '../../../utils/permissions';
 
 const SendNotification = () => {
   const [notificationMethod, setNotificationMethod] = useState('email');
   const [recipient, setRecipient] = useState('all');
+  const [rankFilter, setRankFilter] = useState('all');
+  const [selectedUsers, setSelectedUsers] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [startForm, setStartForm] = useState('');
@@ -29,18 +33,25 @@ const SendNotification = () => {
         recipient,
         subject,
         message,
+        rankFilter,
+        selectedUsers: selectedUsers
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
         startForm: parseInt(startForm) || 1,
         perBatch: parseInt(perBatch) || 1,
         coolingPeriod: parseInt(coolingPeriod) || 0,
       };
 
-      // In a real app, this would use the userService with the new data structure
-      await userService.sendNotification([], message);
+      // In a real app, this would call a backend broadcast API
+      await userService.sendNotification(notificationData.selectedUsers, notificationData.message);
       setSuccess('Notification sent successfully!');
       
       // Reset form
       setSubject('');
       setMessage('');
+      setRankFilter('all');
+      setSelectedUsers('');
       setStartForm('');
       setPerBatch('');
       setCoolingPeriod('');
@@ -52,7 +63,8 @@ const SendNotification = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-8">
+    <PermissionGuard feature={FEATURES.NOTIFICATIONS} access={ACCESS.EDIT} fallback={<div className="p-6 text-gray-800">You do not have permission to send notifications.</div>}>
+      <div className="bg-white rounded-lg shadow-sm p-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-8">Notification to Verified Users</h1>
       
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -142,10 +154,46 @@ const SendNotification = () => {
               <option value="unverified">Unverified Users</option>
               <option value="active">Active Users</option>
               <option value="inactive">Inactive Users</option>
+              <option value="invested">Invested Users</option>
+              <option value="uninvested">Un-Invested Users</option>
+              <option value="rank">Specific Rank(s)</option>
+              <option value="users">Specific User(s)</option>
             </select>
             <FaChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
           </div>
         </div>
+
+        {/* Optional rank filter */}
+        {recipient === 'rank' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Rank Filter
+            </label>
+            <input
+              type="text"
+              value={rankFilter}
+              onChange={(e) => setRankFilter(e.target.value)}
+              placeholder="Enter rank names, comma separated (e.g. EXPLORER,NAVIGATOR)"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-900 placeholder-gray-400"
+            />
+          </div>
+        )}
+
+        {/* Optional specific user filter */}
+        {recipient === 'users' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Specific Users
+            </label>
+            <input
+              type="text"
+              value={selectedUsers}
+              onChange={(e) => setSelectedUsers(e.target.value)}
+              placeholder="Enter usernames or emails, comma separated"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent text-gray-900 placeholder-gray-400"
+            />
+          </div>
+        )}
 
         {/* Subject Field */}
         <div>
@@ -250,6 +298,7 @@ const SendNotification = () => {
         </div>
       </form>
     </div>
+    </PermissionGuard>
   );
 };
 

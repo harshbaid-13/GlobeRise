@@ -1,17 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom';
 import { authService } from '../../services/authService';
-import { ROUTES } from '../../utils/constants';
+import { useAuth } from '../../hooks/useAuth';
+import { ROUTES, STORAGE_KEYS } from '../../utils/constants';
 import Alert from '../../components/common/Alert';
 import Loading from '../../components/common/Loading';
 import Button from '../../components/common/Button';
 
 const VerifyEmail = () => {
-  const { token } = useParams();
+  const { token: routeToken } = useParams();
+  const [searchParams] = useSearchParams();
+  const token = routeToken || searchParams.get('token');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const { refreshUser } = useAuth();
 
   useEffect(() => {
     const verify = async () => {
@@ -22,17 +27,50 @@ const VerifyEmail = () => {
       }
 
       try {
-        await authService.verifyEmail(token);
-        setSuccess(true);
+        const response = await authService.verifyEmail(token);
+        const { user, token: authToken, refreshToken } = response || {};
+
+        // If tokens are provided, store them and authenticate user
+        if (authToken && user) {
+          // Normalize role
+          const normalizedUser = { ...user };
+          if (normalizedUser.role === 'USER') normalizedUser.role = 'client';
+          if (normalizedUser.role === 'ADMIN') normalizedUser.role = 'admin';
+          normalizedUser.role = normalizedUser.role.toLowerCase();
+
+          // Store tokens and user
+          localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, authToken);
+          if (refreshToken) {
+            localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+          }
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(normalizedUser));
+
+          // Update auth context
+          await refreshUser();
+          setIsAuthenticated(true);
+          setSuccess(true);
+
+          // Redirect to appropriate dashboard
+          setTimeout(() => {
+            if (normalizedUser.role === 'admin') {
+              navigate(ROUTES.ADMIN_DASHBOARD);
+            } else {
+              navigate(ROUTES.CLIENT_DASHBOARD);
+            }
+          }, 1500);
+        } else {
+          // No tokens, just show success message
+          setSuccess(true);
+        }
       } catch (err) {
-        setError(err.message || 'Email verification failed. Please try again.');
+        setError(err.response?.data?.message || err.message || 'Email verification failed. Please try again.');
       } finally {
         setLoading(false);
       }
     };
 
     verify();
-  }, [token]);
+  }, [token, navigate, refreshUser]);
 
   if (loading) {
     return (
@@ -52,13 +90,17 @@ const VerifyEmail = () => {
               Email Verified Successfully!
             </h2>
             <p className="mt-2 text-sm text-gray-400">
-              Your email has been verified. You can now log in to your account.
+              {isAuthenticated
+                ? 'Your email has been verified. Redirecting to your dashboard...'
+                : 'Your email has been verified. You can now log in to your account.'}
             </p>
-            <div className="mt-6">
-              <Button onClick={() => navigate(ROUTES.LOGIN)} className="w-full">
-                Go to Login
-              </Button>
-            </div>
+            {!isAuthenticated && (
+              <div className="mt-6">
+                <Button onClick={() => navigate(ROUTES.LOGIN)} className="w-full">
+                  Go to Login
+                </Button>
+              </div>
+            )}
           </>
         ) : (
           <>

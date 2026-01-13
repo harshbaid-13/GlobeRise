@@ -211,7 +211,7 @@ const Plans = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-black">Plans</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">Plans</h1>
         <Button
           variant="primary"
           onClick={handleAddNew}
@@ -222,9 +222,9 @@ const Plans = () => {
         </Button>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-[var(--card-bg)] rounded-lg shadow-md border border-[var(--border-color)] overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+          <table className="min-w-full divide-y divide-[var(--border-color)]">
             <thead className="bg-[#00ADB5]">
               <tr>
                 {columns.map((column, index) => (
@@ -237,18 +237,18 @@ const Plans = () => {
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-[var(--card-bg)] divide-y divide-[var(--border-color)]">
               {plans.length === 0 ? (
                 <tr>
-                  <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={columns.length} className="px-6 py-4 text-center text-[var(--text-tertiary)]">
                     No plans available
                   </td>
                 </tr>
               ) : (
                 plans.map((plan) => (
-                  <tr key={plan.id} className="hover:bg-gray-50">
+                  <tr key={plan.id} className="hover:bg-[var(--bg-hover)]">
                     {columns.map((column, colIndex) => (
-                      <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                      <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-primary)]">
                         {column.render ? column.render(plan[column.accessor], plan) : plan[column.accessor]}
                       </td>
                     ))}
@@ -274,14 +274,14 @@ const Plans = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className={`w-full px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.name ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.name ? 'border-red-500' : 'border-gray-300'
                 }`}
               placeholder="Enter plan name"
             />
@@ -289,11 +289,11 @@ const Plans = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Price <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-r-0 rounded-l-lg text-gray-700">
+              <span className="px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] border-r-0 rounded-l-lg text-[var(--text-primary)]">
                 $
               </span>
               <input
@@ -302,7 +302,7 @@ const Plans = () => {
                 min="0"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.price ? 'border-red-500' : ''
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.price ? 'border-red-500' : ''
                   }`}
                 placeholder="0.00"
               />
@@ -311,7 +311,7 @@ const Plans = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Business Volume (BV) <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
@@ -321,21 +321,21 @@ const Plans = () => {
                 min="0"
                 value={formData.businessVolume}
                 onChange={(e) => setFormData({ ...formData, businessVolume: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.businessVolume ? 'border-red-500' : 'border-gray-300'
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.businessVolume ? 'border-red-500' : 'border-gray-300'
                   }`}
                 placeholder="Enter business volume"
               />
-              <FaQuestionCircle className="ml-2 text-gray-400 cursor-help" title="Business Volume" />
+              <FaQuestionCircle className="ml-2 text-[var(--text-tertiary)] cursor-help" title="Business Volume" />
             </div>
             {formErrors.businessVolume && <p className="mt-1 text-sm text-red-500">{formErrors.businessVolume}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Referral Commission <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-r-0 rounded-l-lg text-gray-700">
+              <span className="px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] border-r-0 rounded-l-lg text-[var(--text-primary)]">
                 $
               </span>
               <input
@@ -344,21 +344,21 @@ const Plans = () => {
                 min="0"
                 value={formData.referralCommission}
                 onChange={(e) => setFormData({ ...formData, referralCommission: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.referralCommission ? 'border-red-500' : ''
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.referralCommission ? 'border-red-500' : ''
                   }`}
                 placeholder="0.00"
               />
-              <FaQuestionCircle className="ml-2 text-gray-400 cursor-help" title="Referral Commission" />
+              <FaQuestionCircle className="ml-2 text-[var(--text-tertiary)] cursor-help" title="Referral Commission" />
             </div>
             {formErrors.referralCommission && <p className="mt-1 text-sm text-red-500">{formErrors.referralCommission}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Tree Commission <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-r-0 rounded-l-lg text-gray-700">
+              <span className="px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] border-r-0 rounded-l-lg text-[var(--text-primary)]">
                 $
               </span>
               <input
@@ -367,11 +367,11 @@ const Plans = () => {
                 min="0"
                 value={formData.treeCommission}
                 onChange={(e) => setFormData({ ...formData, treeCommission: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.treeCommission ? 'border-red-500' : ''
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.treeCommission ? 'border-red-500' : ''
                   }`}
                 placeholder="0.00"
               />
-              <FaQuestionCircle className="ml-2 text-gray-400 cursor-help" title="Tree Commission" />
+              <FaQuestionCircle className="ml-2 text-[var(--text-tertiary)] cursor-help" title="Tree Commission" />
             </div>
             {formErrors.treeCommission && <p className="mt-1 text-sm text-red-500">{formErrors.treeCommission}</p>}
           </div>
@@ -397,14 +397,14 @@ const Plans = () => {
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className={`w-full px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.name ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.name ? 'border-red-500' : 'border-gray-300'
                 }`}
               placeholder="Enter plan name"
             />
@@ -412,11 +412,11 @@ const Plans = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Price <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-r-0 rounded-l-lg text-gray-700">
+              <span className="px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] border-r-0 rounded-l-lg text-[var(--text-primary)]">
                 $
               </span>
               <input
@@ -425,7 +425,7 @@ const Plans = () => {
                 min="0"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.price ? 'border-red-500' : ''
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.price ? 'border-red-500' : ''
                   }`}
                 placeholder="0.00"
               />
@@ -434,7 +434,7 @@ const Plans = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Business Volume (BV) <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
@@ -444,21 +444,21 @@ const Plans = () => {
                 min="0"
                 value={formData.businessVolume}
                 onChange={(e) => setFormData({ ...formData, businessVolume: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.businessVolume ? 'border-red-500' : 'border-gray-300'
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.businessVolume ? 'border-red-500' : 'border-gray-300'
                   }`}
                 placeholder="Enter business volume"
               />
-              <FaQuestionCircle className="ml-2 text-gray-400 cursor-help" title="Business Volume" />
+              <FaQuestionCircle className="ml-2 text-[var(--text-tertiary)] cursor-help" title="Business Volume" />
             </div>
             {formErrors.businessVolume && <p className="mt-1 text-sm text-red-500">{formErrors.businessVolume}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Referral Commission <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-r-0 rounded-l-lg text-gray-700">
+              <span className="px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] border-r-0 rounded-l-lg text-[var(--text-primary)]">
                 $
               </span>
               <input
@@ -467,21 +467,21 @@ const Plans = () => {
                 min="0"
                 value={formData.referralCommission}
                 onChange={(e) => setFormData({ ...formData, referralCommission: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.referralCommission ? 'border-red-500' : ''
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.referralCommission ? 'border-red-500' : ''
                   }`}
                 placeholder="0.00"
               />
-              <FaQuestionCircle className="ml-2 text-gray-400 cursor-help" title="Referral Commission" />
+              <FaQuestionCircle className="ml-2 text-[var(--text-tertiary)] cursor-help" title="Referral Commission" />
             </div>
             {formErrors.referralCommission && <p className="mt-1 text-sm text-red-500">{formErrors.referralCommission}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Tree Commission <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-r-0 rounded-l-lg text-gray-700">
+              <span className="px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] border-r-0 rounded-l-lg text-[var(--text-primary)]">
                 $
               </span>
               <input
@@ -490,11 +490,11 @@ const Plans = () => {
                 min="0"
                 value={formData.treeCommission}
                 onChange={(e) => setFormData({ ...formData, treeCommission: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border border-gray-300 border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.treeCommission ? 'border-red-500' : ''
+                className={`flex-1 px-3 py-2 bg-[var(--input-bg)] border border-[var(--border-color)] border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.treeCommission ? 'border-red-500' : ''
                   }`}
                 placeholder="0.00"
               />
-              <FaQuestionCircle className="ml-2 text-gray-400 cursor-help" title="Tree Commission" />
+              <FaQuestionCircle className="ml-2 text-[var(--text-tertiary)] cursor-help" title="Tree Commission" />
             </div>
             {formErrors.treeCommission && <p className="mt-1 text-sm text-red-500">{formErrors.treeCommission}</p>}
           </div>
@@ -519,7 +519,7 @@ const Plans = () => {
         variant="light"
       >
         <div className="space-y-4">
-          <p className="text-gray-700 text-center">
+          <p className="text-[var(--text-primary)] text-center">
             Are you sure to disable this plan?
           </p>
           <div className="flex justify-center space-x-4 pt-4">

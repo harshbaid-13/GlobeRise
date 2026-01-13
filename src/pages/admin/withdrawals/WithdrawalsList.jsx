@@ -122,7 +122,7 @@ const WithdrawalsList = ({ status, title }) => {
       case 'rejected':
         return 'bg-red-100 text-red-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-[var(--bg-secondary)] text-[var(--text-primary)]';
     }
   };
 
@@ -156,11 +156,11 @@ const WithdrawalsList = ({ status, title }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-[var(--bg-secondary)] p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header with Search */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">{title || 'Withdrawals'}</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{title || 'Withdrawals'}</h1>
           
           {/* Search and Filter Bar */}
           <div className="flex gap-3">
@@ -171,7 +171,7 @@ const WithdrawalsList = ({ status, title }) => {
                 placeholder="Username / TRX"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-48 px-4 py-2 pr-10 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                className="w-48 px-4 py-2 pr-10 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
               />
               <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             </div>
@@ -184,18 +184,18 @@ const WithdrawalsList = ({ status, title }) => {
                 value={selectedDateRange || (startDate && endDate ? `${startDate} - ${endDate}` : '') || ''}
                 readOnly
                 onClick={() => setShowDateDropdown(!showDateDropdown)}
-                className="w-48 px-4 py-2 pr-10 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-gray-900 placeholder:text-gray-400"
+                className="w-48 px-4 py-2 pr-10 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-[var(--text-primary)] placeholder:text-gray-400"
               />
               <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
               
               {showDateDropdown && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="absolute z-10 mt-1 w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg shadow-lg">
                   {dateRangeOptions.map((option) => (
                     <div
                       key={option}
                       onClick={() => handleDateRangeSelect(option)}
                       className={`px-3 py-2 text-sm cursor-pointer hover:bg-purple-100 ${
-                        selectedDateRange === option ? 'bg-purple-600 text-white hover:bg-purple-600' : 'text-gray-900'
+                        selectedDateRange === option ? 'bg-purple-600 text-white hover:bg-purple-600' : 'text-[var(--text-primary)]'
                       }`}
                     >
                       {option}
@@ -205,7 +205,7 @@ const WithdrawalsList = ({ status, title }) => {
               )}
               
               {showCustomRange && (
-                <div className="absolute z-20 top-full left-0 mt-1 p-3 bg-white border border-gray-200 rounded-lg shadow-lg w-full">
+                <div className="absolute z-20 top-full left-0 mt-1 p-3 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg shadow-lg w-full">
                   <div className="flex gap-2">
                     <input
                       type="date"
@@ -216,7 +216,7 @@ const WithdrawalsList = ({ status, title }) => {
                           setSelectedDateRange('');
                         }
                       }}
-                      className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="flex-1 px-2 py-1.5 text-sm border border-[var(--border-color)] rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     <input
                       type="date"
@@ -227,7 +227,7 @@ const WithdrawalsList = ({ status, title }) => {
                           setSelectedDateRange('');
                         }
                       }}
-                      className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="flex-1 px-2 py-1.5 text-sm border border-[var(--border-color)] rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                   </div>
                 </div>
@@ -237,9 +237,9 @@ const WithdrawalsList = ({ status, title }) => {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-[var(--card-bg)] rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-[var(--border-color)]">
               <thead className="bg-blue-800">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
@@ -265,10 +265,10 @@ const WithdrawalsList = ({ status, title }) => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-[var(--card-bg)] divide-y divide-[var(--border-color)]">
                 {filteredWithdrawals.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan={7} className="px-6 py-4 text-center text-[var(--text-tertiary)]">
                       No withdrawals found
                     </td>
                   </tr>
@@ -276,7 +276,7 @@ const WithdrawalsList = ({ status, title }) => {
                   filteredWithdrawals.map((withdrawal) => {
                     const dateInfo = formatDateWithRelative(withdrawal.createdAt);
                     return (
-                      <tr key={withdrawal.id} className="hover:bg-gray-50">
+                      <tr key={withdrawal.id} className="hover:bg-[var(--bg-hover)]">
                         {/* Gateway | Transaction */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm">
@@ -287,16 +287,16 @@ const WithdrawalsList = ({ status, title }) => {
                         
                         {/* Initiated */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-[var(--text-primary)]">
                             <div>{dateInfo.dateTime}</div>
-                            <div className="text-gray-500 text-xs">{dateInfo.relative}</div>
+                            <div className="text-[var(--text-tertiary)] text-xs">{dateInfo.relative}</div>
                           </div>
                         </td>
                         
                         {/* User */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm">
-                            <div className="text-gray-900">{withdrawal.userName || 'N/A'}</div>
+                            <div className="text-[var(--text-primary)]">{withdrawal.userName || 'N/A'}</div>
                             <div 
                               className="text-blue-600 cursor-pointer hover:underline"
                               onClick={() => navigate(`/admin/users/details/${withdrawal.userId}`)}
@@ -308,14 +308,14 @@ const WithdrawalsList = ({ status, title }) => {
                         
                         {/* Amount */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-[var(--text-primary)]">
                             <div>
                               {formatCurrency(withdrawal.amount || 0)}
                               <span className="text-red-600 ml-2">
                                 - {formatCurrency(withdrawal.charge || 0)}
                               </span>
                             </div>
-                            <div className="font-semibold text-gray-900">
+                            <div className="font-semibold text-[var(--text-primary)]">
                               {formatCurrency(withdrawal.afterCharge || withdrawal.amount || 0)}
                             </div>
                           </div>
@@ -323,11 +323,11 @@ const WithdrawalsList = ({ status, title }) => {
                         
                         {/* Conversion */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-[var(--text-primary)]">
                             <div>
                               ${withdrawal.conversionRate || 1.00} = 1.00 {withdrawal.conversionCurrency || 'USD'}
                             </div>
-                            <div className="text-gray-600">
+                            <div className="text-[var(--text-secondary)]">
                               {formatCurrency(withdrawal.afterConversion || withdrawal.afterCharge || withdrawal.amount || 0)} {withdrawal.conversionCurrency || 'USD'}
                             </div>
                           </div>

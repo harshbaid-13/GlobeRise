@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,12 +9,24 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import Loading from '../../components/common/Loading';
+import GoogleSignInButton from '../../components/auth/GoogleSignInButton';
 
 const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Check for OAuth error in URL
+  useEffect(() => {
+    const oauthError = searchParams.get('error');
+    if (oauthError === 'oauth_failed') {
+      setError('Google sign-in failed. Please try again.');
+      // Clean up URL
+      navigate(ROUTES.LOGIN, { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   const {
     register,
@@ -114,6 +126,21 @@ const Login = () => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? <Loading size="sm" /> : 'Sign in'}
             </Button>
+          </div>
+
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-600"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-[#222831] text-gray-400">Or continue with</span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <GoogleSignInButton />
+            </div>
           </div>
         </form>
       </div>

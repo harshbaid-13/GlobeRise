@@ -2,15 +2,14 @@ import { NavLink } from "react-router-dom";
 import {
   FaHome,
   FaPaperPlane,
-  FaKey,
   FaTrophy,
   FaUsers,
   FaFileInvoiceDollar,
   FaBuilding,
   FaEnvelope,
   FaList,
-  FaThumbsUp,
   FaCog,
+  FaUserShield,
   FaChevronDown,
   FaChevronUp,
 } from "react-icons/fa";
@@ -25,7 +24,7 @@ const Sidebar = () => {
     withdrawals: false,
     support: false,
     report: false,
-    extra: false,
+    investmentPlans: false,
   });
 
   const toggleMenu = (menu) => {
@@ -34,21 +33,31 @@ const Sidebar = () => {
 
   const menuItems = [
     { icon: FaHome, label: "Dashboard", path: ROUTES.ADMIN_DASHBOARD },
-    { icon: FaPaperPlane, label: "Plans", path: ROUTES.ADMIN_PLANS },
     {
-      icon: FaKey,
-      label: "Manage Pins",
-      path: ROUTES.ADMIN_PINS_ALL,
-      submenu: [
-        { label: "All Pins", path: ROUTES.ADMIN_PINS_ALL },
-        { label: "User Pins", path: ROUTES.ADMIN_PINS_USER },
-        { label: "Admin Pins", path: ROUTES.ADMIN_PINS_ADMIN },
-        { label: "Used Pins", path: ROUTES.ADMIN_PINS_USED },
-        { label: "Unused Pins", path: ROUTES.ADMIN_PINS_UNUSED },
-      ],
-      menuKey: "managePins",
+      icon: FaTrophy,
+      label: "User Ranking",
+      path: ROUTES.ADMIN_RANKING,
     },
-    { icon: FaTrophy, label: "User Ranking", path: ROUTES.ADMIN_RANKING },
+    {
+      icon: FaPaperPlane,
+      label: "Investment Plans",
+      path: ROUTES.ADMIN_PLANS_ROI,
+      submenu: [
+        { label: "ROI Configuration", path: ROUTES.ADMIN_PLANS_ROI },
+        { label: "Staking Plans", path: ROUTES.ADMIN_PLANS_STAKING },
+      ],
+      menuKey: "investmentPlans",
+    },
+    {
+      icon: FaUserShield,
+      label: "Manage Admins",
+      path: "/admin/admins",
+      submenu: [
+        { label: "All Admins", path: "/admin/admins" },
+        { label: "Create Admin", path: "/admin/admins/create" },
+      ],
+      menuKey: "manageAdmins",
+    },
     {
       icon: FaUsers,
       label: "Manage Users",
@@ -57,6 +66,7 @@ const Sidebar = () => {
       submenu: [
         { label: "Active Users", path: ROUTES.ADMIN_USERS_ACTIVE },
         { label: "Banned Users", path: ROUTES.ADMIN_USERS_BANNED },
+        { label: "Un-Invested Users", path: "/admin/users/uninvested" },
         {
           label: "Email Unverified",
           path: ROUTES.ADMIN_USERS_EMAIL_UNVERIFIED,
@@ -160,7 +170,7 @@ const Sidebar = () => {
         { label: "Invest Log", path: ROUTES.ADMIN_REPORTS_INVEST },
         { label: "BV Log", path: ROUTES.ADMIN_REPORTS_BV },
         { label: "Referral Commission", path: ROUTES.ADMIN_REPORTS_REFERRAL },
-        { label: "Binary Commission", path: ROUTES.ADMIN_REPORTS_BINARY },
+        { label: "Level Commission", path: ROUTES.ADMIN_REPORTS_LEVEL_COMMISSION },
         { label: "Login History", path: ROUTES.ADMIN_REPORTS_LOGIN },
         {
           label: "Notification History",
@@ -169,30 +179,12 @@ const Sidebar = () => {
       ],
       menuKey: "report",
     },
-    { icon: FaThumbsUp, label: "Subscribers", path: ROUTES.ADMIN_SUBSCRIBERS },
     { icon: FaCog, label: "System Setting", path: ROUTES.ADMIN_SETTINGS },
-    {
-      icon: FaList,
-      label: "Extra",
-      path: ROUTES.ADMIN_EXTRA_APPLICATION,
-      submenu: [
-        { label: "Application", path: ROUTES.ADMIN_EXTRA_APPLICATION },
-        { label: "Server", path: ROUTES.ADMIN_EXTRA_SERVER },
-        { label: "Cache", path: ROUTES.ADMIN_EXTRA_CACHE },
-        { label: "Update", path: ROUTES.ADMIN_EXTRA_UPDATE },
-        { label: "Report & Request", path: ROUTES.ADMIN_EXTRA_REPORT_REQUEST },
-      ],
-      menuKey: "extra",
-    },
   ];
 
   return (
     <div
-      className="w-64 text-white h-screen fixed left-0 top-0"
-      style={{
-        backgroundColor: "#222831",
-        borderRight: "1px solid rgba(255,255,255,0.1)",
-      }}
+      className="w-64 bg-[var(--sidebar-bg)] text-[var(--text-primary)] h-screen fixed left-0 top-0 border-r border-[var(--border-color)] transition-colors duration-200"
     >
       <div className="p-6 flex flex-col h-full">
         <div className="mb-8">
@@ -210,7 +202,7 @@ const Sidebar = () => {
                 <div key={item.label}>
                   <button
                     onClick={() => toggleMenu(item.menuKey)}
-                    className="w-full flex items-center justify-between px-6 py-3 text-sm font-medium hover:bg-blue-800 hover:bg-opacity-10 transition-colors text-gray-300 hover:text-white"
+                    className="w-full flex items-center justify-between px-6 py-3 text-sm font-medium hover:bg-[var(--bg-hover)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                   >
                     <div className="flex items-center space-x-3">
                       <Icon />
@@ -236,8 +228,10 @@ const Sidebar = () => {
                         key={subItem.label}
                         to={subItem.path}
                         className={({ isActive }) =>
-                          `flex items-center justify-between px-6 py-2 text-sm hover:bg-blue-800 hover:bg-opacity-10 transition-colors text-gray-400 hover:text-white ${
-                            isActive ? "bg-blue-600 text-white" : ""
+                          `flex items-center justify-between px-6 py-2 text-sm hover:bg-[var(--bg-hover)] transition-colors ${
+                            isActive 
+                              ? "bg-[#00ADB5] text-white" 
+                              : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
                           }`
                         }
                       >
@@ -261,8 +255,8 @@ const Sidebar = () => {
                 className={({ isActive }) =>
                   `flex items-center justify-between px-6 py-3 text-sm font-medium transition-colors ${
                     isActive
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-300 hover:text-white hover:bg-blue-800 hover:bg-opacity-10"
+                      ? "bg-[#00ADB5] text-white"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
                   }`
                 }
               >

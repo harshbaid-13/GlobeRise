@@ -1,3 +1,8 @@
 import AllTicket from './AllTicket';
-export default AllTicket;
+
+const PendingTicket = () => {
+  return <AllTicket statusFilter="OPEN" />;
+};
+
+export default PendingTicket;
 

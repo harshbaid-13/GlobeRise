@@ -17,9 +17,11 @@ const UserRanking = () => {
     icon: '',
     level: '',
     name: '',
-    bvLeft: '',
-    bvRight: '',
-    bonus: '',
+    requiredBusiness: '',
+    bonusAmount: '',
+    royaltyPercent: '',
+    levelStartValue: '',
+    levelEndValue: '',
   });
   const [formErrors, setFormErrors] = useState({});
   const [iconPreview, setIconPreview] = useState('');
@@ -30,10 +32,37 @@ const UserRanking = () => {
 
   const loadRankings = async () => {
     try {
+      setLoading(true);
       const data = await rankingService.getAllRankings();
-      setRankings(data);
+      
+      // Check if we have old data structure and reset if needed
+      const hasOldData = data.some(r => 
+        r.bvLeft !== undefined || 
+        r.bvRight !== undefined || 
+        ['Silver', 'Silver Pro', 'Gold', 'Gold Pro', 'Platinum'].includes(r.name)
+      );
+      
+      if (hasOldData || data.length < 10) {
+        // Reset to new rankings
+        const newData = await rankingService.resetToDefault();
+        const sortedData = [...(newData || [])].sort((a, b) => {
+          const orderA = a.order || a.level || 0;
+          const orderB = b.order || b.level || 0;
+          return orderA - orderB;
+        });
+        setRankings(sortedData);
+      } else {
+        // Sort by order or level to ensure proper display order
+        const sortedData = [...(data || [])].sort((a, b) => {
+          const orderA = a.order || a.level || 0;
+          const orderB = b.order || b.level || 0;
+          return orderA - orderB;
+        });
+        setRankings(sortedData);
+      }
     } catch (error) {
       console.error('Error loading rankings:', error);
+      setRankings([]);
     } finally {
       setLoading(false);
     }
@@ -44,9 +73,11 @@ const UserRanking = () => {
       icon: '',
       level: '',
       name: '',
-      bvLeft: '',
-      bvRight: '',
-      bonus: '',
+      requiredBusiness: '',
+      bonusAmount: '',
+      royaltyPercent: '',
+      levelStartValue: '',
+      levelEndValue: '',
     });
     setFormErrors({});
     setIconPreview('');
@@ -64,11 +95,13 @@ const UserRanking = () => {
     setSelectedRanking(ranking);
     setFormData({
       icon: ranking.icon || '',
-      level: ranking.level?.toString() || '',
+      level: ranking.level?.toString() || ranking.order?.toString() || '',
       name: ranking.name || '',
-      bvLeft: ranking.bvLeft?.toString() || '',
-      bvRight: ranking.bvRight?.toString() || '',
-      bonus: ranking.bonus?.toString() || '',
+      requiredBusiness: ranking.requiredBusiness?.toString() || '',
+      bonusAmount: ranking.bonusAmount?.toString() || ranking.bonus?.toString() || '',
+      royaltyPercent: ranking.royaltyPercent?.toString() || '',
+      levelStartValue: ranking.levelStartValue?.toString() || '',
+      levelEndValue: ranking.levelEndValue?.toString() || '',
     });
     setIconPreview(ranking.icon || '');
     setFormErrors({});
@@ -114,9 +147,10 @@ const UserRanking = () => {
     if (!formData.icon && !iconPreview) errors.icon = 'Icon is required';
     if (!formData.level || parseInt(formData.level) <= 0) errors.level = 'Level must be greater than 0';
     if (!formData.name.trim()) errors.name = 'Name is required';
-    if (!formData.bvLeft || parseFloat(formData.bvLeft) < 0) errors.bvLeft = 'BV Left must be 0 or greater';
-    if (!formData.bvRight || parseFloat(formData.bvRight) < 0) errors.bvRight = 'BV Right must be 0 or greater';
-    if (!formData.bonus || parseFloat(formData.bonus) < 0) errors.bonus = 'Bonus must be 0 or greater';
+    if (!formData.requiredBusiness || parseFloat(formData.requiredBusiness) < 0) errors.requiredBusiness = 'Required Business must be 0 or greater';
+    if (!formData.bonusAmount || parseFloat(formData.bonusAmount) < 0) errors.bonusAmount = 'Bonus Amount must be 0 or greater';
+    if (formData.royaltyPercent === '' || parseFloat(formData.royaltyPercent) < 0) errors.royaltyPercent = 'Royalty Percent must be 0 or greater';
+    if (!formData.levelStartValue || parseFloat(formData.levelStartValue) < 0) errors.levelStartValue = 'Level Start Value must be 0 or greater';
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -128,11 +162,14 @@ const UserRanking = () => {
     try {
       const rankingData = {
         level: parseInt(formData.level),
+        order: parseInt(formData.level),
         name: formData.name.trim(),
-        bvLeft: parseFloat(formData.bvLeft),
-        bvRight: parseFloat(formData.bvRight),
-        bonus: parseFloat(formData.bonus),
+        requiredBusiness: parseFloat(formData.requiredBusiness),
+        bonusAmount: parseFloat(formData.bonusAmount),
+        royaltyPercent: parseFloat(formData.royaltyPercent) || 0,
         icon: formData.icon || iconPreview,
+        levelStartValue: formData.levelStartValue ? parseFloat(formData.levelStartValue) : 0,
+        levelEndValue: formData.levelEndValue ? parseFloat(formData.levelEndValue) : null,
         status: 'enabled',
       };
 
@@ -150,9 +187,11 @@ const UserRanking = () => {
         icon: '',
         level: '',
         name: '',
-        bvLeft: '',
-        bvRight: '',
-        bonus: '',
+        requiredBusiness: '',
+        bonusAmount: '',
+        royaltyPercent: '',
+        levelStartValue: '',
+        levelEndValue: '',
       });
       setIconPreview('');
     } catch (error) {
@@ -177,13 +216,13 @@ const UserRanking = () => {
     {
       header: 'Icon',
       accessor: 'icon',
-      render: (value) => (
+      render: (value, row) => (
         <div className="flex items-center justify-center">
           {value ? (
-            <img src={value} alt="Ranking icon" className="w-12 h-12 rounded-full object-cover" />
+            <img src={value} alt={`${row.name} icon`} className="w-12 h-12 rounded-full object-cover" />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-              <span className="text-xs text-gray-600">No Icon</span>
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00ADB5] to-[#008a91] flex items-center justify-center">
+              <span className="text-xs font-bold text-white">{row.name?.charAt(0) || '?'}</span>
             </div>
           )}
         </div>
@@ -198,17 +237,29 @@ const UserRanking = () => {
       accessor: 'name'
     },
     {
-      header: 'BV Left',
-      accessor: 'bvLeft'
-    },
-    {
-      header: 'BV Right',
-      accessor: 'bvRight'
-    },
-    {
-      header: 'Bonus',
-      accessor: 'bonus',
+      header: 'Total Team Business',
+      accessor: 'requiredBusiness',
       render: (value) => formatCurrency(value)
+    },
+    {
+      header: 'One Time Bonus',
+      accessor: 'bonusAmount',
+      render: (value, row) => formatCurrency(value || row.bonus || 0)
+    },
+    {
+      header: 'Royalty %',
+      accessor: 'royaltyPercent',
+      render: (value) => value ? `${value}%` : '0%'
+    },
+    {
+      header: 'Level Start',
+      accessor: 'levelStartValue',
+      render: (value) => value ? formatCurrency(value) : '-'
+    },
+    {
+      header: 'Level End',
+      accessor: 'levelEndValue',
+      render: (value) => value ? formatCurrency(value) : '-'
     },
     {
       header: 'Status',
@@ -291,15 +342,15 @@ const UserRanking = () => {
               {rankings.length === 0 ? (
                 <tr>
                   <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">
-                    No rankings available
+                    No rankings available. Click "Add New" to create a ranking.
                   </td>
                 </tr>
               ) : (
                 rankings.map((ranking) => (
-                  <tr key={ranking.id} className="hover:bg-gray-50">
+                  <tr key={ranking.id} className="hover:bg-gray-50 transition-colors">
                     {columns.map((column, colIndex) => (
                       <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                        {column.render ? column.render(ranking[column.accessor], ranking) : ranking[column.accessor]}
+                        {column.render ? column.render(ranking[column.accessor], ranking) : (ranking[column.accessor] ?? '-')}
                       </td>
                     ))}
                   </tr>
@@ -399,60 +450,38 @@ const UserRanking = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              BV Left <span className="text-red-500">*</span>
-            </label>
-            <div className="flex items-center">
-              <input
-                type="number"
-                step="1"
-                min="0"
-                value={formData.bvLeft}
-                onChange={(e) => setFormData({ ...formData, bvLeft: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bvLeft ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                placeholder="Enter BV Left"
-              />
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
-                BV
-              </span>
-            </div>
-            {formErrors.bvLeft && <p className="mt-1 text-sm text-red-500">{formErrors.bvLeft}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              BV Right <span className="text-red-500">*</span>
-            </label>
-            <div className="flex items-center">
-              <input
-                type="number"
-                step="1"
-                min="0"
-                value={formData.bvRight}
-                onChange={(e) => setFormData({ ...formData, bvRight: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bvRight ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                placeholder="Enter BV Right"
-              />
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
-                BV
-              </span>
-            </div>
-            {formErrors.bvRight && <p className="mt-1 text-sm text-red-500">{formErrors.bvRight}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Bonus <span className="text-red-500">*</span>
+              Total Team Business <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
               <input
                 type="number"
                 step="0.01"
                 min="0"
-                value={formData.bonus}
-                onChange={(e) => setFormData({ ...formData, bonus: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bonus ? 'border-red-500' : 'border-gray-300'
+                value={formData.requiredBusiness}
+                onChange={(e) => setFormData({ ...formData, requiredBusiness: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.requiredBusiness ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Enter total team business"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                USD
+              </span>
+            </div>
+            {formErrors.requiredBusiness && <p className="mt-1 text-sm text-red-500">{formErrors.requiredBusiness}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              One Time Bonus <span className="text-red-500">*</span>
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.bonusAmount}
+                onChange={(e) => setFormData({ ...formData, bonusAmount: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bonusAmount ? 'border-red-500' : 'border-gray-300'
                   }`}
                 placeholder="Enter bonus amount"
               />
@@ -460,7 +489,73 @@ const UserRanking = () => {
                 USD
               </span>
             </div>
-            {formErrors.bonus && <p className="mt-1 text-sm text-red-500">{formErrors.bonus}</p>}
+            {formErrors.bonusAmount && <p className="mt-1 text-sm text-red-500">{formErrors.bonusAmount}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Royalty Percent
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.royaltyPercent}
+                onChange={(e) => setFormData({ ...formData, royaltyPercent: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.royaltyPercent ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Enter royalty percent"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                %
+              </span>
+            </div>
+            {formErrors.royaltyPercent && <p className="mt-1 text-sm text-red-500">{formErrors.royaltyPercent}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Level Start Value (Business Volume)
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.levelStartValue}
+                onChange={(e) => setFormData({ ...formData, levelStartValue: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.levelStartValue ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Business volume where this level starts"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                USD
+              </span>
+            </div>
+            {formErrors.levelStartValue && <p className="mt-1 text-sm text-red-500">{formErrors.levelStartValue}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Level End Value (Business Volume) <span className="text-gray-500 text-xs">(Optional)</span>
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.levelEndValue}
+                onChange={(e) => setFormData({ ...formData, levelEndValue: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.levelEndValue ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Business volume where this level ends (leave empty for no limit)"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                USD
+              </span>
+            </div>
+            {formErrors.levelEndValue && <p className="mt-1 text-sm text-red-500">{formErrors.levelEndValue}</p>}
           </div>
 
           <div className="flex justify-center pt-4">
@@ -559,60 +654,38 @@ const UserRanking = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              BV Left <span className="text-red-500">*</span>
-            </label>
-            <div className="flex items-center">
-              <input
-                type="number"
-                step="1"
-                min="0"
-                value={formData.bvLeft}
-                onChange={(e) => setFormData({ ...formData, bvLeft: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bvLeft ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                placeholder="Enter BV Left"
-              />
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
-                BV
-              </span>
-            </div>
-            {formErrors.bvLeft && <p className="mt-1 text-sm text-red-500">{formErrors.bvLeft}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              BV Right <span className="text-red-500">*</span>
-            </label>
-            <div className="flex items-center">
-              <input
-                type="number"
-                step="1"
-                min="0"
-                value={formData.bvRight}
-                onChange={(e) => setFormData({ ...formData, bvRight: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bvRight ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                placeholder="Enter BV Right"
-              />
-              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
-                BV
-              </span>
-            </div>
-            {formErrors.bvRight && <p className="mt-1 text-sm text-red-500">{formErrors.bvRight}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Bonus <span className="text-red-500">*</span>
+              Total Team Business <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
               <input
                 type="number"
                 step="0.01"
                 min="0"
-                value={formData.bonus}
-                onChange={(e) => setFormData({ ...formData, bonus: e.target.value })}
-                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bonus ? 'border-red-500' : 'border-gray-300'
+                value={formData.requiredBusiness}
+                onChange={(e) => setFormData({ ...formData, requiredBusiness: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.requiredBusiness ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Enter total team business"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                USD
+              </span>
+            </div>
+            {formErrors.requiredBusiness && <p className="mt-1 text-sm text-red-500">{formErrors.requiredBusiness}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              One Time Bonus <span className="text-red-500">*</span>
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.bonusAmount}
+                onChange={(e) => setFormData({ ...formData, bonusAmount: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.bonusAmount ? 'border-red-500' : 'border-gray-300'
                   }`}
                 placeholder="Enter bonus amount"
               />
@@ -620,7 +693,73 @@ const UserRanking = () => {
                 USD
               </span>
             </div>
-            {formErrors.bonus && <p className="mt-1 text-sm text-red-500">{formErrors.bonus}</p>}
+            {formErrors.bonusAmount && <p className="mt-1 text-sm text-red-500">{formErrors.bonusAmount}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Royalty Percent
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.royaltyPercent}
+                onChange={(e) => setFormData({ ...formData, royaltyPercent: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.royaltyPercent ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Enter royalty percent"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                %
+              </span>
+            </div>
+            {formErrors.royaltyPercent && <p className="mt-1 text-sm text-red-500">{formErrors.royaltyPercent}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Level Start Value (Business Volume)
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.levelStartValue}
+                onChange={(e) => setFormData({ ...formData, levelStartValue: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.levelStartValue ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Business volume where this level starts"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                USD
+              </span>
+            </div>
+            {formErrors.levelStartValue && <p className="mt-1 text-sm text-red-500">{formErrors.levelStartValue}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Level End Value (Business Volume) <span className="text-gray-500 text-xs">(Optional)</span>
+            </label>
+            <div className="flex items-center">
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={formData.levelEndValue}
+                onChange={(e) => setFormData({ ...formData, levelEndValue: e.target.value })}
+                className={`flex-1 px-3 py-2 bg-white border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.levelEndValue ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                placeholder="Business volume where this level ends (leave empty for no limit)"
+              />
+              <span className="px-3 py-2 bg-gray-100 border border-gray-300 border-l-0 rounded-r-lg text-gray-700">
+                USD
+              </span>
+            </div>
+            {formErrors.levelEndValue && <p className="mt-1 text-sm text-red-500">{formErrors.levelEndValue}</p>}
           </div>
 
           <div className="flex justify-center pt-4">

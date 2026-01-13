@@ -1,3 +1,8 @@
 import AllTicket from './AllTicket';
-export default AllTicket;
+
+const AnsweredTicket = () => {
+  return <AllTicket statusFilter="ANSWERED" />;
+};
+
+export default AnsweredTicket;
 

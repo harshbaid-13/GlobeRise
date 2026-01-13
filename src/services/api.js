@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { STORAGE_KEYS } from '../utils/constants';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
@@ -12,7 +13,7 @@ const api = axios.create({
 // Request interceptor for adding auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -36,12 +37,16 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
         if (refreshToken) {
           const response = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
-          const { token } = response.data.data;
+          const { token, refreshToken: newRefreshToken } = response.data.data;
           
-          localStorage.setItem('auth_token', token);
+          // Store both new tokens (token rotation)
+          localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+          if (newRefreshToken) {
+            localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken);
+          }
           
           // Retry original request with new token
           originalRequest.headers.Authorization = `Bearer ${token}`;
@@ -49,8 +54,9 @@ api.interceptors.response.use(
         }
       } catch (refreshError) {
         // Refresh failed, logout user
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.USER);
         window.location.href = '/login';
       }
     }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import { authService } from "../../services/authService";
 import { dashboardService } from "../../services/dashboardService";
 import { formatCurrency } from "../../utils/formatters";
 import {
@@ -43,6 +44,8 @@ const ClientDashboard = () => {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendMessage, setResendMessage] = useState("");
 
   useEffect(() => {
     fetchDashboardData();
@@ -62,6 +65,25 @@ const ClientDashboard = () => {
       setError("Failed to load dashboard data. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!user?.email) return;
+
+    setError(null);
+    setResendMessage("");
+    setResendLoading(true);
+
+    try {
+      await authService.resendEmail(user.email);
+      setResendMessage("Verification email sent successfully. Please check your inbox.");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Failed to resend verification email. Please try again."
+      );
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -231,15 +253,39 @@ const ClientDashboard = () => {
       {/* Announcements Banner */}
       <AnnouncementBanner />
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-[var(--text-primary)]">
-          Welcome back, {user?.email?.split("@")[0] || "User"}!
-        </h1>
-        <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full self-start sm:self-auto">
-          <span className="text-white font-bold text-xs md:text-sm">
-            Rank: {stats?.rank || "NONE"}
-          </span>
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-[var(--text-primary)]">
+            Welcome back, {user?.email?.split("@")[0] || "User"}!
+          </h1>
+          <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full self-start sm:self-auto">
+            <span className="text-white font-bold text-xs md:text-sm">
+              Rank: {stats?.rank || "NONE"}
+            </span>
+          </div>
         </div>
+
+        {!user?.is_verified && (
+          <div className="bg-yellow-500/30 border border-yellow-200 rounded-lg px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3 shadow-md">
+            <div className="text-sm text-gray-900 dark:text-yellow-50 font-semibold">
+              Your email is not verified yet. Please verify your email to unlock full account
+              features.
+            </div>
+            <button
+              onClick={handleResendVerification}
+              disabled={resendLoading}
+              className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-semibold bg-yellow-500 text-yellow-900 hover:bg-yellow-400 disabled:opacity-60 disabled:cursor-not-allowed transition-colors shadow-sm"
+            >
+              {resendLoading ? "Sending..." : "Resend verification email"}
+            </button>
+          </div>
+        )}
+
+        {resendMessage && (
+          <div className="bg-green-500/10 border border-green-500/40 text-green-100 rounded-lg px-4 py-3 text-sm">
+            {resendMessage}
+          </div>
+        )}
       </div>
 
       {/* Live Rates Widget */}

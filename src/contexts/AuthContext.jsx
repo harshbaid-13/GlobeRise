@@ -68,6 +68,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const handleGoogleCallback = async (token) => {
+    try {
+      const result = await authService.handleGoogleCallback(token);
+      if (result.user) {
+        setUser(result.user);
+      }
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -75,6 +87,7 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     refreshUser,
+    handleGoogleCallback,
     isAuthenticated: !!user,
     isAdmin: user?.role === 'admin',
     isClient: user?.role === 'client',

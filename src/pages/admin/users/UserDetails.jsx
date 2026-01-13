@@ -51,6 +51,7 @@ const UserDetails = () => {
   const [isAddBalanceModalOpen, setIsAddBalanceModalOpen] = useState(false);
   const [isSubtractBalanceModalOpen, setIsSubtractBalanceModalOpen] = useState(false);
   const [isBanUserModalOpen, setIsBanUserModalOpen] = useState(false);
+  const [isUnbanUserModalOpen, setIsUnbanUserModalOpen] = useState(false);
   const [balanceFormData, setBalanceFormData] = useState({
     amount: '',
     remark: '',
@@ -188,6 +189,19 @@ const UserDetails = () => {
     } catch (error) {
       console.error('Error banning user:', error);
       alert('Error banning user');
+    }
+  };
+
+  const handleUnbanUser = async (e) => {
+    e.preventDefault();
+    try {
+      await userService.unbanUser(id);
+      setIsUnbanUserModalOpen(false);
+      await loadUser();
+      alert('User unbanned successfully');
+    } catch (error) {
+      console.error('Error unbanning user:', error);
+      alert('Error unbanning user');
     }
   };
 
@@ -380,14 +394,25 @@ const UserDetails = () => {
               <FaSitemap />
               <span>User Tree</span>
             </Button>
-            <Button
-              variant="warning"
-              className="flex items-center space-x-2"
-              onClick={() => setIsBanUserModalOpen(true)}
-            >
-              <FaBan />
-              <span>Ban User</span>
-            </Button>
+            {user.status === 'banned' ? (
+              <Button
+                variant="success"
+                className="flex items-center space-x-2"
+                onClick={() => setIsUnbanUserModalOpen(true)}
+              >
+                <FaBan />
+                <span>Unban User</span>
+              </Button>
+            ) : (
+              <Button
+                variant="warning"
+                className="flex items-center space-x-2"
+                onClick={() => setIsBanUserModalOpen(true)}
+              >
+                <FaBan />
+                <span>Ban User</span>
+              </Button>
+            )}
           </div>
         </div>
 
@@ -855,6 +880,32 @@ const UserDetails = () => {
               className="w-full py-2"
             >
               Submit
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* Unban User Modal */}
+      <Modal
+        isOpen={isUnbanUserModalOpen}
+        onClose={() => {
+          setIsUnbanUserModalOpen(false);
+        }}
+        title="Unban User"
+        variant="light"
+        size="md"
+      >
+        <form onSubmit={handleUnbanUser} className="space-y-4">
+          <p className="text-sm text-gray-600 mb-4">
+            Are you sure you want to unban this user? They will be able to access their dashboard again.
+          </p>
+          <div className="pt-4">
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-full py-2"
+            >
+              Confirm Unban
             </Button>
           </div>
         </form>

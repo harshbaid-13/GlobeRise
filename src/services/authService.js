@@ -71,6 +71,23 @@ export const authService = {
     return response.data;
   },
 
+  async refreshToken() {
+    const currentRefreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+    if (!currentRefreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    const response = await api.post('/auth/refresh', { refreshToken: currentRefreshToken });
+    const { token, refreshToken: newRefreshToken } = response.data.data;
+
+    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+    if (newRefreshToken) {
+      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken);
+    }
+
+    return { token, refreshToken: newRefreshToken || currentRefreshToken };
+  },
+
   async verifyEmail(token) {
     const response = await api.post('/auth/verify-email', { token });
     return response.data;
@@ -97,5 +114,34 @@ export const authService = {
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
     
     return { user, token };
+  },
+
+  async handleGoogleCallback(token) {
+    // Store the token temporarily
+    localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
+    
+    // Fetch user data with the token
+    const response = await api.get('/auth/me');
+    const user = response.data.data.user;
+    
+    // Normalize role
+    if (user.role === 'USER') user.role = 'client';
+    if (user.role === 'ADMIN') user.role = 'admin';
+    user.role = user.role.toLowerCase();
+
+    // Get refresh token if available (should be in response from verify-email if called)
+    // For Google OAuth, we might need to get refresh token separately
+    // For now, store user and token
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+    
+    return { user, token };
+  },
+
+  async changePassword(currentPassword, newPassword) {
+    const response = await api.post('/auth/change-password', {
+      currentPassword,
+      newPassword,
+    });
+    return response.data;
   },
 };

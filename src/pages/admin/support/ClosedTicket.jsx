@@ -1,3 +1,8 @@
 import AllTicket from './AllTicket';
-export default AllTicket;
+
+const ClosedTicket = () => {
+  return <AllTicket statusFilter="CLOSED" />;
+};
+
+export default ClosedTicket;
 

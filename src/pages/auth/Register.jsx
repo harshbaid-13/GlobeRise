@@ -9,6 +9,7 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
 import Loading from '../../components/common/Loading';
+import GoogleSignInButton from '../../components/auth/GoogleSignInButton';
 
 const Register = () => {
   const [error, setError] = useState('');
@@ -52,6 +53,8 @@ const Register = () => {
 
       const result = await registerAuth(payload);
       setSuccess('Registration successful! Please check your email to verify your account.');
+      
+      // Add link to resend email page
       setTimeout(() => {
         navigate(ROUTES.LOGIN);
       }, 3000);
@@ -84,6 +87,22 @@ const Register = () => {
           {success && (
             <Alert type="success" message={success} onClose={() => setSuccess('')} />
           )}
+
+          <div>
+            <GoogleSignInButton />
+            <p className="mt-2 text-xs text-center text-gray-500">
+              Google sign-in automatically verifies your email
+            </p>
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-600"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-[#222831] text-gray-400">Or register with email</span>
+            </div>
+          </div>
 
           <div className="space-y-4">
             <Input
@@ -125,6 +144,15 @@ const Register = () => {
               Have a referral code? Enter it above to join under your sponsor.
             </p>
           </div>
+
+          {success && (
+            <div className="text-sm text-gray-400 text-center">
+              Didn't receive the email?{' '}
+              <Link to={ROUTES.RESEND_EMAIL} className="text-[#00ADB5] hover:text-[#00ADB5]">
+                Resend verification email
+              </Link>
+            </div>
+          )}
 
           <div className="flex items-center">
             <input

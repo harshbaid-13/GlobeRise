@@ -124,7 +124,7 @@ const DepositsList = ({ status, title }) => {
       case 'approved':
         return 'bg-blue-100 text-blue-800';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-[var(--bg-secondary)] text-[var(--text-primary)]';
     }
   };
 
@@ -158,11 +158,11 @@ const DepositsList = ({ status, title }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-[var(--bg-primary)] p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header with Search */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">{title || 'Deposits'}</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{title || 'Deposits'}</h1>
           
           {/* Search and Filter Bar */}
           <div className="flex gap-3">
@@ -173,9 +173,9 @@ const DepositsList = ({ status, title }) => {
                 placeholder="Username / TRX"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-48 px-4 py-2 pr-10 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                className="w-48 px-4 py-2 pr-10 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] placeholder-[var(--text-tertiary)] text-[var(--text-primary)]"
               />
-              <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-tertiary)]" />
             </div>
             
             {/* Date Range Filter */}
@@ -186,18 +186,18 @@ const DepositsList = ({ status, title }) => {
                 value={selectedDateRange || (startDate && endDate ? `${startDate} - ${endDate}` : '') || ''}
                 readOnly
                 onClick={() => setShowDateDropdown(!showDateDropdown)}
-                className="w-48 px-4 py-2 pr-10 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-gray-900 placeholder:text-gray-400"
+                className="w-48 px-4 py-2 pr-10 bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] cursor-pointer text-[var(--text-primary)] placeholder-[var(--text-tertiary)]"
               />
-              <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-tertiary)] pointer-events-none" />
               
               {showDateDropdown && (
-                <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg">
+                <div className="absolute z-10 mt-1 w-full bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg shadow-lg">
                   {dateRangeOptions.map((option) => (
                     <div
                       key={option}
                       onClick={() => handleDateRangeSelect(option)}
-                      className={`px-3 py-2 text-sm cursor-pointer hover:bg-purple-100 ${
-                        selectedDateRange === option ? 'bg-purple-600 text-white hover:bg-purple-600' : 'text-gray-900'
+                      className={`px-3 py-2 text-sm cursor-pointer hover:bg-[var(--bg-hover)] ${
+                        selectedDateRange === option ? 'bg-purple-600 text-white hover:bg-purple-600' : 'text-[var(--text-primary)]'
                       }`}
                     >
                       {option}
@@ -207,7 +207,7 @@ const DepositsList = ({ status, title }) => {
               )}
               
               {showCustomRange && (
-                <div className="absolute z-20 top-full left-0 mt-1 p-3 bg-white border border-gray-200 rounded-lg shadow-lg w-full">
+                <div className="absolute z-20 top-full left-0 mt-1 p-3 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg shadow-lg w-full">
                   <div className="flex gap-2">
                     <input
                       type="date"
@@ -218,7 +218,7 @@ const DepositsList = ({ status, title }) => {
                           setSelectedDateRange('');
                         }
                       }}
-                      className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="flex-1 px-2 py-1.5 text-sm border border-[var(--border-color)] bg-[var(--input-bg)] rounded focus:outline-none focus:ring-1 focus:ring-[#00ADB5] text-[var(--text-primary)]"
                     />
                     <input
                       type="date"
@@ -229,7 +229,7 @@ const DepositsList = ({ status, title }) => {
                           setSelectedDateRange('');
                         }
                       }}
-                      className="flex-1 px-2 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="flex-1 px-2 py-1.5 text-sm border border-[var(--border-color)] bg-[var(--input-bg)] rounded focus:outline-none focus:ring-1 focus:ring-[#00ADB5] text-[var(--text-primary)]"
                     />
                   </div>
                 </div>
@@ -239,10 +239,10 @@ const DepositsList = ({ status, title }) => {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-[var(--card-bg)] rounded-lg shadow-md border border-[var(--border-color)] overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-blue-800">
+            <table className="min-w-full divide-y divide-[var(--border-color)]">
+              <thead className="bg-[#00ADB5]">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                     Gateway | Transaction
@@ -267,10 +267,10 @@ const DepositsList = ({ status, title }) => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-[var(--card-bg)] divide-y divide-[var(--border-color)]">
                 {filteredDeposits.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                    <td colSpan={7} className="px-6 py-4 text-center text-[var(--text-tertiary)]">
                       No deposits found
                     </td>
                   </tr>
@@ -278,27 +278,27 @@ const DepositsList = ({ status, title }) => {
                   filteredDeposits.map((deposit) => {
                     const dateInfo = formatDateWithRelative(deposit.createdAt);
                     return (
-                      <tr key={deposit.id} className="hover:bg-gray-50">
+                      <tr key={deposit.id} className="hover:bg-[var(--bg-hover)]">
                         {/* Gateway | Transaction */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm">
-                            <div className="text-blue-600 font-medium">{deposit.gateway || deposit.method}</div>
-                            <div className="text-blue-500 text-xs">{deposit.transactionId}</div>
+                            <div className="text-blue-600 dark:text-blue-400 font-medium">{deposit.gateway || deposit.method}</div>
+                            <div className="text-blue-500 dark:text-blue-500 text-xs">{deposit.transactionId}</div>
                           </div>
                         </td>
                         
                         {/* Initiated */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-[var(--text-primary)]">
                             <div>{dateInfo.dateTime}</div>
-                            <div className="text-gray-500 text-xs">{dateInfo.relative}</div>
+                            <div className="text-[var(--text-tertiary)] text-xs">{dateInfo.relative}</div>
                           </div>
                         </td>
                         
                         {/* User */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm">
-                            <div className="text-gray-900">{deposit.userName || 'N/A'}</div>
+                            <div className="text-[var(--text-primary)]">{deposit.userName || 'N/A'}</div>
                             <div 
                               className="text-blue-600 cursor-pointer hover:underline"
                               onClick={() => navigate(`/admin/users/details/${deposit.userId}`)}
@@ -310,7 +310,7 @@ const DepositsList = ({ status, title }) => {
                         
                         {/* Amount */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-[var(--text-primary)]">
                             <div>
                               {formatCurrency(deposit.amount || 0)}
                               <span className="text-red-600 ml-2">
@@ -325,7 +325,7 @@ const DepositsList = ({ status, title }) => {
                         
                         {/* Conversion */}
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
+                          <div className="text-sm text-[var(--text-primary)]">
                             <div>
                               ${deposit.conversionRate || 1.00} = 1.00 {deposit.conversionCurrency || 'USD'}
                             </div>

@@ -3,6 +3,7 @@ import Button from '../../components/common/Button';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { profileService } from '../../services/profileService';
+import { authService } from '../../services/authService';
 import { COUNTRY_CODES, COUNTRIES } from '../../utils/countryCodes';
 import Alert from '../../components/common/Alert';
 import AvatarPicker from '../../components/profile/AvatarPicker';
@@ -17,6 +18,7 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [resending, setResending] = useState(false);
   
   // Form fields
   const [firstName, setFirstName] = useState('');
@@ -99,6 +101,21 @@ const Profile = () => {
     }
   };
 
+  const handleResendVerification = async () => {
+    setError('');
+    setSuccess('');
+    setResending(true);
+
+    try {
+      await authService.resendEmail(profile?.email || user?.email);
+      setSuccess('Verification email sent successfully. Please check your inbox.');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to resend verification email.');
+    } finally {
+      setResending(false);
+    }
+  };
+
   if (loading) return <Loading />;
 
   const roleLabel = user?.role
@@ -129,10 +146,20 @@ const Profile = () => {
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#00ADB5]/10 text-[#00ADB5] border border-[#00ADB5]/40">
                   {roleLabel}
                 </span>
-                {profile?.emailVerified && (
+                {profile?.emailVerified ? (
                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/40">
                     <FaCheckCircle className="mr-1" /> Verified
                   </span>
+                ) : (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    disabled={resending}
+                    onClick={handleResendVerification}
+                  >
+                    {resending ? 'Sending...' : 'Resend verification email'}
+                  </Button>
                 )}
               </div>
             </div>

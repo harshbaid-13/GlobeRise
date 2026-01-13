@@ -118,11 +118,11 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
   if (loading) return <Loading size="lg" />;
 
   return (
-    <div className="bg-white min-h-screen p-6">
+    <div className="bg-[var(--bg-primary)] min-h-screen p-6">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold text-gray-800">{getTitle()}</h1>
+          <h1 className="text-3xl font-bold text-[var(--text-primary)]">{getTitle()}</h1>
           <div className="flex items-center gap-3">
             {/* Search Bar */}
             <div className="flex items-center gap-2">
@@ -131,7 +131,7 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
                 placeholder="Search pin"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+                className="px-4 py-2 border border-[var(--border-color)] bg-[var(--input-bg)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[var(--text-primary)] placeholder-[var(--text-tertiary)]"
               />
               <button className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors">
                 <FaSearch className="w-5 h-5" />
@@ -150,9 +150,9 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-blue-600">
+      <div className="bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] overflow-hidden">
+        <table className="min-w-full divide-y divide-[var(--border-color)]">
+          <thead className="bg-[#00ADB5]">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
                 User | Admin
@@ -171,10 +171,10 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-[var(--card-bg)] divide-y divide-[var(--border-color)]">
             {filteredPins.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={5} className="px-6 py-4 text-center text-[var(--text-tertiary)]">
                   No pins found
                 </td>
               </tr>
@@ -188,19 +188,19 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
                     : '';
 
                 return (
-                  <tr key={pin.id} className="hover:bg-gray-50">
+                  <tr key={pin.id} className="hover:bg-[var(--bg-hover)]">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                      <div className="text-sm text-[var(--text-primary)]">
                         Created via {pin.createdBy || 'admin'}
                       </div>
                       <div className="text-sm text-blue-600 cursor-pointer">
                         @{pin.createdBy || 'admin'}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-primary)]">
                       {pin.amount || '-'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[var(--text-primary)]">
                       {pin.pin}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -214,13 +214,13 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
                           {pin.status === 'used' ? 'Used' : 'Unused'}
                         </span>
                         {statusDate && (
-                          <span className="text-xs text-gray-500 mt-1">{statusDate}</span>
+                          <span className="text-xs text-[var(--text-tertiary)] mt-1">{statusDate}</span>
                         )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{dateInfo.dateTime}</div>
-                      <div className="text-sm text-gray-500">{dateInfo.relative}</div>
+                      <div className="text-sm text-[var(--text-primary)]">{dateInfo.dateTime}</div>
+                      <div className="text-sm text-[var(--text-tertiary)]">{dateInfo.relative}</div>
                     </td>
                   </tr>
                 );
@@ -245,7 +245,7 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
         <form onSubmit={handleCreatePin} className="space-y-4">
           {/* Amount Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Amount <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center">
@@ -256,10 +256,10 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                 placeholder="Enter Amount"
-                className={`flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.amount ? 'border-red-500' : 'border-gray-300'
+                className={`flex-1 px-3 py-2 border border-[var(--border-color)] bg-[var(--input-bg)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.amount ? 'border-red-500' : ''
                   }`}
               />
-              <div className="ml-2 px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-700">
+              <div className="ml-2 px-3 py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg text-[var(--text-primary)]">
                 USD
               </div>
             </div>
@@ -270,7 +270,7 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
 
           {/* Total Number of Pin Field */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
               Total Number of Pin <span className="text-red-500">*</span>
             </label>
             <input
@@ -279,7 +279,7 @@ const AllPins = ({ filterType = 'all', filterStatus = null }) => {
               value={formData.totalPins}
               onChange={(e) => setFormData({ ...formData, totalPins: e.target.value })}
               placeholder="Enter Number"
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-400 ${formErrors.totalPins ? 'border-red-500' : 'border-gray-300'
+              className={`w-full px-3 py-2 border border-[var(--border-color)] bg-[var(--input-bg)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] focus:border-transparent text-[var(--text-primary)] placeholder-[var(--text-tertiary)] ${formErrors.totalPins ? 'border-red-500' : ''
                 }`}
             />
             {formErrors.totalPins && (

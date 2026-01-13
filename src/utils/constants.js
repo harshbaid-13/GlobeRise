@@ -14,6 +14,7 @@ export const ROUTES = {
   VERIFY_EMAIL: '/verify-email',
   RESEND_EMAIL: '/resend-email',
   TWO_FA: '/2fa-verify',
+  AUTH_CALLBACK: '/auth/callback',
   
   // Admin routes
   ADMIN_DASHBOARD: '/admin/dashboard',
@@ -51,7 +52,8 @@ export const ROUTES = {
   ADMIN_REPORTS_INVEST: '/admin/reports/invest',
   ADMIN_REPORTS_BV: '/admin/reports/bv',
   ADMIN_REPORTS_REFERRAL: '/admin/reports/referral',
-  ADMIN_REPORTS_BINARY: '/admin/reports/binary',
+  // Renamed in UI to Level Commission (route kept for now)
+  ADMIN_REPORTS_LEVEL_COMMISSION: '/admin/reports/binary',
   ADMIN_REPORTS_LOGIN: '/admin/reports/login',
   ADMIN_REPORTS_NOTIFICATION: '/admin/reports/notification',
   ADMIN_SUBSCRIBERS: '/admin/subscribers',
@@ -62,6 +64,11 @@ export const ROUTES = {
   ADMIN_EXTRA_UPDATE: '/admin/extra/update',
   ADMIN_EXTRA_REPORT_REQUEST: '/admin/extra/report-request',
   ADMIN_RANKING: '/admin/ranking',
+  ADMIN_ADMINS: '/admin/admins',
+  ADMIN_ADMINS_CREATE: '/admin/admins/create',
+  ADMIN_PLANS_ROI: '/admin/plans/roi',
+  ADMIN_PLANS_STAKING: '/admin/plans/staking',
+  ADMIN_USERS_UNINVESTED: '/admin/users/uninvested',
   
   // Client routes
   CLIENT_DASHBOARD: '/client/dashboard',
@@ -107,6 +114,7 @@ export const STORAGE_KEYS = {
   AUTH_TOKEN: 'auth_token',
   REFRESH_TOKEN: 'refresh_token',
   USER: 'user',
+  ADMIN_PERMISSIONS: 'admin_permissions',
   USERS: 'users',
   DEPOSITS: 'deposits',
   WITHDRAWALS: 'withdrawals',

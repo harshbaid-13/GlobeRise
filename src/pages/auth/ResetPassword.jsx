@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { authService } from '../../services/authService';
@@ -11,13 +11,15 @@ import Alert from '../../components/common/Alert';
 import Loading from '../../components/common/Loading';
 
 const ResetPassword = () => {
-  const { token } = useParams();
+  const { token: routeToken } = useParams();
+  const [searchParams] = useSearchParams();
+  const token = routeToken || searchParams.get('token');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [validToken, setValidToken] = useState(false);
   const navigate = useNavigate();
-  
+
   const {
     register,
     handleSubmit,
@@ -69,7 +71,7 @@ const ResetPassword = () => {
             Enter your new password below.
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {error && (
             <Alert type="error" message={error} onClose={() => setError('')} />
@@ -77,7 +79,7 @@ const ResetPassword = () => {
           {success && (
             <Alert type="success" message={success} onClose={() => setSuccess('')} />
           )}
-          
+
           <div className="space-y-4">
             <Input
               label="New Password"
@@ -86,7 +88,7 @@ const ResetPassword = () => {
               required
               {...register('password')}
             />
-            
+
             <Input
               label="Confirm Password"
               type="password"
@@ -101,7 +103,7 @@ const ResetPassword = () => {
               {loading ? <Loading size="sm" /> : 'Reset Password'}
             </Button>
           </div>
-          
+
           <div className="text-center">
             <Link
               to={ROUTES.LOGIN}

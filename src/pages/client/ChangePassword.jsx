@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import Alert from '../../components/common/Alert';
+import { authService } from '../../services/authService';
+import { ROUTES } from '../../utils/constants';
 
 const ChangePassword = () => {
+  const navigate = useNavigate();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -34,15 +38,22 @@ const ChangePassword = () => {
         throw new Error('New password must be different from current password');
       }
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Call API
+      await authService.changePassword(currentPassword, newPassword);
 
-      setSuccess('Password changed successfully!');
+      setSuccess('Password changed successfully! You will be logged out. Please login again with your new password.');
+
+      // Clear form
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
+
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        navigate(ROUTES.LOGIN);
+      }, 2000);
     } catch (err) {
-      setError(err.message || 'Failed to change password');
+      setError(err.response?.data?.message || err.message || 'Failed to change password');
     } finally {
       setLoading(false);
     }

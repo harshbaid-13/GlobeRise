@@ -65,17 +65,17 @@ const AllUsers = ({ loadUsersFn, title = 'All Users' }) => {
 
   return (
     <div>
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-[var(--card-bg)] rounded-lg shadow-md border border-[var(--border-color)] p-6">
         {/* Header with Search */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">{title}</h1>
           <form onSubmit={handleSearch} className="flex items-center space-x-2">
             <input
               type="text"
               placeholder="Username / Email"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
+              className="px-4 py-2 border border-[var(--border-color)] bg-[var(--input-bg)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00ADB5] text-[var(--text-primary)] placeholder-[var(--text-tertiary)]"
             />
             <Button
               type="submit"
@@ -112,10 +112,10 @@ const AllUsers = ({ loadUsersFn, title = 'All Users' }) => {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-[var(--card-bg)] divide-y divide-[var(--border-color)]">
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-4 text-center text-[var(--text-tertiary)]">
                     No users found
                   </td>
                 </tr>
@@ -123,37 +123,37 @@ const AllUsers = ({ loadUsersFn, title = 'All Users' }) => {
                 filteredUsers.map((user, index) => {
                   const dateInfo = formatDateWithRelative(user.createdAt);
                   return (
-                    <tr key={user.id} className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                    <tr key={user.id} className={`hover:bg-[var(--bg-hover)] ${index % 2 === 0 ? 'bg-[var(--card-bg)]' : 'bg-[var(--bg-secondary)]'}`}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-[var(--text-primary)]">
                           <div className="font-medium">{user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim()}</div>
-                          <div className="text-gray-500">@{user.username}</div>
+                          <div className="text-[var(--text-tertiary)]">@{user.username}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-[var(--text-primary)]">
                           <div>{user.email || 'N/A'}</div>
                           <div>{user.mobile || 'N/A'}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{user.countryCode || 'N/A'}</div>
+                        <div className="text-sm text-[var(--text-primary)]">{user.countryCode || 'N/A'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-[var(--text-primary)]">
                           <div>{dateInfo.dateTime || user.createdAt}</div>
-                          <div className="text-gray-500">{dateInfo.relative || formatRelativeTime(user.createdAt)}</div>
+                          <div className="text-[var(--text-tertiary)]">{dateInfo.relative || (user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A')}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{formatCurrency(user.balance || 0)}</div>
+                        <div className="text-sm text-[var(--text-primary)]">{formatCurrency(user.balance || 0)}</div>
                       </td>
                       <td className="px-6 py-4 float-right whitespace-nowrap">
                         <button
                           onClick={() => handleDetailsClick(user.id)}
-                          className="bg-blue-100 text-blue-700 hover:bg-blue-200 px-4 py-2 rounded-lg flex items-center space-x-2 text-sm font-medium transition-colors"
+                          className="bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-500/30 px-4 py-2 rounded-lg flex items-center space-x-2 text-sm font-medium transition-colors"
                         >
-                          <FaFileAlt className="text-blue-700" />
+                          <FaFileAlt className="text-blue-700 dark:text-blue-400" />
                           <span>Details</span>
                         </button>
                       </td>
